@@ -22,7 +22,9 @@ from Picturest import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^$', views.homepage, name='HomePage'),
+    url(r'^$', views.homepage, name='home_page'),
     url(r'^accounts/login/$', LoginView.as_view(), name='login'),
     url(r'^accounts/logout/$', LogoutView.as_view(), name='logout'),
+    url(r'^accounts/register/$', views.register, name='register'),
+
 ]
