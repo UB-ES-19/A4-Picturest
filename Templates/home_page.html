@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+    THIS IS THE HOMEPAGE
+
+    </br>
+
+    {% if authenticated%}
+    <li> <b>Welcome back, {{username}} </b></li>
+    <li><a href="{%url 'logout' %}" align="right"> Log out </a></li>
+    {% else %}
+    <li><a href="{%url 'login' %}">Log in</a></li>
+    <li><a href="{%url 'register' %}">Register</a></li>
+    {% endif %}
+
+
+</body>
+
+</html>
