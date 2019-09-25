@@ -17,17 +17,31 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/Picturest/home_page.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="383">
-              <caret line="53" column="40" selection-start-line="53" selection-start-column="40" selection-end-line="53" selection-end-column="40" />
+            <state relative-caret-position="374">
+              <caret line="74" column="18" lean-forward="true" selection-start-line="74" selection-start-column="18" selection-end-line="74" selection-end-column="18" />
               <folding>
                 <element signature="n#style#0;n#a#0;n#nav#0;n#div#0;n#header#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#input#0;n#form#0;n#nav#0;n#div#0;n#header#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
               </folding>
             </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/ES/settings.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-714" />
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ES/urls.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-21" />
           </provider>
         </entry>
       </file>
@@ -218,7 +232,7 @@
       <updated>1568905878181</updated>
       <workItem from="1569347887392" duration="8558000" />
       <workItem from="1569406314079" duration="152000" />
-      <workItem from="1569441472136" duration="2711000" />
+      <workItem from="1569441472136" duration="3813000" />
     </task>
     <task id="LOCAL-00001" summary="Init">
       <created>1568906049661</created>
@@ -231,7 +245,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="12061000" />
+    <option name="totallyTimeSpent" value="13163000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="638" y="9" width="1248" height="1000" extended-state="0" />
@@ -274,10 +288,22 @@
     <entry file="file://$PROJECT_DIR$/templates/Registration/register.html">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/templates/Registration/LogIn.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="15" selection-start-column="15" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ES/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-21" />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/templates/Picturest/home_page.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="383">
-          <caret line="53" column="40" selection-start-line="53" selection-start-column="40" selection-end-line="53" selection-end-column="40" />
+        <state relative-caret-position="374">
+          <caret line="74" column="18" lean-forward="true" selection-start-line="74" selection-start-column="18" selection-end-line="74" selection-end-column="18" />
           <folding>
             <element signature="n#style#0;n#a#0;n#nav#0;n#div#0;n#header#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#input#0;n#form#0;n#nav#0;n#div#0;n#header#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -286,11 +312,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/Registration/LogIn.html">
+    <entry file="file://$PROJECT_DIR$/ES/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="15" selection-start-column="15" selection-end-column="15" />
-        </state>
+        <state relative-caret-position="-714" />
       </provider>
     </entry>
   </component>
