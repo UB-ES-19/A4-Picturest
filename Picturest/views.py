@@ -14,7 +14,7 @@ def homepage(request):
         'authenticated': request.user.is_authenticated,
         'username': request.user.username
     }
-    return render(request, 'home_page.html', context)
+    return render(request, 'Picturest/home_page.html', context)
 
 
 
@@ -23,7 +23,7 @@ def register(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             new_user = form.save()
-            return HttpResponseRedirect(reverse("home_page"))
+            return HttpResponseRedirect(reverse("Picturest/home_page"))
     else:
         form = UserCreationForm()
     return render(request, "registration/register.html", {
