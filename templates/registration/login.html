@@ -38,8 +38,8 @@
                 <!--        <input type="hidden" name="next" value="{{ next|escape }}" />-->
                         </div>
                         <div class="form-item box-item">
-                            <button type="submit">Create Account</button>
-                            <span id="submit" class="submit">LogIn</span>
+                            <button id="submit" class="submit" type="submit">LogIn</button>
+                            <p>New to Picturest? <a href="{% url 'register'%}">Create an account</a></p>
                         </div>
                     </form>
                 </main>
