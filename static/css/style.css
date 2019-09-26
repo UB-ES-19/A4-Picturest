@@ -7,8 +7,6 @@ html {
 body::before{
     content:'';
     position: fixed;
-    
-    
 }
 
 body:before{
