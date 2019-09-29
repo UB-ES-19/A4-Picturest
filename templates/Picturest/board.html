@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            margin-top: 20px;
+        }
+
+        .button {
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <h2> Creating board </h2>
+    </br></br>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="button" type="submit">Save</button>
+    </form>
+
+
+</body>
+
+</html>

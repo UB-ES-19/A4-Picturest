@@ -17,8 +17,10 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
+from django.contrib.auth.admin import UserAdmin
 
 from Picturest import views
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,4 +28,10 @@ urlpatterns = [
     url(r'^accounts/login/$', LoginView.as_view(), name='login'),
     url(r'^accounts/logout/$', LogoutView.as_view(), name='logout'),
     url(r'^accounts/register/$', views.register, name='register'),
+    url(r'^profile/$', views.profile, name='register'),
+    url(r'^board/$', views.board, name='board'),
+    url(r'^section/$', views.section, name='section'),
+    url(r'^pin/$', views.pin, name='pin'),
+
+
 ]

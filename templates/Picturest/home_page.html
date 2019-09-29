@@ -2,147 +2,170 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+  <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Righteous&display=swap" rel="stylesheet">
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Righteous&display=swap" rel="stylesheet">
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
 
-    <title>Picturest</title>
+  <title>Picturest</title>
 
 
-    <!-- this should increase the number of columns -->
-    <style>
-
-        .card-columns{
-          @include media-breakpoint-only(lg) {
-              column-count: 5;
-          }
-        }
-
-    </style>
+  <!-- this should increase the number of columns -->
+  <style>
+    .card-columns {
+      @include media-breakpoint-only(lg) {
+        column-count: 5;
+      }
+    }
+  </style>
 
 </head>
 
 <body>
-    <header>
-        <div>
-            <nav class="navbar navbar-light bg-light fixed-top">
-              <a class="navbar-brand" href="" style="font-family: 'Righteous', cursive;">
-                  <img src="../static/ImgStatic/PicTurest.png" width="30" height="30" class="d-inline-block align-top" alt="">
-                  Picturest
-              </a>
+  <header>
+    <div>
+      <nav class="navbar navbar-light bg-light fixed-top">
+        <a class="navbar-brand" href="" style="font-family: 'Righteous', cursive;">
+          <img src="../static/ImgStatic/PicTurest.png" width="30" height="30" class="d-inline-block align-top" alt="">
+          Picturest
+        </a>
 
-              <form class="form-inline">
-                  <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" style="width:430px !important;">
-                  <button class="btn btn-danger my-2 my-sm-0" type="submit">Search</button>
-              </form>
+        <form class="form-inline">
+          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
+            style="width:430px !important;">
+          <button class="btn btn-danger my-2 my-sm-0" type="submit">Search</button>
+        </form>
 
-              <div class="btn-group" role="group">
-                <button class="btn btn-outline-secondary" href="">
-                    <img src="../static/ImgStatic/PicFriends.png" width="30" height="30" class="d-inline-block align-top" alt="Friends">
-                </button>
+        <div class="btn-group" role="group">
+          <button class="btn btn-outline-secondary" href="">
+            <img src="../static/ImgStatic/PicFriends.png" width="30" height="30" class="d-inline-block align-top"
+              alt="Friends">
+          </button>
 
-                <button class="btn btn-outline-secondary" href="">
-                    <img src="../static/ImgStatic/PicProfile.png" width="30" height="30" class="d-inline-block align-top" alt="Profile">
-                </button>
+          <button class="btn btn-outline-secondary" href="">
+            <img src="../static/ImgStatic/PicProfile.png" width="30" height="30" class="d-inline-block align-top"
+              alt="Profile">
+          </button>
 
-                <button class="btn btn-outline-secondary" href="">
-                    <img src="../static/ImgStatic/PicChat.png" width="30" height="30" class="d-inline-block align-top" alt="Chat">
-                </button>
+          <button class="btn btn-outline-secondary" href="">
+            <img src="../static/ImgStatic/PicChat.png" width="30" height="30" class="d-inline-block align-top"
+              alt="Chat">
+          </button>
 
-                <button class="btn btn-outline-secondary" href="">
-                    <img src="../static/ImgStatic/PicNotify.png" width="30" height="30" class="d-inline-block align-top" alt="Notifications">
-                </button>
+          <button class="btn btn-outline-secondary" href="">
+            <img src="../static/ImgStatic/PicNotify.png" width="30" height="30" class="d-inline-block align-top"
+              alt="Notifications">
+          </button>
 
-                <div class="btn-group" role="group">
-                  <button class="btn btn-outline-secondary dropdown-toggle" width="56" height="44" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img src="../static/ImgStatic/PicOptions.png" width="30" height="30" class="d-inline-block align-top" alt="Notifications">
-                  </button>
-                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="{%url 'logout' %}">Log Out</a>
-                  </div>
-                </div>
+          <div class="btn-group" role="group">
+            <button class="btn btn-outline-secondary dropdown-toggle" width="56" height="44" type="button"
+              id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <img src="../static/ImgStatic/PicOptions.png" width="30" height="30" class="d-inline-block align-top"
+                alt="Notifications">
+            </button>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="{%url 'logout' %}">Log Out</a>
+            </div>
+          </div>
 
-              </div>
-            </nav>
         </div>
-    </header>
-
-    <div class="container" style="margin-top: 80px;">
-        <!-- From here we should modify some parts and look out everything -->
-        <div class="card-columns">
-          <div class="card">
-            <img src="../static/ImgStatic/Ejemplo1_MainPG.jpg" class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">Card title that wraps to a new line</h5>
-              <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-            </div>
-          </div>
-          <div class="card p-3">
-            <blockquote class="blockquote mb-0 card-body">
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-              <footer class="blockquote-footer">
-                <small class="text-muted">
-                  Someone famous in <cite title="Source Title">Source Title</cite>
-                </small>
-              </footer>
-            </blockquote>
-          </div>
-          <div class="card">
-            <img src="../static/ImgStatic/Ejemplo2_MainPG.jpg" class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-              <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-            </div>
-          </div>
-          <div class="card text-center p-3">
-            <blockquote class="blockquote mb-0">
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat.</p>
-              <footer class="blockquote-footer text-white">
-                <small>
-                  Someone famous in <cite title="Source Title">Source Title</cite>
-                </small>
-              </footer>
-            </blockquote>
-          </div>
-          <div class="card text-center">
-            <div class="card-body">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text">This card has a regular title and short paragraphy of text below it.</p>
-              <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-            </div>
-          </div>
-          <div class="card">
-            <img src="../static/ImgStatic/Ejemplo3_MainPG.jpg" class="card-img-top" alt="...">
-          </div>
-          <div class="card p-3 text-right">
-            <blockquote class="blockquote mb-0">
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-              <footer class="blockquote-footer">
-                <small class="text-muted">
-                  Someone famous in <cite title="Source Title">Source Title</cite>
-                </small>
-              </footer>
-            </blockquote>
-          </div>
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text">This is another card with title and supporting text below. This card has some additional content to make it slightly taller overall.</p>
-              <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-            </div>
-          </div>
-        </div>
+      </nav>
     </div>
+  </header>
+
+  <a class="dropdown-item" href="{%url 'logout' %}">Log Out</a>
+  <a class="dropdown-item" href="{%url 'logout' %}">Log Out</a>
+
+  <a href="profile" class="button">Profile</a>
+  <a href="board" class="button">Create Board</a>
+  <a href="section" class="button">Create Section</a>
+  <a href="pin" class="button">Create Pin</a>
+
+
+  <div class="container" style="margin-top: 80px;">
+    <!-- From here we should modify some parts and look out everything -->
+    <div class="card-columns">
+      <div class="card">
+        <img src="../static/ImgStatic/Ejemplo1_MainPG.jpg" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">Card title that wraps to a new line</h5>
+          <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional
+            content. This content is a little bit longer.</p>
+        </div>
+      </div>
+      <div class="card p-3">
+        <blockquote class="blockquote mb-0 card-body">
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+          <footer class="blockquote-footer">
+            <small class="text-muted">
+              Someone famous in <cite title="Source Title">Source Title</cite>
+            </small>
+          </footer>
+        </blockquote>
+      </div>
+      <div class="card">
+        <img src="../static/ImgStatic/Ejemplo2_MainPG.jpg" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
+          <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+        </div>
+      </div>
+      <div class="card text-center p-3">
+        <blockquote class="blockquote mb-0">
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat.</p>
+          <footer class="blockquote-footer text-white">
+            <small>
+              Someone famous in <cite title="Source Title">Source Title</cite>
+            </small>
+          </footer>
+        </blockquote>
+      </div>
+      <div class="card text-center">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">This card has a regular title and short paragraphy of text below it.</p>
+          <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="../static/ImgStatic/Ejemplo3_MainPG.jpg" class="card-img-top" alt="...">
+      </div>
+      <div class="card p-3 text-right">
+        <blockquote class="blockquote mb-0">
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+          <footer class="blockquote-footer">
+            <small class="text-muted">
+              Someone famous in <cite title="Source Title">Source Title</cite>
+            </small>
+          </footer>
+        </blockquote>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">This is another card with title and supporting text below. This card has some additional
+            content to make it slightly taller overall.</p>
+          <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </body>
 
