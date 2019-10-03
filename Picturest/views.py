@@ -26,3 +26,7 @@ def register(request):
     return render(request, "registration/register.html", {
         'form': form,
     })
+
+
+def profile(request):
+    return render(request, 'Picturest/profile.html', {})
