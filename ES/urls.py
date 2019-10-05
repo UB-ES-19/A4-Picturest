@@ -15,19 +15,19 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
-from django.contrib.auth.admin import UserAdmin
+from django.conf import settings
 
 from Picturest import views
 
+# El registre agafa el CustomUser, no el nou PicturestUser!
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^$', views.homepage, name='home_page'),
-    url(r'^accounts/login/$', LoginView.as_view(), name='login'),
-    url(r'^accounts/logout/$', LogoutView.as_view(), name='logout'),
-    url(r'^accounts/register/$', views.register, name='register'),
+    url(r'^accounts/login/$', views.login_view, name='login'),
+    url(r'^accounts/logout/$', views.logout_view, name='logout'),
+    url(r'^accounts/register/$', views.register_view, name='register'),
     url(r'^profile/$', views.profile, name='register'),
     url(r'^board/$', views.board, name='board'),
     url(r'^section/$', views.section, name='section'),

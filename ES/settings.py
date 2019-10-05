@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Picturest.apps.PicturestConfig',
     'ES',
+    'custom_user'
 ]
 
 MIDDLEWARE = [
@@ -56,8 +57,7 @@ ROOT_URLCONF = 'ES.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
-        ,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -103,8 +103,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-
-
+AUTH_USER_MODEL = 'custom_user.PicturestUser'
 
 
 # Internationalization

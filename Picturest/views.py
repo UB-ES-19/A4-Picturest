@@ -1,11 +1,58 @@
 # Create your views here.
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.contrib.auth import authenticate, get_user_model, login, logout
+from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.conf import settings
 from .models import * 
 from .forms import *
+
+
+
+
+def login_view(request):
+    next = request.GET.get('next')
+    form = UserLoginForm(request.POST or None)
+    if form.is_valid():
+        email = form.cleaned_data.get('email')
+        password = form.cleaned_data.get('password')
+        user = authenticate(email=email, password=password)
+        login(request, user)
+        if next:
+            return redirect(next)
+        return redirect('/')
+
+    context = {
+        'form': form
+    }
+    return render(request, "registration/login.html", context)
+
+
+
+def register_view(request):
+    next = request.GET.get('next')
+    form = UserRegisterForm(request.POST or None)
+    if form.is_valid():
+        user = form.save(commit=False)
+        password = form.cleaned_data.get('password')
+        user.set_password(password)
+        user.save()
+        new_user = authenticate(email=user.email, password=user.password)
+        login(request, new_user)
+        if next:
+            return redirect(next)
+        return redirect('/')
+
+    context = {
+        'form': form
+    }
+    return render(request, "registration/register.html", context)
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('/')
 
 
 @login_required
@@ -29,34 +76,11 @@ def homepage(request):
     context = {
         'pins': pins,
         'authenticated': request.user.is_authenticated,
-        'username': request.user.username
+        'username': request.user.email
     }
     return render(request, 'Picturest/home_page.html', context)
 
 
-def register(request):
-    if request.method == 'POST':
-        form = UserCreateForm(request.POST)
-
-        if form.is_valid():
-            form.save()
-
-
-            return HttpResponseRedirect(reverse("home_page"))
-
-        else:
-            print("BAD PIN CREATION")
-            request.session["result"] = form.errors
-        return HttpResponseRedirect(reverse('home_page'))
-
-    else:
-        form = UserCreationForm()
-        
-        context = {
-            'form': form
-            }
-
-    return render(request, "registration/register.html", context)
 
 
 
@@ -71,7 +95,7 @@ def profile(request):
     
     context = {
         'authenticated': request.user.is_authenticated,
-        'username': request.user.username,
+        'username': request.user.email,
         'user': request.user,
         'user_boards': user_boards,
         'user_sections': user_sections,
@@ -106,7 +130,7 @@ def pin(request):
         context = {
             'form': form,
             'authenticated': request.user.is_authenticated,
-            'username': request.user.username
+            'username': request.user.email
         }
 
     return render(request, 'Picturest/pin.html', context)
@@ -134,7 +158,7 @@ def board(request):
         context = {
             'form': form,
             'authenticated': request.user.is_authenticated,
-            'username': request.user.username
+            'username': request.user.email
         }
 
     return render(request, 'Picturest/board.html', context)
@@ -162,7 +186,7 @@ def section(request):
         context = {
             'form': form,
             'authenticated': request.user.is_authenticated,
-            'username': request.user.username
+            'username': request.user.email
         }
 
     return render(request, 'Picturest/section.html', context)
