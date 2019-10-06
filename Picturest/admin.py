@@ -2,6 +2,7 @@
 from django.contrib import admin
 from custom_user.models import PicturestUser
 from .forms import EditProfileForm, UserRegisterForm
+from .models import *
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -14,3 +15,6 @@ class UserAdmin(admin.ModelAdmin):
 
 
 admin.site.register(PicturestUser, UserAdmin)
+admin.site.register(Board)
+admin.site.register(Section)
+admin.site.register(Pin)
