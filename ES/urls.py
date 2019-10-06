@@ -35,7 +35,9 @@ urlpatterns = [
     url(r'^pin/$', views.pin, name='pin'),
     url(r'^profile/edit/$', views.edit_profile, name='edit_profile'),
     url(r'^following/$', views.following, name="following"),
+]
 
 
-
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

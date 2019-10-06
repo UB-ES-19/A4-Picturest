@@ -40,7 +40,8 @@ class PicturestUser(AbstractBaseUser):
     last_name = models.CharField(max_length=30)
     about = models.CharField(max_length=500)
     location = models.CharField(max_length=60)
-    photo = models.ImageField(storage='/static/', blank=True)
+    photo = models.ImageField(default='default.jpg',
+                              upload_to='profile_pics', blank=True)
 
     date_joined = models.DateTimeField(
         verbose_name='date joined', auto_now_add=True)

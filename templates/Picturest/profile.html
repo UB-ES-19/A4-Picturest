@@ -38,3 +38,5 @@ Last name: {{request.user.last_name}} </br>
 About: {{request.user.about}} </br>
 Location: {{request.user.location}} </br>
 Photo: {{request.user.photo}} </br>
+    <img src="{{ request.user.photo.url }}">
+
