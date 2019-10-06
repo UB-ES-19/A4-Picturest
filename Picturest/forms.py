@@ -2,7 +2,7 @@ from django import forms
 import django.contrib.auth.models
 from django.contrib.auth import authenticate, get_user_model
 from .models import *
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django import forms
 from django.conf import settings
 
@@ -40,6 +40,30 @@ class UserRegisterForm(forms.ModelForm):
             'email',
             'age',
             'password'
+        ]
+
+
+class EditProfileForm(forms.ModelForm):
+    email = forms.EmailField(label='Email address', required=True)
+    age = forms.IntegerField(label='Age', required=False)
+    username = forms.CharField(label='Username', required=False)
+    first_name = forms.CharField(label='First name', required=False)
+    last_name = forms.CharField(label='Last name', required=False)
+    about = forms.CharField(label='About your profile', required=False)
+    location = forms.CharField(label='Location', required=False)
+    photo = forms.ImageField(label='Photo', required=False)
+
+    class Meta:
+        model = User
+        fields = [
+            'email',
+            'age',
+            'username',
+            'first_name',
+            'last_name',
+            'about',
+            'location',
+            'photo',
         ]
 
 

@@ -1,7 +1,10 @@
 <h2>Welcome to your profile {{username}}</h2>
 
-Username: {{user.get_username}} </br>
-Email: {{user.email}} </br>
+
+<a href="edit" class="button">Edit profile</a>
+
+
+
 First name: {{user.first_name}} </br>
 
 
@@ -25,3 +28,15 @@ First name: {{user.first_name}} </br>
 {{pin.title}}
 
 {% endfor %}
+
+
+
+
+Username: {{ request.user.username }} </br>
+Email: {{ request.user.email }} </br>
+Age: {{request.user.age}} </br>
+First name: {{request.user.first_name}} </br>
+Last name: {{request.user.last_name}} </br>
+About: {{request.user.about}} </br>
+Location: {{request.user.location}} </br>
+Photo: {{request.user.photo}} </br>

@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls.static import static
 from django.conf import settings
 
 from Picturest import views
@@ -28,10 +29,11 @@ urlpatterns = [
     url(r'^accounts/login/$', views.login_view, name='login'),
     url(r'^accounts/logout/$', views.logout_view, name='logout'),
     url(r'^accounts/register/$', views.register_view, name='register'),
-    url(r'^profile/$', views.profile, name='register'),
+    url(r'^profile/$', views.profile, name='profile'),
     url(r'^board/$', views.board, name='board'),
     url(r'^section/$', views.section, name='section'),
     url(r'^pin/$', views.pin, name='pin'),
+    url(r'^profile/edit/$', views.edit_profile, name='edit_profile'),
 
 
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
