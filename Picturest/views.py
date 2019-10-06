@@ -122,6 +122,14 @@ def edit_profile(request):
     return render(request, "Picturest/edit_profile.html", context)
 
 
+def following(request):
+    context = {
+        'authenticated': request.user.is_authenticated,
+        'username': request.user.username
+    }
+    return render(request, 'Picturest/following_posts.html', context)
+
+
 @login_required
 def pin(request):
     if request.method == "POST":
