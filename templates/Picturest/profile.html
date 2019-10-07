@@ -1,42 +1,123 @@
-<h2>Welcome to your profile {{username}}</h2>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Righteous&display=swap" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <title>Picturest</title>
 
 
-<a href="edit" class="button">Edit profile</a>
+    <!-- this should increase the number of columns -->
+    <style>
+
+        .card-columns{
+          @include media-breakpoint-only(lg) {
+              column-count: 5;
+          }
+        }
+
+    </style>
+
+</head>
+
+<body>
 
 
+    <header>
+        <div>
+            <nav class="navbar navbar-light bg-light fixed-top">
+              <a class="navbar-brand" href="/" style="font-family: 'Righteous', cursive;">
+                  <img src="../static/ImgStatic/PicTurest.png" width="30" height="30" class="d-inline-block align-top" alt="">
+                  Picturest
+              </a>
+
+              <form class="form-inline">
+                  <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" style="width:430px !important;">
+                  <button class="btn btn-danger my-2 my-sm-0" type="submit">Search</button>
+              </form>
+
+              <div class="btn-group" role="group">
+                <button class="btn btn-outline-secondary" href="">
+                    <img src="../static/ImgStatic/PicFriends.png" width="30" height="30" class="d-inline-block align-top" alt="Friends">
+                </button>
+
+                <button class="btn btn-outline-secondary" href="">
+                    <img src="../static/ImgStatic/PicProfile.png" width="30" height="30" class="d-inline-block align-top" alt="Profile">
+                </button>
+
+                <button class="btn btn-outline-secondary" href="">
+                    <img src="../static/ImgStatic/PicChat.png" width="30" height="30" class="d-inline-block align-top" alt="Chat">
+                </button>
+
+                <button class="btn btn-outline-secondary" href="">
+                    <img src="../static/ImgStatic/PicNotify.png" width="30" height="30" class="d-inline-block align-top" alt="Notifications">
+                </button>
+
+                <div class="btn-group" role="group">
+                  <button class="btn btn-outline-secondary dropdown-toggle" width="56" height="44" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img src="../static/ImgStatic/PicOptions.png" width="30" height="30" class="d-inline-block align-top" alt="Notifications">
+                  </button>
+                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="{%url 'logout' %}">Log Out</a>
+                  </div>
+                </div>
+
+              </div>
+            </nav>
+        </div>
+    </header>
 
 
-<h3>Your Boards</h3>
-{% for board in user_boards %}
+    <br><br><br>
+    <div class="container" style="margin-top: 80px;">
+        <div class="container">
+            <a href="edit" class="button">Edit profile</a>
+            <br>
+            <div class="row">
 
-{{board.name}}
+                <div class="col-md-6 details">
+                    <blockquote>
+                        <h1>{{ request.user.first_name }} {{ request.user.last_name }}</h1>
+                        <small><cite title="Source Title">{{ request.user.location }} <i
+                                class="icon-map-marker"></i></cite></small>
+                    </blockquote>
+                    <p>
+                        {{ request.user.about }}
+                    </p>
+                    <a href="followers.html">
+                        0 followers
+                    </a>
+                    <a href="followings.html">
+                        0 following
+                    </a>
+                </div>
+                <div class="col-md-6 img">
+                    <!-- <img class="rounded-circle z-depth-2" alt="100x100" src="{{ request.user.photo.url }}" data-holder-rendered="true"> -->
+                    <img class="rounded-circle z-depth-2" alt="100x100" src="https://cdn4.iconfinder.com/data/icons/random-112/750/Random-21-128.png" data-holder-rendered="true">
+                </div>
+            </div>
+             <br>
+            <div class="row">
+                <button type="button" class="btn btn-light">Boards</button>
+                <button type="button" class="btn btn-light">Pins</button>
+                <button type="button" class="btn btn-light">Tries</button>
+                <button type="button" class="btn btn-light">Topics</button>
+            </div>
+        </div>
+    </div>
 
-{% endfor %}
 
-<h3>Your Sections</h3>
-{% for section in user_sections %}
+</body>
 
-{{section.name}}
-
-{% endfor %}
-
-<h3>Your Pins</h3>
-{% for pin in user_pins %}
-
-{{pin.title}}
-
-{% endfor %}
-
-
-
-
-Username: {{ request.user.username }} </br>
-Email: {{ request.user.email }} </br>
-Age: {{request.user.age}} </br>
-First name: {{request.user.first_name}} </br>
-Last name: {{request.user.last_name}} </br>
-About: {{request.user.about}} </br>
-Location: {{request.user.location}} </br>
-Photo: {{request.user.photo}} </br>
-    <img src="{{ request.user.photo.url }}">
-
+</html>
