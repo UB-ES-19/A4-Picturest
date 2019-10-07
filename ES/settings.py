@@ -38,8 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Picturest.apps.PicturestConfig',
-    'ES',
-    'custom_user'
+    'ES'
 ]
 
 MIDDLEWARE = [
@@ -103,7 +102,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-AUTH_USER_MODEL = 'custom_user.PicturestUser'
+AUTH_USER_MODEL = 'Picturest.PicturestUser'
 
 
 # Internationalization
