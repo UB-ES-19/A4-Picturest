@@ -1,3 +1,7 @@
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -22,14 +26,12 @@
                         {% endif %}
 
                         {% csrf_token %}
+
                         <div class="form-item box-item">
-                <!--        <input type="text" name="username" value="" id="username">-->
-                            <input type="username" name="username" id="username" placeholder="Username" data-required>
+                            <input type="email" name="email" id="email" placeholder="Email" data-required>
                         </div>
                         <div class="form-item box-item">
-                <!--        <input type="password" name="password" value="" id="password">-->
                             <input type="password" name="password" id="password" placeholder="Password" data-required>
-                <!--        <input type="hidden" name="next" value="{{ next|escape }}" />-->
                         </div>
                         <div class="form-item box-item">
                             <button id="submit" class="submit" type="submit">LogIn</button>

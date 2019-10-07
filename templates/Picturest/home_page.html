@@ -3,6 +3,13 @@
 {% block content %}
 
 
+<br><br><br>
+  <a href="profile" class="button">Profile</a>
+  <a href="board" class="button">Create Board</a>
+  <a href="section" class="button">Create Section</a>
+  <a href="pin" class="button">Create Pin</a>
+
+
     <!-- From here we should modify some parts and look out everything -->
     <div class="card-columns">
       <div class="card">
@@ -69,5 +76,28 @@
       </div>
     </div>
 
+
+    <button class="btn btn-outline-danger btn-lg rounded-circle" data-toggle="modal" data-target="#exampleModalCenter" style="position: fixed; bottom: 20px; right: 20px;"> + </button>
+
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            ...
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-danger">Save changes</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
 
 {% endblock %}

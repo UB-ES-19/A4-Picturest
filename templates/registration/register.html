@@ -1,6 +1,9 @@
 
 
 
+
+
+
 <head>
   {% load static %}
   <meta charset="UTF-8">
@@ -24,27 +27,33 @@
     </header>
     <main>
 
-      <form>
+      <form method="POST">
+        {% csrf_token %}
         <div class="form-item box-item">
           <input type="email" name="email" class="tx1" placeholder="Email" data-email data-required>
           <small class="errorReq"><i class="fa fa-asterisk" aria-hidden="true"></i> required field</small>
           <small class="errorEmail"><i class="fa fa-asterisk" aria-hidden="true"></i> email is not valid</small>
         </div>
-		<div class="form-item box-item">
-          <input type="text" name="Age" placeholder="Age" data-required>
+		    
+        <div class="form-item box-item">
+          <input type="age" name="age" placeholder="Age" data-required>
           <small class="errorReq"><i class="fa fa-asterisk" aria-hidden="true"></i> required field</small>
         </div>
-		<div class="form-item box-item">
-          <input type="password" name="password" placeholder="Password" data-required>
-          <small class="errorReq"><i class="fa fa-asterisk" aria-hidden="true"></i> required field</small>
-        </div>
-        <div class="form-item">
-          <span id="submit" class="submit">Create Account</span>
-        </div>
-		<div>
-			<p>Already have an account? <a href="{%url 'login' %}">Login</a></p>
-		</div>
+		  
+      <div class="form-item box-item">
+        <input type="password" name="password" placeholder="Password" data-required>
+        <small class="errorReq"><i class="fa fa-asterisk" aria-hidden="true"></i> required field</small>
+      </div>
+      
+      <div class="form-item">
+        <button id="submit" class="submit" type="submit">Create Account</button>
+      </div>
 	  </form>
+
+    <div>
+      <p>Already have an account? <a href="{%url 'login' %}">Login</a></p>
+    </div>
+
       <div class="bground">
       </div>
     </main>
