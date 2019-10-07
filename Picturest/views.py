@@ -54,19 +54,10 @@ def logout_view(request):
 
 @login_required
 def homepage(request):
-
     pins = Pin.objects.all()
-    boards = Board.objects.all()
-    sections = Section.objects.all()
-    users = User.objects.all()
-
-    print("Pins: ", list(pins))
-    print("Boards: ", list(boards))
-    for board in list(boards):
-        print(board.name)
-        print(board.author)
-    print("Sections", list(sections))
-    print("Users", list(users))
+    #boards = Board.objects.all()
+    #sections = Section.objects.all()
+    #users = User.objects.all()
 
     context = {
         'pins': pins,
@@ -76,11 +67,8 @@ def homepage(request):
     return render(request, 'Picturest/home_page.html', context)
 
 
+@login_required
 def profile(request):
-
-    # user_age = Age.objects.filter(user = request.user)
-    # print ("USER_AGE: ",user_age)
-
     user_boards = Board.objects.filter(author=request.user)
     user_sections = Section.objects.filter(author=request.user)
     user_pins = Pin.objects.filter(author=request.user)
@@ -102,13 +90,12 @@ def profile(request):
 def edit_profile(request):
     if request.method == "POST":
         form = EditProfileForm(
-            request.POST, instance=request.user)  # request.FILES
+            request.POST, instance=request.user)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse("profile"))
 
         else:
-            print("BAD EDIT PROFILE")
             print(form.errors)
             request.session["result"] = form.errors
         return HttpResponseRedirect(reverse('profile'))
@@ -134,9 +121,7 @@ def following(request):
 def pin(request):
     if request.method == "POST":
         form = PinForm(request.POST)
-        print(form)
         if form.is_valid():
-
             new_pin = form.save(commit=False)
             new_pin.author = request.user
             new_pin.save()
@@ -144,7 +129,6 @@ def pin(request):
             return HttpResponseRedirect(reverse("home_page"))
 
         else:
-            print("BAD PIN CREATION")
             print(form.errors)
             request.session["result"] = form.errors
         return HttpResponseRedirect(reverse('home_page'))
@@ -165,8 +149,6 @@ def board(request):
     if request.method == "POST":
         form = BoardForm(request.POST)
         if form.is_valid():
-            # name = form.cleaned_data['name']
-
             new_board = form.save(commit=False)
             new_board.author = request.user
             new_board.save()
@@ -174,7 +156,6 @@ def board(request):
             return HttpResponseRedirect(reverse("home_page"))
 
         else:
-            print("BAD BOARD CREATION")
             request.session["result"] = form.errors
         return HttpResponseRedirect(reverse('home_page'))
 
@@ -195,14 +176,13 @@ def section(request):
         form = SectionForm(request.POST)
         print(form)
         if form.is_valid():
-
             new_section = form.save(commit=False)
             new_section.author = request.user
             new_section.save()
+
             return HttpResponseRedirect(reverse("home_page"))
 
         else:
-            print("BAD SECTION CREATION")
             request.session["result"] = form.errors
         return HttpResponseRedirect(reverse('home_page'))
 
