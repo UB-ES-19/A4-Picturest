@@ -143,6 +143,7 @@ small.errorOnce {
 .form-item input[type="number"],
 .form-item input[type="email"],
 .form-item input[type="age"] {
+
   display: block;
   color: #000;
   font-size: 16px;
