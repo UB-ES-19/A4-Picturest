@@ -67,16 +67,21 @@ def homepage(request):
 
 @login_required
 def profile(request, user_search):
+    user_aux = ""
+
     if 'user_search' in request.GET:
         user_search = request.GET["user_search"]
 
     if user_search:
-        if "@" in user_search:
-            user_aux = PicturestUser.objects.get(email=user_search)
-        else:
+        #if "@" in user_search:
+        #    user_aux = PicturestUser.objects.get(email=user_search)
+        #else:
+        try:
             user_aux = PicturestUser.objects.get(username=user_search)
+        except PicturestUser.DoesNotExist:
+            return HttpResponseRedirect(reverse("home_page"))
 
-    if user_aux:
+    if not user_aux:
         user_aux = request.user
 
     user_boards = Board.objects.filter(author=request.user)
@@ -87,7 +92,7 @@ def profile(request, user_search):
         'authenticated': request.user.is_authenticated,
         'username': user_aux.username,
         'first_name': user_aux.first_name,
-        'user': request.user,
+        'user': user_aux,
         'user_boards': user_boards,
         'user_sections': user_sections,
         'user_pins': user_pins
