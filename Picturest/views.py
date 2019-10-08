@@ -71,13 +71,17 @@ def profile(request, user_search):
         user_search = request.GET["user_search"]
 
     if user_search:
-        user_aux
+        if "@" in user_search:
+            user_aux = PicturestUser.objects.get(email=user_search)
+        else:
+            user_aux = PicturestUser.objects.get(username=user_search)
 
-    else:
+    if user_aux:
         user_aux = request.user
-        user_boards = Board.objects.filter(author=request.user)
-        user_sections = Section.objects.filter(author=request.user)
-        user_pins = Pin.objects.filter(author=request.user)
+
+    user_boards = Board.objects.filter(author=request.user)
+    user_sections = Section.objects.filter(author=request.user)
+    user_pins = Pin.objects.filter(author=request.user)
 
     context = {
         'authenticated': request.user.is_authenticated,
