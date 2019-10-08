@@ -1,11 +1,7 @@
-from django import forms
-import django.contrib.auth.models
-from django.contrib.auth import authenticate, get_user_model
-from .models import *
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from django import forms
-from django.conf import settings
+from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate
 
+from .models import *
 
 User = get_user_model()
 
@@ -90,3 +86,9 @@ class SectionForm(forms.ModelForm):
     class Meta:
         model = Section
         fields = ["name", "board"]
+
+
+class SearchFriendForm(forms.ModelForm):
+    class Meta:
+        model = Friendship
+        fields = ["friend", "creator"]

@@ -1,14 +1,8 @@
 # Create your models here.
 from __future__ import unicode_literals
+
+from django.contrib.auth.models import AbstractUser, BaseUserManager, AbstractBaseUser, PermissionsMixin
 from django.db import models
-from datetime import datetime
-from django.contrib.auth.models import AbstractUser, BaseUserManager, AbstractBaseUser, PermissionsMixin, UserManager
-from django.core.validators import MaxValueValidator, MinValueValidator
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.utils.translation import ugettext_lazy as _
-from django.conf import settings
-from django.contrib.auth import get_user_model
 
 
 class PicturestUserManager(BaseUserManager):
@@ -104,20 +98,6 @@ class Pin(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
 
-class FriendList(models.Model):
-    friend_list_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='user_friend_list')
-    friend = models.ManyToManyField(User, related_name='user_friends')
-
-
-class RequestList(models.Model):
-    request_list_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='user_request_list')
-    request = models.ManyToManyField(User, related_name='user_friend_requests')
-
-
 class Message(models.Model):
     message_id = models.AutoField(primary_key=True)
     author = models.ForeignKey(
@@ -125,3 +105,14 @@ class Message(models.Model):
     message = models.TextField()
     receptor = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='message_receptor')
+
+
+class Friendship(models.Model):
+    id_friend = models.AutoField(primary_key=True)
+    creator = models.ForeignKey(User, related_name="friendship_creator_set", on_delete=models.CASCADE)
+    friend = models.ForeignKey(User, related_name="friend_set", on_delete=models.CASCADE)
+    accepted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.creator.username + " (" + self.creator.email + ") and " + \
+               self.friend.username + " (" + self.friend.email + "): " + str(self.accepted)
