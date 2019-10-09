@@ -21,7 +21,6 @@ from django.urls import path
 
 from Picturest import views
 
-# El registre agafa el CustomUser, no el nou PicturestUser!
 
 urlpatterns = [
     path('admin/', admin.site.urls),
