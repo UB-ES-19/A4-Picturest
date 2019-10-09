@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form method="POST">
+        {% csrf_token %}
+        <input id="friend" name="friend" placeholder="friend">
+        <button type="submit">Add</button>
+    </form>
+
+    <h1>Friends</h1>
+    <ul>
+        {% for friend_a in accepted %}
+            <li>{{ friend_a.friend.username }}</li>
+        {% endfor %}
+        {% for friend_a in accepted_yours %}
+            <li>{{ friend_a.creator.username }}</li>
+        {% endfor %}
+    </ul>
+
+    <h1>Pending for you</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <ul>
+            {% for friend_a in pending_yours %}
+                <li>
+                    {{ friend_a.creator.username }}
+                    <button type="submit" name="accept" value={{ friend_a.id_friend }}>Accept</button>
+                    <button type="submit" name="refuse" value={{ friend_a.id_friend }}>Refuse</button>
+                </li>
+            {% endfor %}
+        </ul>
+    </form>
+
+    <h1>Pending of you</h1>
+    <ul>
+        {% for friend_a in pending %}
+            <li>{{ friend_a.friend.username }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

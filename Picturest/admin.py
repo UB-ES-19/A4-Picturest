@@ -1,5 +1,6 @@
 # Register your models here.
 from django.contrib import admin
+
 from .forms import EditProfileForm, UserRegisterForm
 from .models import *
 
@@ -17,3 +18,4 @@ admin.site.register(PicturestUser, UserAdmin)
 admin.site.register(Board)
 admin.site.register(Section)
 admin.site.register(Pin)
+admin.site.register(Friendship)

@@ -88,12 +88,12 @@
 
                 <div class="col-md-6 details">
                     <blockquote>
-                        <h1>{{ request.user.first_name }} {{ request.user.last_name }}</h1>
-                        <small><cite title="Source Title">{{ request.user.location }} <i
+                        <h1>{{ user.first_name }} {{ user.last_name }}</h1>
+                        <small><cite title="Source Title">{{ user.location }} <i
                                 class="icon-map-marker"></i></cite></small>
                     </blockquote>
                     <p>
-                        {{ request.user.about }}
+                        {{ user.about }}
                     </p>
                     <a href="followers.html">
                         0 followers

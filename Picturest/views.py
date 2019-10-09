@@ -1,13 +1,12 @@
 # Create your views here.
+from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.contrib.auth import authenticate, get_user_model, login, logout
 from django.shortcuts import render, redirect
-from django.views.generic.edit import UpdateView
 from django.urls import reverse
-from django.conf import settings
-from .models import *
+
 from .forms import *
+from .models import * 
 
 
 def login_view(request):
@@ -68,16 +67,33 @@ def homepage(request):
 
 
 @login_required
-def profile(request):
+def profile(request, user_search):
+    user_aux = ""
+
+    if 'user_search' in request.GET:
+        user_search = request.GET["user_search"]
+
+    if user_search:
+        #if "@" in user_search:
+        #    user_aux = PicturestUser.objects.get(email=user_search)
+        #else:
+        try:
+            user_aux = PicturestUser.objects.get(username=user_search)
+        except PicturestUser.DoesNotExist:
+            return HttpResponseRedirect(reverse("home_page"))
+
+    if not user_aux:
+        user_aux = request.user
+
     user_boards = Board.objects.filter(author=request.user)
     user_sections = Section.objects.filter(author=request.user)
     user_pins = Pin.objects.filter(author=request.user)
 
     context = {
         'authenticated': request.user.is_authenticated,
-        'username': request.user.username,
-        'first_name': request.user.first_name,
-        'user': request.user,
+        'username': user_aux.username,
+        'first_name': user_aux.first_name,
+        'user': user_aux,
         'user_boards': user_boards,
         'user_sections': user_sections,
         'user_pins': user_pins
@@ -195,3 +211,44 @@ def section(request):
         }
 
     return render(request, 'Picturest/section.html', context)
+
+
+@login_required
+def search_friends(request):
+    if request.method == "POST":
+        if "friend" in request.POST.keys():
+            friend_name = request.POST["friend"]
+            if friend_name:
+                try:
+                    form = SearchFriendForm()
+                    freq = form.save(commit=False)
+                    freq.friend = User.objects.get(username=friend_name)
+                    freq.creator = request.user
+                    freq.save()
+                    request.session["result"] = "OK"
+                except User.DoesNotExist:
+                    request.session["result"] = "KO"
+
+        elif "accept" in request.POST.keys():
+            friend_id = request.POST["accept"]
+            Friendship.objects.filter(id_friend=friend_id).update(accepted=True)
+
+        elif "refuse" in request.POST.keys():
+            friend_id = request.POST["refuse"]
+            Friendship.objects.filter(id_friend=friend_id).delete()
+
+        return HttpResponseRedirect(reverse("search_friends"))
+
+    elif request.method == "GET":
+        accepted = Friendship.objects.filter(creator=request.user, accepted=True)
+        accepted_yours = Friendship.objects.filter(friend=request.user, accepted=True)
+        pending = Friendship.objects.filter(creator=request.user, accepted=False)
+        pending_yours = Friendship.objects.filter(friend=request.user, accepted=False)
+
+        context = {
+            "accepted": accepted,
+            "accepted_yours": accepted_yours,
+            "pending": pending,
+            "pending_yours": pending_yours,
+        }
+        return render(request, 'Picturest/search_friends.html', context)
