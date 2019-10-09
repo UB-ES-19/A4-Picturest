@@ -1,11 +1,12 @@
 # Create your views here.
-from django.contrib.auth import login, logout
+from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from .forms import *
+from .models import * 
 
 
 def login_view(request):
