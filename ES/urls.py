@@ -28,12 +28,12 @@ urlpatterns = [
     url(r'^accounts/login/$', views.login_view, name='login'),
     url(r'^accounts/logout/$', views.logout_view, name='logout'),
     url(r'^accounts/register/$', views.register_view, name='register'),
+    url(r'^profile/edit/$', views.edit_profile, name='edit_profile'),
     url(r'^profile/(?P<user_search>.*)$', views.profile, name='profile'),
     url(r'^profile/$', views.profile, name='profile'),
     url(r'^board/$', views.board, name='board'),
     url(r'^section/$', views.section, name='section'),
     url(r'^pin/$', views.pin, name='pin'),
-    url(r'^profile/edit/$', views.edit_profile, name='edit_profile'),
     url(r'^following/$', views.following, name="following"),
     url(r'^search_friends/$', views.search_friends, name='search_friends'),
 ]
