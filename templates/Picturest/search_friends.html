@@ -1,45 +1,64 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <form method="POST">
-        {% csrf_token %}
-        <input id="friend" name="friend" placeholder="friend">
-        <button type="submit">Add</button>
-    </form>
+{% extends 'Picturest/navbar_PicBase.html' %}
+{% block title %}Friends{% endblock %}
+{% block content %}
 
-    <h1>Friends</h1>
-    <ul>
-        {% for friend_a in accepted %}
-            <li>{{ friend_a.friend.username }}</li>
-        {% endfor %}
-        {% for friend_a in accepted_yours %}
-            <li>{{ friend_a.creator.username }}</li>
-        {% endfor %}
-    </ul>
-
-    <h1>Pending for you</h1>
-    <form method="POST">
-        {% csrf_token %}
-        <ul>
-            {% for friend_a in pending_yours %}
-                <li>
-                    {{ friend_a.creator.username }}
-                    <button type="submit" name="accept" value={{ friend_a.id_friend }}>Accept</button>
-                    <button type="submit" name="refuse" value={{ friend_a.id_friend }}>Refuse</button>
-                </li>
-            {% endfor %}
-        </ul>
-    </form>
-
-    <h1>Pending of you</h1>
-    <ul>
-        {% for friend_a in pending %}
-            <li>{{ friend_a.friend.username }}</li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm" align="center">
+                <form class="form-inline" method="POST">
+                    {% csrf_token %}
+                    <input class="form-control mr-sm-2" id="friend" name="friend" placeholder="friend">
+                    <button class="btn btn-danger" type="submit">Add</button>
+                </form>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-sm" align="center">
+                <h1>Friends</h1>
+                <ul class="list-group list-group-flush">
+                    {% for friend_a in accepted %}
+                        <li class="list-group-item">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            {{ friend_a.friend.username }}</li>
+                    {% endfor %}
+                    {% for friend_a in accepted_yours %}
+                        <li class="list-group-item">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            {{ friend_a.creator.username }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-sm" align="center">
+                <h1>Pending for you</h1>
+                <form method="POST">
+                    {% csrf_token %}
+                    <ul class="list-group list-group-flush">
+                        {% for friend_a in pending_yours %}
+                            <li class="list-group-item">
+                                <i class="fa fa-user" aria-hidden="true"></i>
+                                {{ friend_a.creator.username }}
+                                <button class="btn btn-success btn-sm" type="submit" name="accept" value={{ friend_a.id_friend }}>
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm" type="submit" name="refuse" value={{ friend_a.id_friend }}>
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </button>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </form>
+            </div>
+            <div class="col-sm" align="center">
+                <h1>Pending of you</h1>
+                <ul class="list-group list-group-flush">
+                    {% for friend_a in pending %}
+                        <li class="list-group-item">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            {{ friend_a.friend.username }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
