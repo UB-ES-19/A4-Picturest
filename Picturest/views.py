@@ -69,6 +69,8 @@ def homepage(request):
 @login_required
 def profile(request, user_search):
     user_aux = ""
+    you = False
+    dis = True
 
     if 'user_search' in request.GET:
         user_search = request.GET["user_search"]
@@ -82,12 +84,28 @@ def profile(request, user_search):
         except PicturestUser.DoesNotExist:
             return HttpResponseRedirect(reverse("friend_not_found"))
 
-    if not user_aux:
+    if request.method == "GET" and not user_aux:
         user_aux = request.user
+        you = True
+
+    elif request.method == "POST":
+        form = SearchFriendForm()
+        freq = form.save(commit=False)
+        freq.friend = user_aux
+        freq.creator = request.user
+        freq.save()
+        request.session["result"] = "OK"
 
     user_boards = Board.objects.filter(author=user_aux)
     user_sections = Section.objects.filter(author=user_aux)
     user_pins = Pin.objects.filter(author=user_aux)
+
+    if not you:
+        try:
+            Friendship.objects.get(friend=user_aux, creator=request.user)
+            dis = True
+        except Friendship.DoesNotExist:
+            dis = False
 
     context = {
         'authenticated': request.user.is_authenticated,
@@ -96,9 +114,13 @@ def profile(request, user_search):
         'user': user_aux,
         'user_boards': user_boards,
         'user_sections': user_sections,
-        'user_pins': user_pins
-
+        'user_pins': user_pins,
+        'you': you,
+        'followers': 0,
+        'followings': 0,
+        'disabled': dis
     }
+
     return render(request, 'Picturest/profile.html', context)
 
 
