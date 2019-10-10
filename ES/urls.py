@@ -21,7 +21,6 @@ from django.urls import path
 
 from Picturest import views
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^$', views.homepage, name='home_page'),
@@ -36,6 +35,7 @@ urlpatterns = [
     url(r'^pin/$', views.pin, name='pin'),
     url(r'^following/$', views.following, name="following"),
     url(r'^search_friends/$', views.search_friends, name='search_friends'),
+    url(r'^friend_not_found/$', views.friend_not_found, name='friend_not_found'),
 ]
 
 
