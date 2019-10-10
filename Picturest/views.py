@@ -1,12 +1,12 @@
 # Create your views here.
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from .forms import *
-from .models import * 
+from .models import *
 
 
 def login_view(request):
@@ -74,20 +74,20 @@ def profile(request, user_search):
         user_search = request.GET["user_search"]
 
     if user_search:
-        #if "@" in user_search:
-        #    user_aux = PicturestUser.objects.get(email=user_search)
-        #else:
         try:
-            user_aux = PicturestUser.objects.get(username=user_search)
+            if "@" in user_search:
+                user_aux = PicturestUser.objects.get(email=user_search)
+            else:
+                user_aux = PicturestUser.objects.get(username=user_search)
         except PicturestUser.DoesNotExist:
-            return HttpResponseRedirect(reverse("home_page"))
+            return HttpResponseRedirect(reverse("friend_not_found"))
 
     if not user_aux:
         user_aux = request.user
 
-    user_boards = Board.objects.filter(author=request.user)
-    user_sections = Section.objects.filter(author=request.user)
-    user_pins = Pin.objects.filter(author=request.user)
+    user_boards = Board.objects.filter(author=user_aux)
+    user_sections = Section.objects.filter(author=user_aux)
+    user_pins = Pin.objects.filter(author=user_aux)
 
     context = {
         'authenticated': request.user.is_authenticated,
@@ -252,3 +252,7 @@ def search_friends(request):
             "pending_yours": pending_yours,
         }
         return render(request, 'Picturest/search_friends.html', context)
+
+
+def friend_not_found(request):
+    return render(request, 'Picturest/user_not_found.html', {})
