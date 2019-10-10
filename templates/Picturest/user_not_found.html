@@ -1,0 +1,22 @@
+{% extends 'Picturest/navbar_PicBase.html' %}
+{% block title %}User_not_found{% endblock %}
+{% block content %}
+<div class>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="jumbotron">
+        <h1 align="center" class="display-4">User Not found</h1>
+        <br>
+        <p align="center" class="lead">The user you are looking for has not found.</p>
+        <hr class="my-4">
+        <p align="center">Maybe have you misspelled the name?</p>
+        <div align="center">
+            <a   href="{% url 'home_page' %}" class="btn btn-danger" href="#" role="button">Back to home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
