@@ -146,7 +146,7 @@ def edit_profile(request):
 
     return render(request, "Picturest/edit_profile.html", context)
 
-
+@login_required
 def following(request):
     context = {
         'authenticated': request.user.is_authenticated,
