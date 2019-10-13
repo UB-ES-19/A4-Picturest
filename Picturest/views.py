@@ -118,6 +118,8 @@ def profile(request, user_search):
     user_boards = Board.objects.filter(author=user_aux)
     user_sections = Section.objects.filter(author=user_aux)
     user_pins = Pin.objects.filter(author=user_aux)
+    following = Friendship.objects.filter(creator=user_aux, accepted=True).count()
+    followers = Friendship.objects.filter(friend=user_aux, accepted=True).count()
 
     if not you:
         try:
@@ -135,8 +137,8 @@ def profile(request, user_search):
         'user_sections': user_sections,
         'user_pins': user_pins,
         'you': you,
-        'followers': 0,
-        'followings': 0,
+        'followers': followers,
+        'followings': following,
         'disabled': dis
     }
 
@@ -303,3 +305,16 @@ def search_friends(request):
 
 def friend_not_found(request):
     return render(request, 'Picturest/user_not_found.html', {})
+
+
+def search(request):
+    word = request.GET["word_search"]
+    users_username = PicturestUser.objects.filter(username__contains=word)
+    pins = Pin.objects.filter(title__contains=word)
+
+    context = {
+        "users_username": users_username,
+        "pins": pins
+    }
+
+    return render(request, 'Picturest/search.html', context)

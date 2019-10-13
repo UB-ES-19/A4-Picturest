@@ -44,8 +44,8 @@
                   Picturest
               </a>
 
-              <form class="form-inline" action="{% url 'profile'%}" method="get">
-                  <input name="user_search" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" style="width:430px !important;">
+              <form class="form-inline" action="{% url 'search'%}" method="get">
+                  <input name="word_search" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" style="width:430px !important;">
                   <button class="btn btn-danger my-2 my-sm-0" type="submit">Search</button>
               </form>
 
@@ -54,7 +54,7 @@
                     <img src="../static/ImgStatic/PicFriends.png" width="30" height="30" class="d-inline-block align-top"  alt="Friends">
                 </a>
 
-                <a class="btn btn-outline-secondary" title="Profile" href="profile">
+                <a class="btn btn-outline-secondary" title="Profile" href="{%url 'profile' %}">
                     <img src="../static/ImgStatic/PicProfile.png" width="30" height="30" class="d-inline-block align-top" alt="Profile">
                 </a>
 

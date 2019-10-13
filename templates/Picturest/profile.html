@@ -28,12 +28,18 @@
                     <p>
                         {{ user.about }}
                     </p>
-                    <a href="followers.html">
-                        {{ followers }} followers
-                    </a>
-                    <a href="followings.html">
-                        {{ followings }} following
-                    </a>
+                    {% if you %}
+                       <a href="{%url 'search_friends' %}">
+                            {{ followers }} followers
+                       </a>
+                        <a href="{%url 'search_friends' %}">
+                            {{ followings }} following
+                        </a>
+                    {% else %}
+                        <p>
+                            {{ followers }} followers | {{ followings }} following
+                        </p>
+                    {% endif %}
                 </div>
                 <div class="col-md-6 img">
                     <img class="rounded-circle z-depth-2" alt="100x100" src="{{ request.user.photo.url }}" data-holder-rendered="true"> 

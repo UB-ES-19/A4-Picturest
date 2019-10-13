@@ -37,7 +37,7 @@ class PicturestUserManager(BaseUserManager):
 
 class PicturestUser(AbstractBaseUser):
     email = models.EmailField(verbose_name="email", max_length=60, unique=True)
-    username = models.CharField(max_length=30)
+    username = models.CharField(max_length=30, unique=True)
     age = models.PositiveIntegerField()
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
@@ -55,7 +55,7 @@ class PicturestUser(AbstractBaseUser):
     is_superuser = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['age']
+    REQUIRED_FIELDS = ['age', 'username']
 
     objects = PicturestUserManager()
 
