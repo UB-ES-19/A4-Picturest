@@ -153,13 +153,16 @@
                 }
 
             </style>
+          <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
             <div class="form-group">
                 <label>Select the Image to Post</label>
                 <div class="input-group">
                     <span class="input-group-btn">
                         <span class="btn btn-outline-secondary btn-file">
                           Browse…
-                          <input type="file" id="imgInp">
+                          <input type="file" name="post" id="imgInp">
                         </span>
                     </span>
                     <input type="text" class="form-control" readonly>
@@ -172,23 +175,31 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text">Put a Title</span>
                   </div>
-                  <textarea class="form-control" aria-label="Title"></textarea>
+                  {% comment %} <textarea class="form-control" aria-label="Title"></textarea> {% endcomment %}
+                  <input type="title" name="title" class="form-control" data-required>
                 </div>
 
                 <div class="input-group" style="padding-top: 8px;">
                   <div class="input-group-prepend">
                     <span class="input-group-text">Make a description</span>
                   </div>
-                  <textarea class="form-control" aria-label="Description"></textarea>
+                  {% comment %} <textarea class="form-control" aria-label="Description"></textarea> {% endcomment %}
+                  <input type="description" name="description" class="form-control" data-required>
                 </div>
 
             </div>
 
           </div>
+
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-danger">UPLOAD</button>
+            {% comment %} <button type="button" class="btn btn-danger">UPLOAD</button> {% endcomment %}
+            <button id="submit" class="btn btn-danger" type="submit">Real upload</button>
+
           </div>
+
+          </form>
+
         </div>
       </div>
     </div>
