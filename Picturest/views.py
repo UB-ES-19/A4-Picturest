@@ -53,17 +53,36 @@ def logout_view(request):
 
 @login_required
 def homepage(request):
-    pins = Pin.objects.all()
-    #boards = Board.objects.all()
-    #sections = Section.objects.all()
-    #users = User.objects.all()
 
-    context = {
-        'pins': pins,
-        'authenticated': request.user.is_authenticated,
-        'username': request.user.email
-    }
-    return render(request, 'Picturest/home_page.html', context)
+    if request.method == "POST":
+        form = PinForm(request.POST, request.FILES)
+        if form.is_valid():
+            new_pin = form.save(commit=False)
+            new_pin.author = request.user
+            new_pin.post = form.cleaned_data['post']
+            new_pin.save()
+            return HttpResponseRedirect(reverse("profile"))
+
+        else:
+            print(form.errors)
+            request.session["result"] = form.errors
+        return HttpResponseRedirect(reverse('home_page'))
+
+    else:
+        form = PinForm(instance=request.user)
+
+        pins = Pin.objects.all()
+        #boards = Board.objects.all()
+        #sections = Section.objects.all()
+        #users = User.objects.all()
+
+        context = {
+            'pins': pins,
+            'authenticated': request.user.is_authenticated,
+            'username': request.user.email,
+            'form': form
+        }
+        return render(request, 'Picturest/home_page.html', context)
 
 
 @login_required
@@ -145,6 +164,7 @@ def edit_profile(request):
         }
 
     return render(request, "Picturest/edit_profile.html", context)
+
 
 @login_required
 def following(request):
@@ -253,7 +273,8 @@ def search_friends(request):
 
         elif "accept" in request.POST.keys():
             friend_id = request.POST["accept"]
-            Friendship.objects.filter(id_friend=friend_id).update(accepted=True)
+            Friendship.objects.filter(
+                id_friend=friend_id).update(accepted=True)
 
         elif "refuse" in request.POST.keys():
             friend_id = request.POST["refuse"]
@@ -262,10 +283,14 @@ def search_friends(request):
         return HttpResponseRedirect(reverse("search_friends"))
 
     elif request.method == "GET":
-        accepted = Friendship.objects.filter(creator=request.user, accepted=True)
-        accepted_yours = Friendship.objects.filter(friend=request.user, accepted=True)
-        pending = Friendship.objects.filter(creator=request.user, accepted=False)
-        pending_yours = Friendship.objects.filter(friend=request.user, accepted=False)
+        accepted = Friendship.objects.filter(
+            creator=request.user, accepted=True)
+        accepted_yours = Friendship.objects.filter(
+            friend=request.user, accepted=True)
+        pending = Friendship.objects.filter(
+            creator=request.user, accepted=False)
+        pending_yours = Friendship.objects.filter(
+            friend=request.user, accepted=False)
 
         context = {
             "accepted": accepted,

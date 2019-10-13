@@ -43,8 +43,8 @@ class PicturestUser(AbstractBaseUser):
     last_name = models.CharField(max_length=30)
     about = models.CharField(max_length=500)
     location = models.CharField(max_length=60)
-    photo = models.ImageField(default='default.jpg',
-                              upload_to='profile_pics', blank=True)
+    photo = models.ImageField(upload_to='profile_pics',
+                              blank=True, default='profile_pics/default.png')
 
     date_joined = models.DateTimeField(
         verbose_name='date joined', auto_now_add=True)
@@ -89,12 +89,12 @@ class Section(models.Model):
 
 class Pin(models.Model):
     pin_id = models.AutoField(primary_key=True)
-    post = models.ImageField(upload_to='static/user_images')
+    post = models.ImageField(upload_to='posts')
     description = models.TextField()
     title = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    board = models.ForeignKey(Board, on_delete=models.CASCADE)
-    section = models.ForeignKey(Section, on_delete=models.CASCADE)
+    #board = models.ForeignKey(Board, on_delete=models.CASCADE)
+    #section = models.ForeignKey(Section, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
 
@@ -109,10 +109,13 @@ class Message(models.Model):
 
 class Friendship(models.Model):
     id_friend = models.AutoField(primary_key=True)
-    creator = models.ForeignKey(User, related_name="friendship_creator_set", on_delete=models.CASCADE)
-    friend = models.ForeignKey(User, related_name="friend_set", on_delete=models.CASCADE)
+    creator = models.ForeignKey(
+        User, related_name="friendship_creator_set", on_delete=models.CASCADE)
+    friend = models.ForeignKey(
+        User, related_name="friend_set", on_delete=models.CASCADE)
     accepted = models.BooleanField(default=False)
 
     def __str__(self):
         return self.creator.username + " (" + self.creator.email + ") and " + \
-               self.friend.username + " (" + self.friend.email + "): " + str(self.accepted)
+            self.friend.username + \
+            " (" + self.friend.email + "): " + str(self.accepted)
