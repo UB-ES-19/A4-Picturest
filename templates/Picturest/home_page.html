@@ -187,6 +187,17 @@
                   <input type="description" name="description" class="form-control" data-required>
                 </div>
 
+                <div class="input-group" style="padding-top: 8px;">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Select a board</span>
+                  </div>
+                  <select name="board">
+                    {% for board in boards_user %}
+                        <option value="{{ board.board_id }}">{{ board.name }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+
             </div>
 
           </div>

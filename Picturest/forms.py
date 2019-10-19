@@ -67,10 +67,12 @@ class PinForm(forms.ModelForm):
     post = forms.ImageField(label='Post', required=True)
     title = forms.CharField(label="Title", max_length=50, required=True)
     description = forms.CharField(label="Description", required=False)
+    board = forms.ModelChoiceField(label="Board", queryset=Board.objects.all(),
+                                   empty_label=None)
 
     class Meta:
         model = Pin
-        fields = ["post", "title", "description"]
+        fields = ["post", "title", "description", "board"]
         # fields = ["post", "title", "description", "board", "section"]
 
     def __init__(self, *args, **kwargs):

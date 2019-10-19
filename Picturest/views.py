@@ -60,7 +60,6 @@ def logout_view(request):
 
 @login_required
 def homepage(request):
-
     if request.method == "POST":
         form = PinForm(request.POST, request.FILES)
         if form.is_valid():
@@ -79,6 +78,7 @@ def homepage(request):
         form = PinForm(instance=request.user)
 
         pins = Pin.objects.all()
+        boards_user = Board.objects.filter(author=request.user)
         #boards = Board.objects.all()
         #sections = Section.objects.all()
         #users = User.objects.all()
@@ -87,7 +87,8 @@ def homepage(request):
             'pins': pins,
             'authenticated': request.user.is_authenticated,
             'username': request.user.email,
-            'form': form
+            'form': form,
+            'boards_user': boards_user
         }
         return render(request, 'Picturest/home_page.html', context)
 
