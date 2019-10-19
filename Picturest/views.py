@@ -176,7 +176,7 @@ def following(request):
 
 
 @login_required
-def pin(request):
+def pin(request, pin_search=""):
     if request.method == "POST":
         form = PinForm(request.POST)
         if form.is_valid():
@@ -191,6 +191,17 @@ def pin(request):
             request.session["result"] = form.errors
         return HttpResponseRedirect(reverse('home_page'))
 
+    elif pin_search:
+        try:
+            result = Pin.objects.get(pin_id=pin_search)
+            context = {
+                'pin': result
+            }
+            return render(request, 'Picturest/picture_view.html', context)
+
+        except Pin.DoesNotExist or Pin.MultipleObjectsReturned:
+            return HttpResponseRedirect(reverse("friend_not_found"))
+
     else:
         form = PinForm()
         context = {
@@ -199,7 +210,7 @@ def pin(request):
             'username': request.user.email
         }
 
-    return render(request, 'Picturest/pin.html', context)
+        return render(request, 'Picturest/pin.html', context)
 
 
 @login_required
