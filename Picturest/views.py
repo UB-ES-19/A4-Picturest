@@ -36,6 +36,13 @@ def register_view(request):
         user.set_password(password)
         user.save()
         login(request, user)
+
+        form_board = BoardForm()
+        board_default = form_board.save(commit=False)
+        board_default.name = "Default"
+        board_default.author = request.user
+        board_default.save()
+
         if next:
             return redirect(next)
         return redirect('/')
