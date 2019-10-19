@@ -67,7 +67,7 @@ def homepage(request):
             new_pin.author = request.user
             new_pin.post = form.cleaned_data['post']
             new_pin.save()
-            return HttpResponseRedirect(reverse("profile"))
+            return HttpResponseRedirect(reverse('pin', args=(new_pin.pin_id,)))
 
         else:
             print(form.errors)
@@ -185,21 +185,7 @@ def following(request):
 
 @login_required
 def pin(request, pin_search=""):
-    if request.method == "POST":
-        form = PinForm(request.POST)
-        if form.is_valid():
-            new_pin = form.save(commit=False)
-            new_pin.author = request.user
-            new_pin.save()
-
-            return HttpResponseRedirect(reverse("home_page"))
-
-        else:
-            print(form.errors)
-            request.session["result"] = form.errors
-        return HttpResponseRedirect(reverse('home_page'))
-
-    elif pin_search:
+    if pin_search:
         try:
             result = Pin.objects.get(pin_id=pin_search)
             context = {
@@ -211,14 +197,7 @@ def pin(request, pin_search=""):
             return HttpResponseRedirect(reverse("friend_not_found"))
 
     else:
-        form = PinForm()
-        context = {
-            'form': form,
-            'authenticated': request.user.is_authenticated,
-            'username': request.user.email
-        }
-
-        return render(request, 'Picturest/pin.html', context)
+        return HttpResponseRedirect(reverse("home_page"))
 
 
 @login_required
