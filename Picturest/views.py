@@ -61,11 +61,25 @@ def logout_view(request):
 @login_required
 def homepage(request):
     if request.method == "POST":
+        new_board = None
+
         form = PinForm(request.POST, request.FILES)
+        if 'board' in form.errors:
+            form_board = BoardForm()
+            new_board = form_board.save(commit=False)
+            new_board.author = request.user
+            new_board.name = request.POST['board_name']
+            new_board.save()
+            form.errors.pop('board')
+
         if form.is_valid():
             new_pin = form.save(commit=False)
             new_pin.author = request.user
             new_pin.post = form.cleaned_data['post']
+
+            if new_board:
+                new_pin.board = new_board
+
             new_pin.save()
             return HttpResponseRedirect(reverse('pin', args=(new_pin.pin_id,)))
 

@@ -195,7 +195,16 @@
                     {% for board in boards_user %}
                         <option value="{{ board.board_id }}">{{ board.name }}</option>
                     {% endfor %}
+                    <option value="new_board">New board</option>
                   </select>
+                </div>
+
+                <div class="input-group" style="padding-top: 8px;">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">New board name</span>
+                  </div>
+                  {% comment %} <textarea class="form-control" aria-label="New Board"></textarea> {% endcomment %}
+                  <input type="board_name" name="board_name" class="form-control" data-required>
                 </div>
 
             </div>
