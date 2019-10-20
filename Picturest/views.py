@@ -215,29 +215,20 @@ def pin(request, pin_search=""):
 
 
 @login_required
-def board(request):
-    if request.method == "POST":
-        form = BoardForm(request.POST)
-        if form.is_valid():
-            new_board = form.save(commit=False)
-            new_board.author = request.user
-            new_board.save()
+def board(request, board_search=""):
+    if board_search:
+        try:
+            result = Board.objects.get(board_id=board_search)
+            context = {
+                'board': result
+            }
+            return render(request, 'Picturest/board_view.html', context)
 
-            return HttpResponseRedirect(reverse("home_page"))
-
-        else:
-            request.session["result"] = form.errors
-        return HttpResponseRedirect(reverse('home_page'))
+        except Board.DoesNotExist or Board.MultipleObjectsReturned:
+            return HttpResponseRedirect(reverse("friend_not_found"))
 
     else:
-        form = BoardForm()
-        context = {
-            'form': form,
-            'authenticated': request.user.is_authenticated,
-            'username': request.user.email
-        }
-
-    return render(request, 'Picturest/board.html', context)
+        return HttpResponseRedirect(reverse("home_page"))
 
 
 @login_required
