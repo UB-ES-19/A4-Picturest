@@ -1,0 +1,33 @@
+@ -1,51 +1,33 @@
+{% extends 'Picturest/navbar_PicBase.html' %}
+{% block title %}User_not_found{% endblock %}
+{% block content %}
+<div class>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="jumbotron">
+        <h3 align="center" class="display-4">{{ pin.title }}</h3>
+        <br>
+        <div>
+            <div class="col-md-6 img">
+                <img class="rounded-circle z-depth-2" alt="100x100" src="{{ pin.author.photo.url }}" data-holder-rendered="true">
+            </div>
+            <p>
+                &nbsp;&nbsp;&nbsp;
+                <a href="{% url 'profile' pin.author.username %}">{{ pin.author.username }}</a>
+                &nbsp; saved to &nbsp;
+                {% comment %}<a href="{% url 'board' pin.board.board_id %}">{{ pin.board.name }}</a>{% endcomment %}
+                <a href="">Board</a>
+            </p>
+            <div class="col-md-6 img">
+                <img src="{{ pin.post.url }}" data-holder-rendered="true">
+            </div>
+            <p>&nbsp;&nbsp;&nbsp;{{ pin.description }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

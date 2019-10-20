@@ -32,6 +32,7 @@ urlpatterns = [
     url(r'^profile/$', views.profile, name='profile'),
     url(r'^board/$', views.board, name='board'),
     url(r'^section/$', views.section, name='section'),
+    url(r'^pin/(?P<pin_search>.*)$', views.pin, name='pin'),
     url(r'^pin/$', views.pin, name='pin'),
     url(r'^following/$', views.following, name="following"),
     url(r'^search_friends/$', views.search_friends, name='search_friends'),
