@@ -88,7 +88,6 @@ def homepage(request):
 @login_required
 def profile(request, user_search):
     user_aux = ""
-    you = False
     dis = True
 
     if 'user_search' in request.GET:
@@ -105,7 +104,6 @@ def profile(request, user_search):
 
     if request.method == "GET" and not user_aux:
         user_aux = request.user
-        you = True
 
     elif request.method == "POST":
         form = SearchFriendForm()
@@ -121,7 +119,7 @@ def profile(request, user_search):
     following = Friendship.objects.filter(creator=user_aux, accepted=True).count()
     followers = Friendship.objects.filter(friend=user_aux, accepted=True).count()
 
-    if not you:
+    if user_aux != request.user:
         try:
             Friendship.objects.get(friend=user_aux, creator=request.user)
             dis = True
@@ -136,7 +134,7 @@ def profile(request, user_search):
         'user_boards': user_boards,
         'user_sections': user_sections,
         'user_pins': user_pins,
-        'you': you,
+        'you': user_aux == request.user,
         'followers': followers,
         'followings': following,
         'disabled': dis
@@ -320,7 +318,9 @@ def friend_not_found(request):
 
 def search(request):
     word = request.GET["word_search"]
-    users_username = PicturestUser.objects.filter(username__contains=word)
+    you = request.user.username
+    users_username = PicturestUser.objects.filter(username__contains=word).\
+        exclude(username=you)
     pins = Pin.objects.filter(title__contains=word)
 
     context = {

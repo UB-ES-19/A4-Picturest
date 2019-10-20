@@ -24,7 +24,7 @@
                 <br>
                 {% for pin in pins %}
                     <div align="center">
-                        <a class="btn btn-outline-primary list-group-item list-group-item-action" role="button" aria-disabled="true" href="{% url 'profile' user.username %}">{{ pin.title }}</a>
+                        <a class="btn btn-outline-primary list-group-item list-group-item-action" role="button" aria-disabled="true" href="{% url 'pin' pin.pin_id %}">{{ pin.title }}</a>
                     </div>
                 {% endfor %}
             </ul>
