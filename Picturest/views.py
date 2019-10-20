@@ -128,8 +128,6 @@ def profile(request, user_search):
 
     context = {
         'authenticated': request.user.is_authenticated,
-        'username': user_aux.username,
-        'first_name': user_aux.first_name,
         'user': user_aux,
         'user_boards': user_boards,
         'user_sections': user_sections,
