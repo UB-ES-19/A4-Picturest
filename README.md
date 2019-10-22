@@ -9,7 +9,7 @@ Now on your terminal type `python3 ./manage.py shell` to open the Django shell
 Execute the following command `exec(open('Picturest/populate_db.py').read());` to run the script `populate_db.py`
 
 ## Script populate_db.py
-Aquest script crea 5 Users:
+Aquest script crea 5 Users:  
 username: ico, email: quim@gmail.com, password: quim  
 username: carol, email:  carolina@gmail.com, password: carolina  
 username: fran, email: fran@gmail.com, password: fran  
