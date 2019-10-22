@@ -16,7 +16,7 @@ Aquest script crea 5 Users, 1 per cada un, que podeu fer servir per fer login:
 - **username**: pere, **email**: pere@gmail.com, **password**: pere  
 - **username**: vicent, **email**: vicent@gmail.com, **password**: vicent  
 
-Tambe crea 7 Pins, l'autor sera un User escollit aleatoriament (es a dir, algu de nosaltres). 
+Tambe crea 7 Pins, l'autor de cada Pin sera un User escollit aleatoriament (es a dir, algu de nosaltres). 
 
 Per acabar crear 2 Friendships per persona
 
