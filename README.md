@@ -10,11 +10,11 @@ Execute the following command `exec(open('Picturest/populate_db.py').read());` t
 
 ## Script populate_db.py
 Aquest script crea 5 Users:  
-- username: ico, email: quim@gmail.com, password: quim  
-- username: carol, email:  carolina@gmail.com, password: carolina  
-- username: fran, email: fran@gmail.com, password: fran  
-- username: pere, email: pere@gmail.com, password: pere  
-- username: vicent, email: vicent@gmail.com, password: vicent  
+- **username**: ico, **email**: quim@gmail.com, **password**: quim  
+- **username**: carol, **email**:  carolina@gmail.com, **password**: carolina  
+- **username**: fran, **email**: fran@gmail.com, **password**: fran  
+- **username**: pere, **email**: pere@gmail.com, **password**: pere  
+- **username**: vicent, **email**: vicent@gmail.com, **password**: vicent  
 
 
 
