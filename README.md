@@ -6,7 +6,7 @@ Clone the last version of the project on your computer (current: `quim/pins_from
 Make sure this file are deleted: `db.sqlite3` and the only file you have in the `migrations` folder is: ` __init__.py `  
 
 Now on your terminal type `python3 manage.py shell` to open the Django shell  
-Ro run the script `populate_db.py` execute the following command `exec(open('Picturest/populate_db.py').read());`  
+To run the script `populate_db.py` execute the following command `exec(open('Picturest/populate_db.py').read());`  
 To exit the shell type `exit`  
 
 **IMPORTANT: You only have to execute the scrip once**  
