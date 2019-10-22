@@ -170,21 +170,12 @@ def edit_profile(request):
 def following(request):
     form = PinForm(instance=request.user)
     email_followers = []
-
     friendships = Friendship.objects.filter(creator=request.user)
 
     for friendship in friendships:
-        print(friendship.friend)
         email_followers.append(friendship.friend)
 
-    print(email_followers)
     pins = Pin.objects.filter(author__in=email_followers)
-    print(pins)
-    print("--")
-    for pin in pins:
-        print(pin.author)
-        user = User.objects.filter(email=pin.author)
-
     context = {
         'pins': pins,
         'authenticated': request.user.is_authenticated,
@@ -338,11 +329,9 @@ def friend_not_found(request):
 def search(request):
     word = request.GET["word_search"]
     you = request.user.username
-    print(word)
     users_username = PicturestUser.objects.filter(username=word)
     pins = Pin.objects.filter(title__contains=word)
 
-    print(users_username)
     context = {
         "users_username": users_username,
         "pins": pins
