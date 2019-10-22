@@ -8,7 +8,7 @@ Make sure this file are deleted: `db.sqlite3` and the only file you have in the 
 Now on your terminal type `python3 manage.py shell` to open the Django shell  
 Execute the following command `exec(open('Picturest/populate_db.py').read());` to run the script `populate_db.py`
 
-**You only have to execute the scrip once**  
+**IMPORTANT: You only have to execute the scrip once**  
 If you want to flush the DB use the command: `python3 manage.py sqlflush | python3 manage.py dbshell`  
 
 ## Script populate_db.py
