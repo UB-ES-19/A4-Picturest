@@ -335,7 +335,6 @@ def search(request):
     you = request.user.username
     users_username = PicturestUser.objects.filter(username__contains=word).\
         exclude(username=you)
-
     pins = Pin.objects.filter(title__contains=word)
 
     context = {
