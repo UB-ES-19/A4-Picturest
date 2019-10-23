@@ -15,7 +15,10 @@
         <a class="pin_ref" href="{% url 'pin' pin.pin_id %}">
             <div class="card">
                 <p align="right">
-                    <button type="button" class="btn btn-light">Delete</button>
+                    <form class="form-inline" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-light" value="{{ pin.pin_id }}" name="pin">Delete</button>
+                    </form>
                 </p>
                 <img class="card-img-top" alt="100x100" src="{{ pin.post.url }}" data-holder-rendered="true">
                 <div class="card-body">

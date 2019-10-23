@@ -216,6 +216,10 @@ def pin(request, pin_search=""):
 
 @login_required
 def board(request, board_search=""):
+    if request.method == "POST":
+        pin_id = request.POST["pin"]
+        Pin.objects.get(pin_id=pin_id).delete()
+
     if board_search:
         try:
             result = Board.objects.get(board_id=board_search)
