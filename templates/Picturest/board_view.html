@@ -4,92 +4,27 @@
 
 <div class="container">
     <br></br>
-    <h1><b>Board Name</b></h1>
+    <h1><b>{{ board.name }}</b></h1>
     <a class="text-muted" >Showing all pins that belong to this board </a>
 </div>
 <br><br><br>
 
 <!-- From here we should modify some parts and look out everything -->
 <div class="card-columns">
-    <div class="card">
-        <p align="right">
-            <button type="button" class="btn btn-light">Delete</button>
-        </p>
-        <img src="../static/ImgStatic/Ejemplo1_MainPG.jpg" class="card-img-top" alt="...">
-        <div class="card-body">
-            <h5 class="card-title">Card title that wraps to a new line</h5>
-            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional
-                content. This content is a little bit longer.</p>
-        </div>
-    </div>
-    <div class="card p-3">
-        <p align="right">
-            <button type="button" class="btn btn-light">Delete</button>
-        </p>
-        <blockquote class="blockquote mb-0 card-body">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-            <footer class="blockquote-footer">
-                <small class="text-muted">
-                    Someone famous in <cite title="Source Title">Source Title</cite>
-                </small>
-            </footer>
-        </blockquote>
-    </div>
-    <div class="card">
-        <p align="right">
-            <button type="button" class="btn btn-light">Delete</button>
-        </p>
-        <img src="../static/ImgStatic/Ejemplo2_MainPG.jpg" class="card-img-top" alt="...">
-        <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-        </div>
-    </div>
-    <div class="card text-center p-3">
-        <p align="right">
-            <button type="button" class="btn btn-light">Delete</button>
-        </p>
-        <blockquote class="blockquote mb-0">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat.</p>
-            <footer class="blockquote-footer text-white">
-                <small>
-                    Someone famous in <cite title="Source Title">Source Title</cite>
-                </small>
-            </footer>
-        </blockquote>
-    </div>
-    <div class="card text-center">
-        <div class="card-body">
-            <p align="right"> <button type="button" class="btn btn-light">Delete</button></p>
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">This card has a regular title and short paragraphy of text below it.</p>
-            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-        </div>
-    </div>
-    <div class="card">
-        <img src="../static/ImgStatic/Ejemplo3_MainPG.jpg" class="card-img-top" alt="...">
-    </div>
-    <div class="card p-3 text-right">
-        <p align="right"> <button type="button" class="btn btn-light">Delete</button></p>
-        <blockquote class="blockquote mb-0">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-            <footer class="blockquote-footer">
-                <small class="text-muted">
-                    Someone famous in <cite title="Source Title">Source Title</cite>
-                </small>
-            </footer>
-        </blockquote>
-    </div>
-    <div class="card">
-        <div class="card-body">
-            <p align="right"> <button type="button" class="btn btn-light">Delete</button></p>
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">This is another card with title and supporting text below. This card has some
-                additional content to make it slightly taller overall.</p>
-            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-        </div>
-    </div>
+    {% for pin in pins %}
+        <a class="pin_ref" href="{% url 'pin' pin.pin_id %}">
+            <div class="card">
+                <p align="right">
+                    <button type="button" class="btn btn-light">Delete</button>
+                </p>
+                <img class="card-img-top" alt="100x100" src="{{ pin.post.url }}" data-holder-rendered="true">
+                <div class="card-body">
+                    <h5 class="card-title">{{ pin.title }}</h5>
+                    <p class="card-text">{{ pin.description }}</p>
+                </div>
+            </div>
+        </a>
+    {% endfor %}
 </div>
 
 

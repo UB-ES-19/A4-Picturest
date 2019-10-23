@@ -219,8 +219,11 @@ def board(request, board_search=""):
     if board_search:
         try:
             result = Board.objects.get(board_id=board_search)
+            pins = Pin.objects.filter(board=result)
+
             context = {
-                'board': result
+                'board': result,
+                'pins': pins
             }
             return render(request, 'Picturest/board_view.html', context)
 
