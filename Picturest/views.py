@@ -7,6 +7,7 @@ from django.urls import reverse
 
 from .forms import *
 from .models import *
+import random
 
 
 def login_view(request):
@@ -116,8 +117,10 @@ def profile(request, user_search):
     user_boards = Board.objects.filter(author=user_aux)
     user_sections = Section.objects.filter(author=user_aux)
     user_pins = Pin.objects.filter(author=user_aux)
-    following = Friendship.objects.filter(creator=user_aux, accepted=True).count()
-    followers = Friendship.objects.filter(friend=user_aux, accepted=True).count()
+    following = Friendship.objects.filter(
+        creator=user_aux, accepted=True).count()
+    followers = Friendship.objects.filter(
+        friend=user_aux, accepted=True).count()
 
     if user_aux != request.user:
         try:
@@ -166,11 +169,24 @@ def edit_profile(request):
 
 @login_required
 def following(request):
+    form = PinForm(instance=request.user)
+    email_followers = []
+    friendships = Friendship.objects.filter(creator=request.user)
+
+    for friendship in friendships:
+        email_followers.append(friendship.friend)
+
+    #pins = Pin.objects.filter(author__in=email_followers)
+    pins = sorted(Pin.objects.filter(author__in=email_followers),
+                  key=lambda x: random.random())
+
     context = {
+        'pins': pins,
         'authenticated': request.user.is_authenticated,
-        'username': request.user.username
+        'username': request.user.username,
+        'form': form
     }
-    return render(request, 'Picturest/following_posts.html', context)
+    return render(request, 'Picturest/home_page.html', context)
 
 
 @login_required
