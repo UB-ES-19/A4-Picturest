@@ -125,11 +125,30 @@ class Friendship(models.Model):
             " (" + self.friend.email + "): " + str(self.accepted)
 
 
-class Interest(models.Model):
+class Interests(models.Model):
     INTERESTS = [
         "Cinema", "Music", "Sports"
     ]
 
-    interest_id = models.AutoField(primary_key=True)
-    interest = models.TextField(unique=True)
-    is_interested = models.BooleanField(default=False)
+    CATEGORIES = (
+        ("cin", "Cinema"),
+        ("mus", "Music"),
+        ("spo", "Sports")
+    )
+    interest = models.TextField(max_length=5, choices=CATEGORIES)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    # interest_id = models.AutoField(primary_key=True)
+    # category = models.CharField(max_length=5, choices=CATEGORIES)
+    # is_interested = models.BooleanField(default=False)
+
+
+class InterestsSimple(models.Model):
+    INTERESTS = [
+        "Cinema", "Music", "Sports"
+    ]
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    cinema = models.BooleanField(default=False)
+    music = models.BooleanField(default=False)
+    sports = models.BooleanField(default=False)

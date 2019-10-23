@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            margin-top: 20px;
+        }
+
+        .button {
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <h2> Interests </h2>
+    </br></br>
+
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form_simple.as_p }}
+        
+        <input type="submit" value="Save">
+    </form>
+
+
+{% comment %} 
+    {% for interest in form.interest %}
+        <label for="{{ interest.id_for_label }}">
+            {{ interest.choice_label }}
+            <span class="interest">{{ interest.tag }}</span>
+        </label>
+    {% endfor %}
+
+    {% for value,text in form.interest.field.choices %}
+        <option value="{{ value }}">{{ text }}</option>
+    {% endfor %}
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        
+        <input type="submit" value="Save">
+    </form> {% endcomment %}
+
+
+</body>
+
+</html>
