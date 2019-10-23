@@ -123,3 +123,13 @@ class Friendship(models.Model):
         return self.creator.username + " (" + self.creator.email + ") and " + \
             self.friend.username + \
             " (" + self.friend.email + "): " + str(self.accepted)
+
+
+class Interest(models.Model):
+    INTERESTS = [
+        "Cinema", "Music", "Sports"
+    ]
+
+    interest_id = models.AutoField(primary_key=True)
+    interest = models.TextField(unique=True)
+    is_interested = models.BooleanField(default=False)
