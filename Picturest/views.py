@@ -333,7 +333,7 @@ def friend_not_found(request):
 def search(request):
     word = request.GET["word_search"]
     you = request.user.username
-    users_username = PicturestUser.objects.filter(username=word).\
+    users_username = PicturestUser.objects.filter(username__contains=word).\
         exclude(username=you)
 
     pins = Pin.objects.filter(title__contains=word)
