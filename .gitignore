@@ -125,3 +125,4 @@ dmypy.json
 
 # Others
 .idea/
+.DS_Store

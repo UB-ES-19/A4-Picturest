@@ -7,6 +7,7 @@ from django.urls import reverse
 
 from .forms import *
 from .models import *
+import random
 
 
 def login_view(request):
@@ -175,7 +176,10 @@ def following(request):
     for friendship in friendships:
         email_followers.append(friendship.friend)
 
-    pins = Pin.objects.filter(author__in=email_followers)
+    #pins = Pin.objects.filter(author__in=email_followers)
+    pins = sorted(Pin.objects.filter(author__in=email_followers),
+                  key=lambda x: random.random())
+
     context = {
         'pins': pins,
         'authenticated': request.user.is_authenticated,
