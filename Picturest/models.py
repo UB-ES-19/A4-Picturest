@@ -6,26 +6,30 @@ from django.db import models
 
 
 class PicturestUserManager(BaseUserManager):
-    def create_user(self, email, age, password=None):
+    def create_user(self, email, age, username, password=None):
         if not email:
             raise ValueError("Users must have an email address")
         if not age:
             raise ValueError("Users must introduce an age")
+        if not username:
+            raise ValueError("Users must introduce an username")
 
         user = self.model(
             email=self.normalize_email(email),
             age=age,
+            username=username,
         )
 
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, age, password):
+    def create_superuser(self, email, age, username, password):
         user = self.create_user(
             email=self.normalize_email(email),
             password=password,
             age=age,
+            username=username,
         )
 
         user.is_admin = True
@@ -37,7 +41,7 @@ class PicturestUserManager(BaseUserManager):
 
 class PicturestUser(AbstractBaseUser):
     email = models.EmailField(verbose_name="email", max_length=60, unique=True)
-    username = models.CharField(max_length=30)
+    username = models.CharField(max_length=30, unique=True)
     age = models.PositiveIntegerField()
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
@@ -55,7 +59,7 @@ class PicturestUser(AbstractBaseUser):
     is_superuser = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['age']
+    REQUIRED_FIELDS = ['age', 'username']
 
     objects = PicturestUserManager()
 

@@ -1,0 +1,34 @@
+{% extends 'Picturest/navbar_PicBase.html' %}
+{% block title %}Search{% endblock %}
+{% block content %}
+    <nav>
+      <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link active" id="nav-users-tab" data-toggle="tab" href="#users" role="tab" aria-controls="nav-users" aria-selected="true">Users</a>
+        <a class="nav-item nav-link" id="nav-pins-tab" data-toggle="tab" href="#pins" role="tab" aria-controls="nav-pins" aria-selected="false">Pins</a>
+        <a class="nav-item nav-link" id="nav-boards-tab" data-toggle="tab" href="#boards" role="tab" aria-controls="nav-boards" aria-selected="false">Boards</a>
+      </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="users" role="tabpanel" aria-labelledby="nav-users-tab">
+            <ul class="list-group col-3">
+                <br>
+                {% for user in users_username %}
+                    <div align="center">
+                        <a class="btn btn-outline-primary list-group-item list-group-item-action" role="button" aria-disabled="true" href="{% url 'profile' user.username %}">{{ user.first_name }} {{ user.last_name }} {{ user.username }}</a>
+                    </div>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="tab-pane fade" id="pins" role="tabpanel" aria-labelledby="nav-pins-tab">
+            <ul class="list-group">
+                <br>
+                {% for pin in pins %}
+                    <div align="center">
+                        <a class="btn btn-outline-primary list-group-item list-group-item-action" role="button" aria-disabled="true" href="{% url 'pin' pin.pin_id %}">{{ pin.title }}</a>
+                    </div>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="tab-pane fade" id="boards" role="tabpanel" aria-labelledby="nav-boards-tab">...</div>
+    </div>
+{% endblock %}

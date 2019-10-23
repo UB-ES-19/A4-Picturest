@@ -28,12 +28,14 @@ class UserLoginForm(forms.Form):
 class UserRegisterForm(forms.ModelForm):
     email = forms.EmailField(label='Email address')
     age = forms.IntegerField(label='Age')
+    username = forms.CharField(label='Username')
     password = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
         model = User
         fields = [
             'email',
+            'username',
             'age',
             'password'
         ]

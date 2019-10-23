@@ -7,6 +7,7 @@ from django.urls import reverse
 
 from .forms import *
 from .models import *
+import random
 
 
 def login_view(request):
@@ -110,7 +111,6 @@ def homepage(request):
 @login_required
 def profile(request, user_search):
     user_aux = ""
-    you = False
     dis = True
 
     if 'user_search' in request.GET:
@@ -127,7 +127,6 @@ def profile(request, user_search):
 
     if request.method == "GET" and not user_aux:
         user_aux = request.user
-        you = True
 
     elif request.method == "POST":
         form = SearchFriendForm()
@@ -140,8 +139,12 @@ def profile(request, user_search):
     user_boards = Board.objects.filter(author=user_aux)
     user_sections = Section.objects.filter(author=user_aux)
     user_pins = Pin.objects.filter(author=user_aux)
+    following = Friendship.objects.filter(
+        creator=user_aux, accepted=True).count()
+    followers = Friendship.objects.filter(
+        friend=user_aux, accepted=True).count()
 
-    if not you:
+    if user_aux != request.user:
         try:
             Friendship.objects.get(friend=user_aux, creator=request.user)
             dis = True
@@ -150,15 +153,13 @@ def profile(request, user_search):
 
     context = {
         'authenticated': request.user.is_authenticated,
-        'username': user_aux.username,
-        'first_name': user_aux.first_name,
         'user': user_aux,
         'user_boards': user_boards,
         'user_sections': user_sections,
         'user_pins': user_pins,
-        'you': you,
-        'followers': 0,
-        'followings': 0,
+        'you': user_aux == request.user,
+        'followers': followers,
+        'followings': following,
         'disabled': dis
     }
 
@@ -190,11 +191,24 @@ def edit_profile(request):
 
 @login_required
 def following(request):
+    form = PinForm(instance=request.user)
+    email_followers = []
+    friendships = Friendship.objects.filter(creator=request.user)
+
+    for friendship in friendships:
+        email_followers.append(friendship.friend)
+
+    #pins = Pin.objects.filter(author__in=email_followers)
+    pins = sorted(Pin.objects.filter(author__in=email_followers),
+                  key=lambda x: random.random())
+
     context = {
+        'pins': pins,
         'authenticated': request.user.is_authenticated,
-        'username': request.user.username
+        'username': request.user.username,
+        'form': form
     }
-    return render(request, 'Picturest/following_posts.html', context)
+    return render(request, 'Picturest/home_page.html', context)
 
 
 @login_required
@@ -313,3 +327,18 @@ def search_friends(request):
 
 def friend_not_found(request):
     return render(request, 'Picturest/user_not_found.html', {})
+
+
+def search(request):
+    word = request.GET["word_search"]
+    you = request.user.username
+    users_username = PicturestUser.objects.filter(username__contains=word).\
+        exclude(username=you)
+    pins = Pin.objects.filter(title__contains=word)
+
+    context = {
+        "users_username": users_username,
+        "pins": pins
+    }
+
+    return render(request, 'Picturest/search.html', context)
