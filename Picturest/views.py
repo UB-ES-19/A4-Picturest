@@ -115,8 +115,6 @@ def profile(request, user_search):
             for elem in interests_list:
                 interest_value = getattr(temp, elem)
                 interest_values[elem] = interest_value
-            print(interests_list)
-            print(interest_values)
 
             form_interests = InterestsSimpleForm(instance=interests[0])
         else:
@@ -295,7 +293,6 @@ def board(request):
 def section(request):
     if request.method == "POST":
         form = SectionForm(request.POST)
-        print(form)
         if form.is_valid():
             new_section = form.save(commit=False)
             new_section.author = request.user
@@ -413,7 +410,6 @@ def interests(request):
         else:
             form_simple = InterestsSimpleForm()
 
-        print(form_simple)
         context = {
             # 'form': form,
             'form_simple': form_simple,
