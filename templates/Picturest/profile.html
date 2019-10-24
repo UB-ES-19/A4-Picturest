@@ -1,11 +1,10 @@
-
 {% extends 'Picturest/navbar_PicBase.html' %}
 {% block title %}Profile{% endblock %}
 {% block content %}
 
         <div class="container">
             {% if you %}
-                <a href="edit" class="button">Edit profile</a>
+                <a href="{% url 'edit_profile' %}" class="button">Edit profile</a>
             {% else %}
                 <form class="form-inline" method="POST">
                     {% csrf_token %}
@@ -46,9 +45,73 @@
                     {% comment %} <img class="rounded-circle z-depth-2" alt="100x100" src="https://cdn4.iconfinder.com/data/icons/random-112/750/Random-21-128.png" data-holder-rendered="true"> {% endcomment %}
                 </div>
             </div>
-             <br>
-            <a href="{% url 'interests' %}" class="button">Select interests</a>
 
+            <div class="interests-modal-triggerers">
+                <button class="btn btn-outline-danger" data-toggle="modal" data-target="#new_interests" class="button">Select new interests</button>
+            </div>
+
+            <div class="modal fade" id="new_interests" tabindex="-1" role="dialog" aria-labelledby="interests_modal" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="interests_title">Choose many interests as you want</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                      {% comment %}
+                        Aqui estaria lo de añadir botones para cada interes de dentro de la lista de intereses
+                        asi como esta la checkbox. No me acuerdo de como coger los elementos de dentro del form porque
+                        era de backend y lo tengo patata. Dejo el codigo de como tendrian que ser los botones y luego ya
+                        adaptas a los tags de los intereses.
+
+                        La gracia estaria en que el botón de guardar los cambios en el modal sea el que hace el summit
+                        pero como esta fuera del form no se bien bien como colocarlo. Si se pone dentro del form queda
+                        el boton de close fuera del footer del modal, asi que no se que hacer con el. Dejo un prototipo
+                        y mañana si eso se modifica.
+
+                        El prototipo se puede expandir de forma infinita puesto que el modal body se supone que tiene
+                        la posibilidad de hacer scroll asi que no hay problema. Si que quiere hacer una division entre
+                        los diferentes interests lo ideal seria triggerear un <br> justo despues de cada nuevo interes
+                        o añadir un margin-bottom pequeño como de unos 5px. (en el ejemplo estan puestos, yo tiraria por
+                        los de margin porque es mas cute y porque llenar de br el codigo es cancerigeno).
+
+                        Luego justo antes de lo de los boards y tal (los botones de abajo) pienso que seria util
+                        mostrar la lista de intereses para asi tenerlos a mano (asi pequeñita que no moleste mucho)
+
+                        - Fran
+                      {% endcomment %}
+
+
+                      <form method="POST">
+                        {% csrf_token %}
+                        {{ form_simple.as_p }}
+                        <div class="list-group">
+
+                          <input type="checkbox" name="CheckBoxInputName" value="Value1" id="CheckBox1" />
+                          <label class="list-group-item" for="CheckBox1">interest 1</label>
+
+                          <input type="checkbox" name="CheckBoxInputName" value="Value2" id="CheckBox2" />
+                          <label class="list-group-item" for="CheckBox2">interest 2</label>
+                            <br>
+                          <input type="checkbox" name="CheckBoxInputName" value="Value3" id="CheckBox3" />
+                          <label class="list-group-item" for="CheckBox3" style="margin-bottom: 5px;">interest 3</label>
+
+                          <input type="checkbox" name="CheckBoxInputName" value="Value4" id="CheckBox4" />
+                          <label class="list-group-item" for="CheckBox4">interest 4</label>
+
+                        </div>
+                      </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                    <button type="summit" value="save" class="btn btn-danger">Save changes</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br>
             <div class="row">
                 <button type="button" class="btn btn-light">Boards</button>
                 <button type="button" class="btn btn-light">Pins</button>
