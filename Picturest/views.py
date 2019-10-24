@@ -230,13 +230,28 @@ def pin(request, pin_search=""):
 
 @login_required
 def board(request, board_search=""):
+    result = Board.objects.get(board_id=board_search)
+
     if request.method == "POST":
-        pin_id = request.POST["pin"]
-        Pin.objects.get(pin_id=pin_id).delete()
+        if "pin" in request.POST:
+            pin_id = request.POST["pin"]
+            Pin.objects.get(pin_id=pin_id).delete()
+
+        else:
+            form = PinForm(request.POST, request.FILES)
+
+            if 'board' in form.errors:
+                form.errors.pop('board')
+
+            if form.is_valid():
+                new_pin = form.save(commit=False)
+                new_pin.author = request.user
+                new_pin.post = form.cleaned_data['post']
+                new_pin.board = result
+                new_pin.save()
 
     if board_search:
         try:
-            result = Board.objects.get(board_id=board_search)
             pins = Pin.objects.filter(board=result)
 
             context = {
@@ -335,10 +350,12 @@ def search(request):
     users_username = PicturestUser.objects.filter(username__contains=word).\
         exclude(username=you)
     pins = Pin.objects.filter(title__contains=word)
+    boards = Board.objects.filter(name__contains=word)
 
     context = {
         "users_username": users_username,
-        "pins": pins
+        "pins": pins,
+        "boards": boards
     }
 
     return render(request, 'Picturest/search.html', context)

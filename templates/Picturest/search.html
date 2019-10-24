@@ -10,7 +10,7 @@
     </nav>
     <div class="tab-content" id="nav-tabContent">
         <div class="tab-pane fade show active" id="users" role="tabpanel" aria-labelledby="nav-users-tab">
-            <ul class="list-group col-3">
+            <ul class="list-group">
                 <br>
                 {% for user in users_username %}
                     <div align="center">
@@ -24,11 +24,20 @@
                 <br>
                 {% for pin in pins %}
                     <div align="center">
-                        <a class="btn btn-outline-primary list-group-item list-group-item-action" role="button" aria-disabled="true" href="{% url 'pin' pin.pin_id %}">{{ pin.title }}</a>
+                        <a class="btn btn-outline-primary list-group-item list-group-item-action" role="button" aria-disabled="true" href="{% url 'pin' pin.pin_id %}">{{ pin.title }} ({{ pin.author.username }})</a>
                     </div>
                 {% endfor %}
             </ul>
         </div>
-        <div class="tab-pane fade" id="boards" role="tabpanel" aria-labelledby="nav-boards-tab">...</div>
+        <div class="tab-pane fade" id="boards" role="tabpanel" aria-labelledby="nav-boards-tab">
+            <ul class="list-group">
+                <br>
+                {% for board in boards %}
+                    <div align="center">
+                        <a class="btn btn-outline-primary list-group-item list-group-item-action" role="button" aria-disabled="true" href="{% url 'board' board.board_id %}">{{ board.name}} ({{ board.author.username }})</a>
+                    </div>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 {% endblock %}
