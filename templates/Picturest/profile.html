@@ -83,32 +83,38 @@
 
                         - Fran
                       {% endcomment %}
-
+                      {% comment %} <div class="list-group">
+                        {% for interest in interests %}
+                            <input type="checkbox" name="CheckBoxInputName" value={{interest}} id={{interest}} />
+                            <label class="list-group-item" for={{ interest }} style=" margin-bottom: 0.25em;"> {{ interest }} </label>
+                        {% endfor %}
+                      </div> {% endcomment %}
 
                       <form method="POST">
                         {% csrf_token %}
-                        {{ form_simple.as_p }}
+                        {% comment %} {{ form_interests.as_p }} {% endcomment %}
+                        
+
                         <div class="list-group">
+                        {% for key, value in interest_values.items %}
+                              {% if value %}
+                                <input type="checkbox" name={{ key }} value={{ key }} id={{key }} checked>
+                              {% else %}
+                                  <input type="checkbox" name={{ key }} value={{ key }} id={{key }}>
+                              {% endif %}
+                              <label class="list-group-item" name={{ key }} for={{ key }} style=" margin-bottom: 0.25em;"> {{ key }}</label>
+                          {% endfor %}
+                        </div>
 
-                          <input type="checkbox" name="CheckBoxInputName" value="Value1" id="CheckBox1" />
-                          <label class="list-group-item" for="CheckBox1" style=" margin-bottom: 0.25em;">interest 1</label>
-
-                          <input type="checkbox" name="CheckBoxInputName" value="Value2" id="CheckBox2" />
-                          <label class="list-group-item" for="CheckBox2"  style=" margin-bottom: 0.25em;">interest 2</label>
-
-                          <input type="checkbox" name="CheckBoxInputName" value="Value3" id="CheckBox3" />
-                          <label class="list-group-item" for="CheckBox3"  style=" margin-bottom: 0.25em;">interest 3</label>
-
-                          <input type="checkbox" name="CheckBoxInputName" value="Value4" id="CheckBox4" />
-                          <label class="list-group-item" for="CheckBox4"  style=" margin-bottom: 0.25em;">interest 4</label>
-
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                          <button type="summit" value="save" class="btn btn-danger">Save changes</button>
                         </div>
                       </form>
+
+
                   </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-                    <button type="summit" value="save" class="btn btn-danger">Save changes</button>
-                  </div>
+                  
                 </div>
               </div>
             </div>

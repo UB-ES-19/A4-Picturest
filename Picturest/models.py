@@ -145,10 +145,12 @@ class Interests(models.Model):
 
 class InterestsSimple(models.Model):
     INTERESTS = [
-        "Cinema", "Music", "Sports"
+        "cinema", "music", "sports"
     ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     cinema = models.BooleanField(default=False)
     music = models.BooleanField(default=False)
     sports = models.BooleanField(default=False)
+
+    interests_list = INTERESTS
