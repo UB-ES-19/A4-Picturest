@@ -24,8 +24,9 @@
                 <a href="{% url 'board' pin.board.board_id %}">{{ pin.board.name }}</a>
             </p>
             <div class="col-md-6 img">
-                <img src="{{ pin.post.url }}" data-holder-rendered="true">
+                <img style="width:500px; height:500px;" src="{{ pin.post.url }}" data-holder-rendered="true">
             </div>
+            <br>
             <p>&nbsp;&nbsp;&nbsp;{{ pin.description }}</p>
         </div>
     </div>
