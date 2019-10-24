@@ -1,7 +1,7 @@
 # Create your models here.
 from __future__ import unicode_literals
 
-from django.contrib.auth.models import AbstractUser, BaseUserManager, AbstractBaseUser, PermissionsMixin
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.db import models
 
 
@@ -82,6 +82,10 @@ class Board(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return str(self.board_id) + ": " + str(self.name) + " of " \
+               + str(self.author.username)
+
 
 class Section(models.Model):
     section_id = models.AutoField(primary_key=True)
@@ -97,9 +101,13 @@ class Pin(models.Model):
     description = models.TextField()
     title = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    #board = models.ForeignKey(Board, on_delete=models.CASCADE)
+    board = models.ForeignKey(Board, on_delete=models.CASCADE)
     #section = models.ForeignKey(Section, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.pin_id) + ": " + str(self.title) + " of " \
+               + str(self.author.username)
 
 
 class Message(models.Model):
