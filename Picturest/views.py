@@ -37,6 +37,13 @@ def register_view(request):
         user.set_password(password)
         user.save()
         login(request, user)
+
+        form_board = BoardForm()
+        board_default = form_board.save(commit=False)
+        board_default.name = "Default"
+        board_default.author = request.user
+        board_default.save()
+
         if next:
             return redirect(next)
         return redirect('/')
@@ -54,15 +61,28 @@ def logout_view(request):
 
 @login_required
 def homepage(request):
-
     if request.method == "POST":
+        new_board = None
+
         form = PinForm(request.POST, request.FILES)
+        if 'board' in form.errors:
+            form_board = BoardForm()
+            new_board = form_board.save(commit=False)
+            new_board.author = request.user
+            new_board.name = request.POST['board_name']
+            new_board.save()
+            form.errors.pop('board')
+
         if form.is_valid():
             new_pin = form.save(commit=False)
             new_pin.author = request.user
             new_pin.post = form.cleaned_data['post']
+
+            if new_board:
+                new_pin.board = new_board
+
             new_pin.save()
-            return HttpResponseRedirect(reverse("profile"))
+            return HttpResponseRedirect(reverse('pin', args=(new_pin.pin_id,)))
 
         else:
             print(form.errors)
@@ -73,6 +93,7 @@ def homepage(request):
         form = PinForm(instance=request.user)
 
         pins = Pin.objects.all()
+        boards_user = Board.objects.filter(author=request.user)
         #boards = Board.objects.all()
         #sections = Section.objects.all()
         #users = User.objects.all()
@@ -81,7 +102,8 @@ def homepage(request):
             'pins': pins,
             'authenticated': request.user.is_authenticated,
             'username': request.user.email,
-            'form': form
+            'form': form,
+            'boards_user': boards_user
         }
         return render(request, 'Picturest/home_page.html', context)
 
@@ -227,21 +249,7 @@ def following(request):
 
 @login_required
 def pin(request, pin_search=""):
-    if request.method == "POST":
-        form = PinForm(request.POST)
-        if form.is_valid():
-            new_pin = form.save(commit=False)
-            new_pin.author = request.user
-            new_pin.save()
-
-            return HttpResponseRedirect(reverse("home_page"))
-
-        else:
-            print(form.errors)
-            request.session["result"] = form.errors
-        return HttpResponseRedirect(reverse('home_page'))
-
-    elif pin_search:
+    if pin_search:
         try:
             result = Pin.objects.get(pin_id=pin_search)
             context = {
@@ -253,40 +261,46 @@ def pin(request, pin_search=""):
             return HttpResponseRedirect(reverse("friend_not_found"))
 
     else:
-        form = PinForm()
-        context = {
-            'form': form,
-            'authenticated': request.user.is_authenticated,
-            'username': request.user.email
-        }
-
-        return render(request, 'Picturest/pin.html', context)
+        return HttpResponseRedirect(reverse("home_page"))
 
 
 @login_required
-def board(request):
-    if request.method == "POST":
-        form = BoardForm(request.POST)
-        if form.is_valid():
-            new_board = form.save(commit=False)
-            new_board.author = request.user
-            new_board.save()
+def board(request, board_search=""):
+    result = Board.objects.get(board_id=board_search)
 
-            return HttpResponseRedirect(reverse("home_page"))
+    if request.method == "POST":
+        if "pin" in request.POST:
+            pin_id = request.POST["pin"]
+            Pin.objects.get(pin_id=pin_id).delete()
 
         else:
-            request.session["result"] = form.errors
-        return HttpResponseRedirect(reverse('home_page'))
+            form = PinForm(request.POST, request.FILES)
+
+            if 'board' in form.errors:
+                form.errors.pop('board')
+
+            if form.is_valid():
+                new_pin = form.save(commit=False)
+                new_pin.author = request.user
+                new_pin.post = form.cleaned_data['post']
+                new_pin.board = result
+                new_pin.save()
+
+    if board_search:
+        try:
+            pins = Pin.objects.filter(board=result)
+
+            context = {
+                'board': result,
+                'pins': pins
+            }
+            return render(request, 'Picturest/board_view.html', context)
+
+        except Board.DoesNotExist or Board.MultipleObjectsReturned:
+            return HttpResponseRedirect(reverse("friend_not_found"))
 
     else:
-        form = BoardForm()
-        context = {
-            'form': form,
-            'authenticated': request.user.is_authenticated,
-            'username': request.user.email
-        }
-
-    return render(request, 'Picturest/board.html', context)
+        return HttpResponseRedirect(reverse("home_page"))
 
 
 @login_required
@@ -371,10 +385,12 @@ def search(request):
     users_username = PicturestUser.objects.filter(username__contains=word).\
         exclude(username=you)
     pins = Pin.objects.filter(title__contains=word)
+    boards = Board.objects.filter(name__contains=word)
 
     context = {
         "users_username": users_username,
-        "pins": pins
+        "pins": pins,
+        "boards": boards
     }
 
     return render(request, 'Picturest/search.html', context)

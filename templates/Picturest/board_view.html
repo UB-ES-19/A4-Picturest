@@ -1,37 +1,42 @@
 {% extends 'Picturest/navbar_PicBase.html' %}
-{% block title %}Home{% endblock %}
+{% block title %}Profile{% endblock %}
 {% block content %}
 
-
+<div class="container">
+    <br>
+    <h1><b>{{ board.name }}</b></h1>
+    <a class="text-muted" >Showing all pins that belong to this board </a>
+</div>
 <br><br><br>
-  {% comment %} <a href="board" class="button">Create Board</a>
-  <a href="section" class="button">Create Section</a>
-  <a href="pin" class="button">Create Pin</a> {% endcomment %}
 
-    <!-- From here we should modify some parts and look out everything -->
-    <div class="card-columns">
-    
-      {% for pin in pins %}
-
-        <a class="pin_ref" href="{% url 'pin' pin.pin_id %}"> 
-          <div class="card" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
-            <img class="card-img-top" alt="100x100" src="{{ pin.post.url }}" data-holder-rendered="true">
-            <div class="card-body">
-              <h5 class="card-title">{{ pin.title }}</h5>
-              <p class="card-text">{{ pin.description }}</p>
+<!-- From here we should modify some parts and look out everything -->
+<div class="card-columns">
+    {% for pin in pins %}
+        <a class="pin_ref" href="{% url 'pin' pin.pin_id %}">
+            <div class="card">
+                <p align="right">
+                    <form class="form-inline" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-light" value="{{ pin.pin_id }}" name="pin">Delete</button>
+                    </form>
+                </p>
+                <img class="card-img-top" alt="100x100" src="{{ pin.post.url }}" data-holder-rendered="true">
+                <div class="card-body">
+                    <h5 class="card-title">{{ pin.title }}</h5>
+                    <p class="card-text">{{ pin.description }}</p>
+                </div>
             </div>
-          </div>
         </a>
+    {% endfor %}
+</div>
 
-        
-      {% endfor %}
+{% if request.user == board.author %}
+<button class="btn btn-outline-danger btn-lg rounded-circle" data-toggle="modal" data-target="#exampleModalCenter"
+        style="font-weight: bold;  position: fixed; bottom: 20px; right: 20px;"> +
+</button>
+{% endif %}
 
-    </div>
-
-
-    <button class="btn btn-outline-danger btn-lg rounded-circle" data-toggle="modal" data-target="#exampleModalCenter" style="font-weight: bold;  position: fixed; bottom: 20px; right: 20px;"> + </button>
-
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -141,26 +146,6 @@
                   <input type="description" name="description" class="form-control" data-required>
                 </div>
 
-                <div class="input-group" style="padding-top: 8px;">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">Select a board</span>
-                  </div>
-                  <select name="board">
-                    {% for board in boards_user %}
-                        <option value="{{ board.board_id }}">{{ board.name }}</option>
-                    {% endfor %}
-                    <option value="new_board">New board</option>
-                  </select>
-                </div>
-
-                <div class="input-group" style="padding-top: 8px;">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">New board name</span>
-                  </div>
-                  {% comment %} <textarea class="form-control" aria-label="New Board"></textarea> {% endcomment %}
-                  <input type="board_name" name="board_name" class="form-control" data-required>
-                </div>
-
             </div>
 
           </div>
@@ -177,5 +162,4 @@
         </div>
       </div>
     </div>
-
 {% endblock %}
