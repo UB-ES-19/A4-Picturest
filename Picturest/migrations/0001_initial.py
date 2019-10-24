@@ -77,6 +77,24 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='InterestsSimple',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('cinema', models.BooleanField(default=False)),
+                ('music', models.BooleanField(default=False)),
+                ('sports', models.BooleanField(default=False)),
+                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Interests',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('interest', models.TextField(choices=[('cin', 'Cinema'), ('mus', 'Music'), ('spo', 'Sports')], max_length=5)),
+                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
+        migrations.CreateModel(
             name='Friendship',
             fields=[
                 ('id_friend', models.AutoField(primary_key=True, serialize=False)),

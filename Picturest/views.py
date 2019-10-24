@@ -127,14 +127,47 @@ def profile(request, user_search):
 
     if request.method == "GET" and not user_aux:
         user_aux = request.user
+        interests = InterestsSimple.objects.filter(user=request.user)
+
+        if interests:
+
+            temp = interests[0]
+            interests_list = temp.interests_list
+            interest_values = {}
+            for elem in interests_list:
+                interest_value = getattr(temp, elem)
+                interest_values[elem] = interest_value
+
+            form_interests = InterestsSimpleForm(instance=interests[0])
+        else:
+            form_interests = InterestsSimpleForm()
 
     elif request.method == "POST":
         form = SearchFriendForm()
-        freq = form.save(commit=False)
-        freq.friend = user_aux
-        freq.creator = request.user
-        freq.save()
-        request.session["result"] = "OK"
+        if form.is_valid():
+            freq = form.save(commit=False)
+            freq.friend = user_aux
+            freq.creator = request.user
+            freq.save()
+            request.session["result"] = "OK"
+
+        interests = InterestsSimple.objects.filter(user=request.user)
+        if interests:
+            form_interests = InterestsSimpleForm(
+                request.POST or None, instance=interests[0])
+        else:
+            form_interests = InterestsSimpleForm(request.POST or None)
+
+        if form_interests.is_valid():
+            interests = form_interests.save(commit=False)
+            interests.user = request.user
+            interests.save()
+
+            return HttpResponseRedirect(reverse("profile"))
+
+        else:
+            request.session["result"] = form.errors
+        return HttpResponseRedirect(reverse('profile'))
 
     user_boards = Board.objects.filter(author=user_aux)
     user_sections = Section.objects.filter(author=user_aux)
@@ -160,7 +193,10 @@ def profile(request, user_search):
         'you': user_aux == request.user,
         'followers': followers,
         'followings': following,
-        'disabled': dis
+        'disabled': dis,
+        'form_interests': form_interests,
+        'interests_list': interests_list,
+        'interest_values': interest_values
     }
 
     return render(request, 'Picturest/profile.html', context)
@@ -271,7 +307,6 @@ def board(request, board_search=""):
 def section(request):
     if request.method == "POST":
         form = SectionForm(request.POST)
-        print(form)
         if form.is_valid():
             new_section = form.save(commit=False)
             new_section.author = request.user
