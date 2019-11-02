@@ -2,6 +2,7 @@ from Picturest.models import *
 import django
 import os
 import random
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE',
                       'tango_with_django_project.settings')
 
@@ -19,13 +20,13 @@ def populate():
     }
 
     pins = {
-        "pin_1": {"post": "populate_script/flower.jpg", "title": "Flower", "description": "the description"},
-        "pin_2": {"post": "populate_script/eye.jpeg", "title": "Dibujo a lapiz", "description": "One year going"},
-        "pin_3": {"post": "populate_script/drawing.jpeg", "title": "The rain is here", "description": "Another draw copied from Pinterest"},
-        "pin_4": {"post": "populate_script/estanteria.jpeg", "title": "Pinteres.Estanteria", "description": "Snake"},
-        "pin_5": {"post": "populate_script/faces.jpeg", "title": "Intentant-ho", "description": "estan molt be"},
-        "pin_6": {"post": "populate_script/hands.jpeg", "title": "hanDs topo", "description": "Quan la munyeca fa crec"},
-        "pin_7": {"post": "populate_script/portrait.jpeg", "title": "Camarada Dimitri Petrenko", "description": "One big and great"},
+        "pin_1": {"post": "populate_script/flower.jpg", "title": "Flower", "description": "the description", "pin_id": "Default"},
+        "pin_2": {"post": "populate_script/eye.jpeg", "title": "Dibujo a lapiz", "description": "One year going", "pin_id": "Default"},
+        "pin_3": {"post": "populate_script/drawing.jpeg", "title": "The rain is here", "description": "Another draw copied from Pinterest", "pin_id": "Default"},
+        "pin_4": {"post": "populate_script/estanteria.jpeg", "title": "Pinteres.Estanteria", "description": "Snake", "pin_id": "Default"},
+        "pin_5": {"post": "populate_script/faces.jpeg", "title": "Intentant-ho", "description": "estan molt be", "pin_id": "Default"},
+        "pin_6": {"post": "populate_script/hands.jpeg", "title": "hanDs topo", "description": "Quan la munyeca fa crec", "pin_id": "Default"},
+        "pin_7": {"post": "populate_script/portrait.jpeg", "title": "Camarada Dimitri Petrenko", "description": "One big and great", "pin_id": "Default"},
     }
 
     for user, user_data in users.items():
@@ -45,8 +46,11 @@ def populate():
         title = pin_data["title"]
         description = pin_data["description"]
         author = random.choice(users)
+        user_board_default = Board.objects.filter(
+            author=author, name="Default")
+        board = user_board_default[0]
 
-        add_pin(post, title, description, author)
+        add_pin(post, title, description, author, board)
 
     user_quim = User.objects.filter(username="ico")
     user_fran = User.objects.filter(username="fran")
@@ -80,6 +84,8 @@ def add_user(username, age, email, password):
     user = User.objects.create_user(
         email=email, age=age, username=username, password=password)
     user.save()
+    add_board("Default", user)
+    add_interests(user)
     return user
 
 
@@ -93,18 +99,21 @@ def add_user_admin(username, age, email, password):
     user = User.objects.create_superuser(
         email=email, age=age, username=username, password=password)
     user.save()
+    add_board("Default", user)
+    add_interests(user)
     return user
 
 
-def add_pin(post, title, description, author):
+def add_pin(post, title, description, author, board):
     print("--- New Pin --")
     print("post: ", post)
     print("title: ", title)
     print("description: ", description)
     print("author: ", author)
+    print("board: ", board)
 
     pin = Pin.objects.create(
-        post=post, title=title, description=description, author=author)
+        post=post, title=title, description=description, author=author, board=board)
     pin.save()
     return pin
 
@@ -116,6 +125,19 @@ def add_friendship(creator, friend):
     friendship.save()
     return friendship
 
+
+def add_board(name, author):
+    print("--- New Board --")
+    board = Board.objects.create(name=name, author=author)
+    board.save()
+    return board
+
+
+def add_interests(user):
+    print("--- New Interests --")
+    interests = InterestsSimple.objects.create(user=user)
+    interests.save()
+    return interests
 
     # Start execution here!
 if __name__ == '__main__':

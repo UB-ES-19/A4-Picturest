@@ -112,6 +112,8 @@ def homepage(request):
 def profile(request, user_search):
     user_aux = ""
     dis = True
+    interests_list = []
+    interest_values = []
 
     if 'user_search' in request.GET:
         user_search = request.GET["user_search"]
