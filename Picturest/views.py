@@ -116,6 +116,8 @@ def homepage(request):
 @login_required
 def profile(request, user_search):
     user_aux = ""
+    interests_list = []
+    interest_values = []
     dis = True
     interests_list = []
     interest_values = []
