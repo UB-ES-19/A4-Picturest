@@ -96,12 +96,11 @@ def homepage(request):
 
     else:
         form = PinForm(instance=request.user)
-
-        pins = Pin.objects.all()
+        user_interests = get_user_interests(request.user)
+        interests_list = get_interests_list(user_interests)
+        interests_list_hastag = add_hastag_to_interests(interests_list)
+        pins = get_pins_from_interests(interests_list_hastag)
         boards_user = Board.objects.filter(author=request.user)
-        #boards = Board.objects.all()
-        #sections = Section.objects.all()
-        #users = User.objects.all()
 
         context = {
             'pins': pins,
@@ -243,7 +242,7 @@ def following(request):
     for friendship in friendships:
         email_followers.append(friendship.friend)
 
-    #pins = Pin.objects.filter(author__in=email_followers)
+    # pins = Pin.objects.filter(author__in=email_followers)
     pins = sorted(Pin.objects.filter(author__in=email_followers),
                   key=lambda x: random.random())
 
@@ -403,3 +402,45 @@ def search(request):
     }
 
     return render(request, 'Picturest/search.html', context)
+
+
+def get_user_interests(user):
+    interest_values = {}
+    interests = InterestsSimple.objects.filter(user=user)
+
+    if interests:
+        temp = interests[0]
+        interests_list = temp.interests_list
+        for elem in interests_list:
+            interest_value = getattr(temp, elem)
+            interest_values[elem] = interest_value
+
+    return interest_values
+
+
+def get_interests_list(interests):
+    interests_list = []
+    for interest, value in interests.items():
+        if value:
+            interests_list.append(interest)
+    return interests_list
+
+
+def add_hastag_to_interests(interests_list):
+    interests_hastag = []
+    for interest in interests_list:
+        temp = "#"+interest
+        interests_hastag.append(temp)
+    return interests_hastag
+
+
+def get_pins_from_interests(interests_list):
+    # This method will show one Pin as many times as different interests contains.
+    # Bad implementation. Pins shouldn't be repeated, but for now it's OK
+
+    pins = []
+    for interest in interests_list:
+        pins += Pin.objects.filter(description__contains=interest)
+    pins = list(dict.fromkeys(pins))
+
+    return pins

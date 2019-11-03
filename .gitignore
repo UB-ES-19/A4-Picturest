@@ -126,3 +126,6 @@ dmypy.json
 # Others
 .idea/
 .DS_Store
+
+media/posts/
+Picturest/migrations/

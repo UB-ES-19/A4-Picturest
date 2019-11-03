@@ -20,13 +20,13 @@ def populate():
     }
 
     pins = {
-        "pin_1": {"post": "populate_script/flower.jpg", "title": "Flower", "description": "the description", "pin_id": "Default"},
-        "pin_2": {"post": "populate_script/eye.jpeg", "title": "Dibujo a lapiz", "description": "One year going", "pin_id": "Default"},
-        "pin_3": {"post": "populate_script/drawing.jpeg", "title": "The rain is here", "description": "Another draw copied from Pinterest", "pin_id": "Default"},
-        "pin_4": {"post": "populate_script/estanteria.jpeg", "title": "Pinteres.Estanteria", "description": "Snake", "pin_id": "Default"},
-        "pin_5": {"post": "populate_script/faces.jpeg", "title": "Intentant-ho", "description": "estan molt be", "pin_id": "Default"},
-        "pin_6": {"post": "populate_script/hands.jpeg", "title": "hanDs topo", "description": "Quan la munyeca fa crec", "pin_id": "Default"},
-        "pin_7": {"post": "populate_script/portrait.jpeg", "title": "Camarada Dimitri Petrenko", "description": "One big and great", "pin_id": "Default"},
+        "pin_1": {"post": "populate_script/flower.jpg", "title": "Flower", "description": "the description #cinema", "pin_id": "Default"},
+        "pin_2": {"post": "populate_script/eye.jpeg", "title": "Dibujo a lapiz", "description": "One year going #music", "pin_id": "Default"},
+        "pin_3": {"post": "populate_script/drawing.jpeg", "title": "The rain is here", "description": "Another draw copied from Pinterest #music", "pin_id": "Default"},
+        "pin_4": {"post": "populate_script/estanteria.jpeg", "title": "Pinteres.Estanteria", "description": "Snake #sports", "pin_id": "Default"},
+        "pin_5": {"post": "populate_script/faces.jpeg", "title": "Intentant-ho", "description": "estan molt be #sports", "pin_id": "Default"},
+        "pin_6": {"post": "populate_script/hands.jpeg", "title": "hanDs topo", "description": "Quan la munyeca fa crec #cinema", "pin_id": "Default"},
+        "pin_7": {"post": "populate_script/portrait.jpeg", "title": "Camarada Dimitri Petrenko", "description": "One big and great #cinema", "pin_id": "Default"},
     }
 
     for user, user_data in users.items():
