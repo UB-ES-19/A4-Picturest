@@ -435,6 +435,7 @@ def add_hastag_to_interests(interests_list):
 def get_pins_from_interests(interests_list):
     # This method will show one Pin as many times as different interests contains.
     # Bad implementation. Pins shouldn't be repeated, but for now it's OK
+
     pins = []
     for interest in interests_list:
         pins += Pin.objects.filter(description__contains=interest)
