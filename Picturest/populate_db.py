@@ -85,6 +85,8 @@ def add_user(username, age, email, password):
         email=email, age=age, username=username, password=password)
     user.save()
     add_board("Default", user)
+    add_interests(user)
+    
     return user
 
 
@@ -99,6 +101,8 @@ def add_user_admin(username, age, email, password):
         email=email, age=age, username=username, password=password)
     user.save()
     add_board("Default", user)
+    add_interests(user)
+
     return user
 
 
@@ -129,6 +133,14 @@ def add_board(name, author):
     board = Board.objects.create(name=name, author=author)
     board.save()
     return board
+
+
+def add_interests(user):
+    print("--- New Interests --")
+    interests = InterestsSimple.objects.create(user=user)
+    interests.save()
+    return interests
+
 
     # Start execution here!
 if __name__ == '__main__':

@@ -44,6 +44,11 @@ def register_view(request):
         board_default.author = request.user
         board_default.save()
 
+        form_interests = InterestsSimpleForm()
+        interests = form_interests.save(commit=False)
+        interests.user = request.user
+        interests.save()
+
         if next:
             return redirect(next)
         return redirect('/')
@@ -114,6 +119,8 @@ def profile(request, user_search):
     interests_list = []
     interest_values = []
     dis = True
+    interests_list = []
+    interest_values = []
 
     if 'user_search' in request.GET:
         user_search = request.GET["user_search"]
