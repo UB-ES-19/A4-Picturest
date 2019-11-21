@@ -30,12 +30,13 @@ urlpatterns = [
     url(r'^profile/edit/$', views.edit_profile, name='edit_profile'),
     url(r'^profile/(?P<user_search>.*)$', views.profile, name='profile'),
     url(r'^profile/$', views.profile, name='profile'),
-    url(r'^board/$', views.board, name='board'),
+    url(r'^board/(?P<board_search>.*)$', views.board, name='board'),
     url(r'^section/$', views.section, name='section'),
-    url(r'^pin/$', views.pin, name='pin'),
+    url(r'^pin/(?P<pin_search>.*)$', views.pin, name='pin'),
     url(r'^following/$', views.following, name="following"),
     url(r'^search_friends/$', views.search_friends, name='search_friends'),
     url(r'^friend_not_found/$', views.friend_not_found, name='friend_not_found'),
+    url(r'^search/$', views.search, name='search'),
 ]
 
 

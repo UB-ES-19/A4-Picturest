@@ -7,6 +7,7 @@ from django.urls import reverse
 
 from .forms import *
 from .models import *
+import random
 
 
 def login_view(request):
@@ -36,6 +37,18 @@ def register_view(request):
         user.set_password(password)
         user.save()
         login(request, user)
+
+        form_board = BoardForm()
+        board_default = form_board.save(commit=False)
+        board_default.name = "Default"
+        board_default.author = request.user
+        board_default.save()
+
+        form_interests = InterestsSimpleForm()
+        interests = form_interests.save(commit=False)
+        interests.user = request.user
+        interests.save()
+
         if next:
             return redirect(next)
         return redirect('/')
@@ -53,15 +66,28 @@ def logout_view(request):
 
 @login_required
 def homepage(request):
-
     if request.method == "POST":
+        new_board = None
+
         form = PinForm(request.POST, request.FILES)
+        if 'board' in form.errors:
+            form_board = BoardForm()
+            new_board = form_board.save(commit=False)
+            new_board.author = request.user
+            new_board.name = request.POST['board_name']
+            new_board.save()
+            form.errors.pop('board')
+
         if form.is_valid():
             new_pin = form.save(commit=False)
             new_pin.author = request.user
             new_pin.post = form.cleaned_data['post']
+
+            if new_board:
+                new_pin.board = new_board
+
             new_pin.save()
-            return HttpResponseRedirect(reverse("profile"))
+            return HttpResponseRedirect(reverse('pin', args=(new_pin.pin_id,)))
 
         else:
             print(form.errors)
@@ -70,17 +96,18 @@ def homepage(request):
 
     else:
         form = PinForm(instance=request.user)
-
-        pins = Pin.objects.all()
-        #boards = Board.objects.all()
-        #sections = Section.objects.all()
-        #users = User.objects.all()
+        user_interests = get_user_interests(request.user)
+        interests_list = get_interests_list(user_interests)
+        interests_list_hastag = add_hastag_to_interests(interests_list)
+        pins = get_pins_from_interests(interests_list_hastag)
+        boards_user = Board.objects.filter(author=request.user)
 
         context = {
             'pins': pins,
             'authenticated': request.user.is_authenticated,
             'username': request.user.email,
-            'form': form
+            'form': form,
+            'boards_user': boards_user
         }
         return render(request, 'Picturest/home_page.html', context)
 
@@ -88,8 +115,11 @@ def homepage(request):
 @login_required
 def profile(request, user_search):
     user_aux = ""
-    you = False
+    interests_list = []
+    interest_values = []
     dis = True
+    interests_list = []
+    interest_values = []
 
     if 'user_search' in request.GET:
         user_search = request.GET["user_search"]
@@ -105,21 +135,57 @@ def profile(request, user_search):
 
     if request.method == "GET" and not user_aux:
         user_aux = request.user
-        you = True
+        interests = InterestsSimple.objects.filter(user=request.user)
+
+        if interests:
+
+            temp = interests[0]
+            interests_list = temp.interests_list
+            interest_values = {}
+            for elem in interests_list:
+                interest_value = getattr(temp, elem)
+                interest_values[elem] = interest_value
+
+            form_interests = InterestsSimpleForm(instance=interests[0])
+        else:
+            form_interests = InterestsSimpleForm()
 
     elif request.method == "POST":
         form = SearchFriendForm()
-        freq = form.save(commit=False)
-        freq.friend = user_aux
-        freq.creator = request.user
-        freq.save()
-        request.session["result"] = "OK"
+        if form.is_valid():
+            freq = form.save(commit=False)
+            freq.friend = user_aux
+            freq.creator = request.user
+            freq.save()
+            request.session["result"] = "OK"
+
+        interests = InterestsSimple.objects.filter(user=request.user)
+        if interests:
+            form_interests = InterestsSimpleForm(
+                request.POST or None, instance=interests[0])
+        else:
+            form_interests = InterestsSimpleForm(request.POST or None)
+
+        if form_interests.is_valid():
+            interests = form_interests.save(commit=False)
+            interests.user = request.user
+            interests.save()
+
+            return HttpResponseRedirect(reverse("profile"))
+
+        else:
+            request.session["result"] = form.errors
+        return HttpResponseRedirect(reverse('profile'))
 
     user_boards = Board.objects.filter(author=user_aux)
     user_sections = Section.objects.filter(author=user_aux)
     user_pins = Pin.objects.filter(author=user_aux)
+    following = Friendship.objects.filter(
+        creator=user_aux, accepted=True).count()
+    followers = Friendship.objects.filter(
+        friend=user_aux, accepted=True).count()
 
-    if not you:
+    if user_aux != request.user:
         try:
             Friendship.objects.get(friend=user_aux, creator=request.user)
             dis = True
@@ -128,16 +194,17 @@ def profile(request, user_search):
 
     context = {
         'authenticated': request.user.is_authenticated,
-        'username': user_aux.username,
-        'first_name': user_aux.first_name,
         'user': user_aux,
         'user_boards': user_boards,
         'user_sections': user_sections,
         'user_pins': user_pins,
-        'you': you,
-        'followers': 0,
-        'followings': 0,
-        'disabled': dis
+        'you': user_aux == request.user,
+        'followers': followers,
+        'followings': following,
+        'disabled': dis,
+        'form_interests': form_interests,
+        'interests_list': interests_list,
+        'interest_values': interest_values
     }
 
     return render(request, 'Picturest/profile.html', context)
@@ -168,71 +235,86 @@ def edit_profile(request):
 
 @login_required
 def following(request):
+    form = PinForm(instance=request.user)
+    email_followers = []
+    friendships = Friendship.objects.filter(creator=request.user)
+
+    for friendship in friendships:
+        email_followers.append(friendship.friend)
+
+    # pins = Pin.objects.filter(author__in=email_followers)
+    pins = sorted(Pin.objects.filter(author__in=email_followers),
+                  key=lambda x: random.random())
+
     context = {
+        'pins': pins,
         'authenticated': request.user.is_authenticated,
-        'username': request.user.username
+        'username': request.user.username,
+        'form': form
     }
-    return render(request, 'Picturest/following_posts.html', context)
+    return render(request, 'Picturest/home_page.html', context)
 
 
 @login_required
-def pin(request):
-    if request.method == "POST":
-        form = PinForm(request.POST)
-        if form.is_valid():
-            new_pin = form.save(commit=False)
-            new_pin.author = request.user
-            new_pin.save()
+def pin(request, pin_search=""):
+    if pin_search:
+        try:
+            result = Pin.objects.get(pin_id=pin_search)
+            context = {
+                'pin': result
+            }
+            return render(request, 'Picturest/picture_view.html', context)
 
-            return HttpResponseRedirect(reverse("home_page"))
-
-        else:
-            print(form.errors)
-            request.session["result"] = form.errors
-        return HttpResponseRedirect(reverse('home_page'))
+        except Pin.DoesNotExist or Pin.MultipleObjectsReturned:
+            return HttpResponseRedirect(reverse("friend_not_found"))
 
     else:
-        form = PinForm()
-        context = {
-            'form': form,
-            'authenticated': request.user.is_authenticated,
-            'username': request.user.email
-        }
-
-    return render(request, 'Picturest/pin.html', context)
+        return HttpResponseRedirect(reverse("home_page"))
 
 
 @login_required
-def board(request):
-    if request.method == "POST":
-        form = BoardForm(request.POST)
-        if form.is_valid():
-            new_board = form.save(commit=False)
-            new_board.author = request.user
-            new_board.save()
+def board(request, board_search=""):
+    result = Board.objects.get(board_id=board_search)
 
-            return HttpResponseRedirect(reverse("home_page"))
+    if request.method == "POST":
+        if "pin" in request.POST:
+            pin_id = request.POST["pin"]
+            Pin.objects.get(pin_id=pin_id).delete()
 
         else:
-            request.session["result"] = form.errors
-        return HttpResponseRedirect(reverse('home_page'))
+            form = PinForm(request.POST, request.FILES)
+
+            if 'board' in form.errors:
+                form.errors.pop('board')
+
+            if form.is_valid():
+                new_pin = form.save(commit=False)
+                new_pin.author = request.user
+                new_pin.post = form.cleaned_data['post']
+                new_pin.board = result
+                new_pin.save()
+
+    if board_search:
+        try:
+            pins = Pin.objects.filter(board=result)
+
+            context = {
+                'board': result,
+                'pins': pins
+            }
+            return render(request, 'Picturest/board_view.html', context)
+
+        except Board.DoesNotExist or Board.MultipleObjectsReturned:
+            return HttpResponseRedirect(reverse("friend_not_found"))
 
     else:
-        form = BoardForm()
-        context = {
-            'form': form,
-            'authenticated': request.user.is_authenticated,
-            'username': request.user.email
-        }
-
-    return render(request, 'Picturest/board.html', context)
+        return HttpResponseRedirect(reverse("home_page"))
 
 
 @login_required
 def section(request):
     if request.method == "POST":
         form = SectionForm(request.POST)
-        print(form)
         if form.is_valid():
             new_section = form.save(commit=False)
             new_section.author = request.user
@@ -303,3 +385,62 @@ def search_friends(request):
 
 def friend_not_found(request):
     return render(request, 'Picturest/user_not_found.html', {})
+
+
+def search(request):
+    word = request.GET["word_search"]
+    you = request.user.username
+    users_username = PicturestUser.objects.filter(username__contains=word).\
+        exclude(username=you)
+    pins = Pin.objects.filter(title__contains=word)
+    boards = Board.objects.filter(name__contains=word)
+
+    context = {
+        "users_username": users_username,
+        "pins": pins,
+        "boards": boards
+    }
+
+    return render(request, 'Picturest/search.html', context)
+
+
+def get_user_interests(user):
+    interest_values = {}
+    interests = InterestsSimple.objects.filter(user=user)
+
+    if interests:
+        temp = interests[0]
+        interests_list = temp.interests_list
+        for elem in interests_list:
+            interest_value = getattr(temp, elem)
+            interest_values[elem] = interest_value
+
+    return interest_values
+
+
+def get_interests_list(interests):
+    interests_list = []
+    for interest, value in interests.items():
+        if value:
+            interests_list.append(interest)
+    return interests_list
+
+
+def add_hastag_to_interests(interests_list):
+    interests_hastag = []
+    for interest in interests_list:
+        temp = "#"+interest
+        interests_hastag.append(temp)
+    return interests_hastag
+
+
+def get_pins_from_interests(interests_list):
+    # This method will show one Pin as many times as different interests contains.
+    # Bad implementation. Pins shouldn't be repeated, but for now it's OK
+
+    pins = []
+    for interest in interests_list:
+        pins += Pin.objects.filter(description__contains=interest)
+    pins = list(dict.fromkeys(pins))
+
+    return pins

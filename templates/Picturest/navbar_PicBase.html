@@ -9,6 +9,7 @@
     {% load staticfiles %}
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/interests_style.css' %}">
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Righteous&display=swap" rel="stylesheet">
@@ -30,6 +31,14 @@
               column-count: 5;
           }
         }
+        .pin_ref{
+            color: inherit; 
+        } 
+        .card-img-top{
+            min-width: 100px;
+            min-height: 100px;
+        }
+
 
     </style>
 
@@ -39,13 +48,13 @@
     <header>
         <div>
             <nav class="navbar navbar-light bg-light fixed-top">
-              <a class="navbar-brand" href="{% url 'home_page' %}" style="font-family: 'Righteous', cursive;">
+              <a class="navbar-brand" href="{% url 'home_page' %}" title="Home" style="font-family: 'Righteous', cursive;">
                   <img src="../static/ImgStatic/PicTurest.png" width="30" height="30" class="d-inline-block align-top" alt="">
                   Picturest
               </a>
 
-              <form class="form-inline" action="{% url 'profile'%}" method="get">
-                  <input name="user_search" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" style="width:430px !important;">
+              <form class="form-inline" action="{% url 'search'%}" method="get">
+                  <input name="word_search" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" style="width:430px !important;">
                   <button class="btn btn-danger my-2 my-sm-0" type="submit">Search</button>
               </form>
 
@@ -54,7 +63,7 @@
                     <img src="../static/ImgStatic/PicFriends.png" width="30" height="30" class="d-inline-block align-top"  alt="Friends">
                 </a>
 
-                <a class="btn btn-outline-secondary" title="Profile" href="profile">
+                <a class="btn btn-outline-secondary" title="Profile" href="{% url 'profile' %}">
                     <img src="../static/ImgStatic/PicProfile.png" width="30" height="30" class="d-inline-block align-top" alt="Profile">
                 </a>
 
@@ -62,7 +71,7 @@
                     <img src="../static/ImgStatic/PicChat.png" width="30" height="30" class="d-inline-block align-top" alt="Chat">
                 </a>
 
-                <a class="btn btn-outline-secondary" title="Notifications" href="">
+                <a class="btn btn-outline-secondary" title="Notifications" href="{% url 'search_friends' %}">
                     <img src="../static/ImgStatic/PicNotify.png" width="30" height="30" class="d-inline-block align-top" alt="Notifications">
                 </a>
 

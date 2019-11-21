@@ -1,11 +1,10 @@
-
 {% extends 'Picturest/navbar_PicBase.html' %}
 {% block title %}Profile{% endblock %}
 {% block content %}
 
         <div class="container">
             {% if you %}
-                <a href="edit" class="button">Edit profile</a>
+                <a href="{% url 'edit_profile' %}" class="button">Edit profile</a>
             {% else %}
                 <form class="form-inline" method="POST">
                     {% csrf_token %}
@@ -28,19 +27,98 @@
                     <p>
                         {{ user.about }}
                     </p>
-                    <a href="followers.html">
-                        {{ followers }} followers
-                    </a>
-                    <a href="followings.html">
-                        {{ followings }} following
-                    </a>
+                    {% if you %}
+                       <a href="{%url 'search_friends' %}">
+                            {{ followers }} followers
+                       </a>
+                        <a href="{%url 'search_friends' %}">
+                            {{ followings }} following
+                        </a>
+                    {% else %}
+                        <p>
+                            {{ followers }} followers | {{ followings }} following
+                        </p>
+                    {% endif %}
                 </div>
                 <div class="col-md-6 img">
-                    <img class="rounded-circle z-depth-2" alt="100x100" src="{{ request.user.photo.url }}" data-holder-rendered="true"> 
+                    <img class="rounded-circle z-depth-2" alt="100x100" src="{{ user.photo.url }}" data-holder-rendered="true">
                     {% comment %} <img class="rounded-circle z-depth-2" alt="100x100" src="https://cdn4.iconfinder.com/data/icons/random-112/750/Random-21-128.png" data-holder-rendered="true"> {% endcomment %}
                 </div>
             </div>
-             <br>
+
+            <div class="interests-modal-triggerers">
+                <button class="btn btn-outline-danger" data-toggle="modal" data-target="#new_interests" class="button">Select new interests</button>
+            </div>
+
+            <div class="modal fade" id="new_interests" tabindex="-1" role="dialog" aria-labelledby="interests_modal" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="interests_title">Choose many interests as you want</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                      {% comment %}
+                        Aqui estaria lo de añadir botones para cada interes de dentro de la lista de intereses
+                        asi como esta la checkbox. No me acuerdo de como coger los elementos de dentro del form porque
+                        era de backend. Dejo el codigo de como tendrian que ser los botones y luego ya
+                        adaptas a los tags de los intereses.
+
+                        La gracia estaria en que el botón de guardar los cambios en el modal sea el que hace el summit
+                        pero como esta fuera del form no se bien bien como colocarlo. Si se pone dentro del form queda
+                        el boton de close fuera del footer del modal, asi que no se que hacer con el. Dejo un prototipo
+                        y mañana si eso se modifica.
+
+                        El prototipo se puede expandir de forma infinita puesto que el modal-body se supone que tiene
+                        la posibilidad de hacer scroll asi que no hay problema.
+
+                        Luego justo antes de lo de los boards y tal (los botones de abajo del select) pienso que seria
+                        util mostrar la lista de intereses para asi tenerlos a mano (asi pequeñita que no moleste mucho)
+
+                        Es muy importante el style que hay en los label estos porque no funciona en el fichero CSS que
+                        he hecho expresamente, asi que cada vez que se crea un nuevo interes en la lista ese style tiene
+                        que estar si o si para que se vea como tiene que ser.
+
+                        - Fran
+                      {% endcomment %}
+                      {% comment %} <div class="list-group">
+                        {% for interest in interests %}
+                            <input type="checkbox" name="CheckBoxInputName" value={{interest}} id={{interest}} />
+                            <label class="list-group-item" for={{ interest }} style=" margin-bottom: 0.25em;"> {{ interest }} </label>
+                        {% endfor %}
+                      </div> {% endcomment %}
+
+                      <form method="POST">
+                        {% csrf_token %}
+                        {% comment %} {{ form_interests.as_p }} {% endcomment %}
+                        
+
+                        <div class="list-group">
+                        {% for key, value in interest_values.items %}
+                              {% if value %}
+                                <input type="checkbox" name={{ key }} value={{ key }} id={{key }} checked>
+                              {% else %}
+                                  <input type="checkbox" name={{ key }} value={{ key }} id={{key }}>
+                              {% endif %}
+                              <label class="list-group-item" name={{ key }} for={{ key }} style=" margin-bottom: 0.25em;"> {{ key }}</label>
+                          {% endfor %}
+                        </div>
+
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                          <button type="summit" value="save" class="btn btn-danger">Save changes</button>
+                        </div>
+                      </form>
+
+
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+            <br>
             <div class="row">
                 <button type="button" class="btn btn-light">Boards</button>
                 <button type="button" class="btn btn-light">Pins</button>

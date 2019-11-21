@@ -28,12 +28,14 @@ class UserLoginForm(forms.Form):
 class UserRegisterForm(forms.ModelForm):
     email = forms.EmailField(label='Email address')
     age = forms.IntegerField(label='Age')
+    username = forms.CharField(label='Username')
     password = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
         model = User
         fields = [
             'email',
+            'username',
             'age',
             'password'
         ]
@@ -67,18 +69,20 @@ class PinForm(forms.ModelForm):
     post = forms.ImageField(label='Post', required=True)
     title = forms.CharField(label="Title", max_length=50, required=True)
     description = forms.CharField(label="Description", required=False)
+    board = forms.ModelChoiceField(label="Board", queryset=Board.objects.all(),
+                                   empty_label=None)
 
     class Meta:
         model = Pin
-        fields = ["post", "title", "description"]
+        fields = ["post", "title", "description", "board"]
         # fields = ["post", "title", "description", "board", "section"]
 
     def __init__(self, *args, **kwargs):
         super(PinForm, self).__init__(*args, **kwargs)
         self.fields['post'].required = False
-        #self.fields['author'].required = False
-        #self.fields['board'].required = False
-        #self.fields['section'].required = False
+        # self.fields['author'].required = False
+        # self.fields['board'].required = False
+        # self.fields['section'].required = False
 
 
 class BoardForm(forms.ModelForm):
@@ -97,3 +101,20 @@ class SearchFriendForm(forms.ModelForm):
     class Meta:
         model = Friendship
         fields = ["friend", "creator"]
+
+
+class InterestsForm(forms.ModelForm):
+    # interest = forms.MultipleChoiceField(choices=Interests.CATEGORIES)
+    interest = forms.MultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple,
+        choices=Interests.CATEGORIES)
+
+    class Meta:
+        model = Interests
+        fields = ["interest"]
+
+
+class InterestsSimpleForm(forms.ModelForm):
+    class Meta:
+        model = InterestsSimple
+        fields = ["cinema", "sports", "music"]
