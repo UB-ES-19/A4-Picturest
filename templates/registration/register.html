@@ -1,0 +1,83 @@
+
+
+
+
+
+
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <title>Registration Form</title>
+
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+
+</head>
+
+<body>
+
+  <div class="row">
+  <div class="background-image"></div>
+  <section class="section">
+    <header>
+      <h3>Welcome to Picturest</h3>
+      <h4>Find new ideas to try</h4>
+    </header>
+    <main>
+
+      <form method="POST">
+        {% csrf_token %}
+        <div class="form-item box-item">
+          <input type="email" name="email" class="tx1" placeholder="Email" data-email data-required>
+          <small class="errorReq"><i class="fa fa-asterisk" aria-hidden="true"></i> required field</small>
+          <small class="errorEmail"><i class="fa fa-asterisk" aria-hidden="true"></i> email is not valid</small>
+        </div>
+		    
+        <div class="form-item box-item">
+          <input type="age" name="age" placeholder="Age" data-required>
+          <small class="errorReq"><i class="fa fa-asterisk" aria-hidden="true"></i> required field</small>
+        </div>
+
+        <div class="form-item box-item">
+          <input type="username" name="username" placeholder="Username" data-required>
+          <small class="errorReq"><i class="fa fa-asterisk" aria-hidden="true"></i> required field</small>
+        </div>
+		  
+      <div class="form-item box-item">
+        <input type="password" name="password" placeholder="Password" data-required>
+        <small class="errorReq"><i class="fa fa-asterisk" aria-hidden="true"></i> required field</small>
+      </div>
+      
+      <div class="form-item">
+        <button id="submit" class="submit" type="submit">Create Account</button>
+      </div>
+	  </form>
+
+    <div>
+      <p>Already have an account? <a href="{%url 'login' %}">Login</a></p>
+    </div>
+
+      <div class="bground">
+      </div>
+    </main>
+    <footer>
+      <div class="form-item">
+          <span id="bussiness" class="bussiness">Create Bussiness Account</span>
+        </div>
+      </form>
+    </footer>
+    <i class="wave"></i>
+  </section>
+</div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script  src="function.js"></script>
+</body>
+
+
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Create the account">
+</form>

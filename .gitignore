@@ -122,3 +122,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Others
+.idea/
+.DS_Store
+
+media/posts/
+Picturest/migrations/

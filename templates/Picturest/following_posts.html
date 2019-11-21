@@ -1,0 +1,184 @@
+{% extends 'Picturest/navbar_PicBase.html' %}
+{% block title %}Following{% endblock %}
+{% block content %}
+
+
+    <!-- From here we should modify some parts and look out everything -->
+    <div class="card-columns">
+      <div class="card">
+        <img src="../static/ImgStatic/Ejemplo1_MainPG.jpg" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">Card title that wraps to a new line</h5>
+          <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+        </div>
+      </div>
+      <div class="card p-3">
+        <blockquote class="blockquote mb-0 card-body">
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+          <footer class="blockquote-footer">
+            <small class="text-muted">
+              Someone famous in <cite title="Source Title">Source Title</cite>
+            </small>
+          </footer>
+        </blockquote>
+      </div>
+      <div class="card">
+        <img src="../static/ImgStatic/Ejemplo2_MainPG.jpg" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
+          <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+        </div>
+      </div>
+      <div class="card text-center p-3">
+        <blockquote class="blockquote mb-0">
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat.</p>
+          <footer class="blockquote-footer text-white">
+            <small>
+              Someone famous in <cite title="Source Title">Source Title</cite>
+            </small>
+          </footer>
+        </blockquote>
+      </div>
+      <div class="card text-center">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">This card has a regular title and short paragraphy of text below it.</p>
+          <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="../static/ImgStatic/Ejemplo3_MainPG.jpg" class="card-img-top" alt="...">
+      </div>
+      <div class="card p-3 text-right">
+        <blockquote class="blockquote mb-0">
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+          <footer class="blockquote-footer">
+            <small class="text-muted">
+              Someone famous in <cite title="Source Title">Source Title</cite>
+            </small>
+          </footer>
+        </blockquote>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">This is another card with title and supporting text below. This card has some additional content to make it slightly taller overall.</p>
+          <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-outline-danger btn-lg rounded-circle" data-toggle="modal" data-target="#exampleModalCenter" style="font-weight: bold;  position: fixed; bottom: 20px; right: 20px;"> + </button>
+
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Post a Pin</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+            <script>
+              $(document).ready( function() {
+                  $(document).on('change', '.btn-file :file', function() {
+                  var input = $(this),
+                      label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+                  input.trigger('fileselect', [label]);
+                  });
+
+                  $('.btn-file :file').on('fileselect', function(event, label) {
+
+                      var input = $(this).parents('.input-group').find(':text'),
+                          log = label;
+
+                      if( input.length ) {
+                          input.val(log);
+                      } else {
+                          if( log ) alert(log);
+                      }
+
+                  });
+                  function readURL(input) {
+                      if (input.files && input.files[0]) {
+                          var reader = new FileReader();
+
+                          reader.onload = function (e) {
+                              $('#img-upload').attr('src', e.target.result);
+                          }
+
+                          reader.readAsDataURL(input.files[0]);
+                      }
+                  }
+
+                  $("#imgInp").change(function(){
+                      readURL(this);
+                  });
+              });
+
+            </script>
+
+            <style>
+                .btn-file {
+                    position: relative;
+                    overflow: hidden;
+                }
+                .btn-file input[type=file] {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    min-width: 100%;
+                    min-height: 100%;
+                    font-size: 100px;
+                    text-align: right;
+                    filter: alpha(opacity=0);
+                    opacity: 0;
+                    outline: none;
+                    background: white;
+                    cursor: inherit;
+                    display: block;
+                }
+
+                #img-upload{
+                    width: 100%;
+                }
+
+            </style>
+            <div class="form-group">
+                <label>Select the Image to Post</label>
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <span class="btn btn-outline-secondary btn-file">
+                          Browse…
+                          <input type="file" id="imgInp">
+                        </span>
+                    </span>
+                    <input type="text" class="form-control" readonly>
+                </div>
+
+                <br>
+                <img id='img-upload'/>
+
+
+                <div class="input-group" style="padding-top: 8px;">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Make a description</span>
+                  </div>
+                  <textarea class="form-control" aria-label="Description"></textarea>
+                </div>
+
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger">UPLOAD</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}

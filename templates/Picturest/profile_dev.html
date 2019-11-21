@@ -1,0 +1,36 @@
+<h2>Welcome to your profile {{username}}</h2>
+
+
+<a href="edit" class="button">Edit profile</a>
+
+
+
+
+<h3>Your Boards</h3>
+{% for board in user_boards %}
+    {{board.name}}
+{% endfor %}
+
+<h3>Your Sections</h3>
+{% for section in user_sections %}
+    {{section.name}}
+{% endfor %}
+
+<h3>Your Pins</h3>
+{% for pin in user_pins %}
+    {{pin.title}}
+{% endfor %}
+
+
+
+
+Username: {{ request.user.username }} </br>
+Email: {{ request.user.email }} </br>
+Age: {{request.user.age}} </br>
+First name: {{request.user.first_name}} </br>
+Last name: {{request.user.last_name}} </br>
+About: {{request.user.about}} </br>
+Location: {{request.user.location}} </br>
+Photo: {{request.user.photo}} </br>
+    <img src="{{ request.user.photo.url }}">
+

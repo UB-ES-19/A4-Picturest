@@ -1,0 +1,181 @@
+{% extends 'Picturest/navbar_PicBase.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+
+<br><br><br>
+  {% comment %} <a href="board" class="button">Create Board</a>
+  <a href="section" class="button">Create Section</a>
+  <a href="pin" class="button">Create Pin</a> {% endcomment %}
+
+    <!-- From here we should modify some parts and look out everything -->
+    <div class="card-columns">
+    
+      {% for pin in pins %}
+
+        <a class="pin_ref" href="{% url 'pin' pin.pin_id %}"> 
+          <div class="card" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+            <img class="card-img-top" alt="100x100" src="{{ pin.post.url }}" data-holder-rendered="true">
+            <div class="card-body">
+              <h5 class="card-title">{{ pin.title }}</h5>
+              <p class="card-text">{{ pin.description }}</p>
+            </div>
+          </div>
+        </a>
+
+        
+      {% endfor %}
+
+    </div>
+
+
+    <button class="btn btn-outline-danger btn-lg rounded-circle" data-toggle="modal" data-target="#exampleModalCenter" style="font-weight: bold;  position: fixed; bottom: 20px; right: 20px;"> + </button>
+
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Post a Pin</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+            <script>
+              $(document).ready( function() {
+                  $(document).on('change', '.btn-file :file', function() {
+                  var input = $(this),
+                      label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+                  input.trigger('fileselect', [label]);
+                  });
+
+                  $('.btn-file :file').on('fileselect', function(event, label) {
+
+                      var input = $(this).parents('.input-group').find(':text'),
+                          log = label;
+
+                      if( input.length ) {
+                          input.val(log);
+                      } else {
+                          if( log ) alert(log);
+                      }
+
+                  });
+                  function readURL(input) {
+                      if (input.files && input.files[0]) {
+                          var reader = new FileReader();
+
+                          reader.onload = function (e) {
+                              $('#img-upload').attr('src', e.target.result);
+                          }
+
+                          reader.readAsDataURL(input.files[0]);
+                      }
+                  }
+
+                  $("#imgInp").change(function(){
+                      readURL(this);
+                  });
+              });
+
+            </script>
+
+            <style>
+                .btn-file {
+                    position: relative;
+                    overflow: hidden;
+                }
+                .btn-file input[type=file] {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    min-width: 100%;
+                    min-height: 100%;
+                    font-size: 100px;
+                    text-align: right;
+                    filter: alpha(opacity=0);
+                    opacity: 0;
+                    outline: none;
+                    background: white;
+                    cursor: inherit;
+                    display: block;
+                }
+
+                #img-upload{
+                    width: 100%;
+                }
+
+            </style>
+          <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label>Select the Image to Post</label>
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <span class="btn btn-outline-secondary btn-file">
+                          Browse…
+                          <input type="file" name="post" id="imgInp">
+                        </span>
+                    </span>
+                    <input type="text" class="form-control" readonly>
+                </div>
+
+                <br>
+                <img id='img-upload'/>
+
+                <div class="input-group" style="padding-top: 8px;">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Put a Title</span>
+                  </div>
+                  {% comment %} <textarea class="form-control" aria-label="Title"></textarea> {% endcomment %}
+                  <input type="title" name="title" class="form-control" data-required>
+                </div>
+
+                <div class="input-group" style="padding-top: 8px;">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Make a description</span>
+                  </div>
+                  {% comment %} <textarea class="form-control" aria-label="Description"></textarea> {% endcomment %}
+                  <input type="description" name="description" class="form-control" data-required>
+                </div>
+
+                <div class="input-group" style="padding-top: 8px;">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">Select a board</span>
+                  </div>
+                  <select name="board">
+                    {% for board in boards_user %}
+                        <option value="{{ board.board_id }}">{{ board.name }}</option>
+                    {% endfor %}
+                    <option value="new_board">New board</option>
+                  </select>
+                </div>
+
+                <div class="input-group" style="padding-top: 8px;">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">New board name</span>
+                  </div>
+                  {% comment %} <textarea class="form-control" aria-label="New Board"></textarea> {% endcomment %}
+                  <input type="board_name" name="board_name" class="form-control" data-required>
+                </div>
+
+            </div>
+
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
+            {% comment %} <button type="button" class="btn btn-danger">UPLOAD</button> {% endcomment %}
+            <button id="submit" class="btn btn-danger" type="submit">Real upload</button>
+
+          </div>
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+
+{% endblock %}
