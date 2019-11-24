@@ -1,4 +1,6 @@
 # Create your views here.
+import random
+
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
@@ -7,7 +9,6 @@ from django.urls import reverse
 
 from .forms import *
 from .models import *
-import random
 
 
 def login_view(request):
@@ -178,7 +179,6 @@ def profile(request, user_search):
         return HttpResponseRedirect(reverse('profile'))
 
     user_boards = Board.objects.filter(author=user_aux)
-    user_sections = Section.objects.filter(author=user_aux)
     user_pins = Pin.objects.filter(author=user_aux)
     following = Friendship.objects.filter(
         creator=user_aux, accepted=True).count()
@@ -196,7 +196,6 @@ def profile(request, user_search):
         'authenticated': request.user.is_authenticated,
         'user': user_aux,
         'user_boards': user_boards,
-        'user_sections': user_sections,
         'user_pins': user_pins,
         'you': user_aux == request.user,
         'followers': followers,
@@ -309,32 +308,6 @@ def board(request, board_search=""):
 
     else:
         return HttpResponseRedirect(reverse("home_page"))
-
-
-@login_required
-def section(request):
-    if request.method == "POST":
-        form = SectionForm(request.POST)
-        if form.is_valid():
-            new_section = form.save(commit=False)
-            new_section.author = request.user
-            new_section.save()
-
-            return HttpResponseRedirect(reverse("home_page"))
-
-        else:
-            request.session["result"] = form.errors
-        return HttpResponseRedirect(reverse('home_page'))
-
-    else:
-        form = SectionForm()
-        context = {
-            'form': form,
-            'authenticated': request.user.is_authenticated,
-            'username': request.user.email
-        }
-
-    return render(request, 'Picturest/section.html', context)
 
 
 @login_required

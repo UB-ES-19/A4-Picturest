@@ -87,14 +87,6 @@ class Board(models.Model):
                + str(self.author.username)
 
 
-class Section(models.Model):
-    section_id = models.AutoField(primary_key=True)
-    name = models.TextField()
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    board = models.ForeignKey(Board, on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(auto_now_add=True)
-
-
 class Pin(models.Model):
     pin_id = models.AutoField(primary_key=True)
     post = models.ImageField(upload_to='posts')
@@ -102,21 +94,11 @@ class Pin(models.Model):
     title = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     board = models.ForeignKey(Board, on_delete=models.CASCADE)
-    #section = models.ForeignKey(Section, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return str(self.pin_id) + ": " + str(self.title) + " of " \
                + str(self.author.username)
-
-
-class Message(models.Model):
-    message_id = models.AutoField(primary_key=True)
-    author = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='message_author')
-    message = models.TextField()
-    receptor = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='message_receptor')
 
 
 class Friendship(models.Model):
