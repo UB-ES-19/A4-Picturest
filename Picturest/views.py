@@ -116,8 +116,6 @@ def homepage(request):
 @login_required
 def profile(request, user_search):
     user_aux = ""
-    interests_list = []
-    interest_values = []
     dis = True
     interests_list = []
     interest_values = []
@@ -136,20 +134,6 @@ def profile(request, user_search):
 
     if request.method == "GET" and not user_aux:
         user_aux = request.user
-        interests = InterestsSimple.objects.filter(user=request.user)
-
-        if interests:
-
-            temp = interests[0]
-            interests_list = temp.interests_list
-            interest_values = {}
-            for elem in interests_list:
-                interest_value = getattr(temp, elem)
-                interest_values[elem] = interest_value
-
-            form_interests = InterestsSimpleForm(instance=interests[0])
-        else:
-            form_interests = InterestsSimpleForm()
 
     elif request.method == "POST":
         form = SearchFriendForm()
@@ -177,6 +161,20 @@ def profile(request, user_search):
         else:
             request.session["result"] = form.errors
         return HttpResponseRedirect(reverse('profile'))
+
+    interests = InterestsSimple.objects.filter(user=user_aux)
+
+    if interests:
+        temp = interests[0]
+        interests_list = temp.interests_list
+        interest_values = {}
+        for elem in interests_list:
+            interest_value = getattr(temp, elem)
+            interest_values[elem] = interest_value
+
+        form_interests = InterestsSimpleForm(instance=interests[0])
+    else:
+        form_interests = InterestsSimpleForm()
 
     user_boards = Board.objects.filter(author=user_aux)
     user_pins = Pin.objects.filter(author=user_aux)
