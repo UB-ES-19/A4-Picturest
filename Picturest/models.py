@@ -144,3 +144,6 @@ class InterestsSimple(models.Model):
     sports = models.BooleanField(default=False)
 
     interests_list = INTERESTS
+
+    def __str__(self):
+        return "Interests of " + str(self.user.username)
