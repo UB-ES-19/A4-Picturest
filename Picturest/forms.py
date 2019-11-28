@@ -91,12 +91,6 @@ class BoardForm(forms.ModelForm):
         fields = ["name"]
 
 
-class SectionForm(forms.ModelForm):
-    class Meta:
-        model = Section
-        fields = ["name", "board"]
-
-
 class SearchFriendForm(forms.ModelForm):
     class Meta:
         model = Friendship

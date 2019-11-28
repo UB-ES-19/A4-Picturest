@@ -1,4 +1,6 @@
 # Create your views here.
+import random
+
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
@@ -7,7 +9,6 @@ from django.urls import reverse
 
 from .forms import *
 from .models import *
-import random
 
 
 def login_view(request):
@@ -115,8 +116,6 @@ def homepage(request):
 @login_required
 def profile(request, user_search):
     user_aux = ""
-    interests_list = []
-    interest_values = []
     dis = True
     interests_list = []
     interest_values = []
@@ -135,20 +134,6 @@ def profile(request, user_search):
 
     if request.method == "GET" and not user_aux:
         user_aux = request.user
-        interests = InterestsSimple.objects.filter(user=request.user)
-
-        if interests:
-
-            temp = interests[0]
-            interests_list = temp.interests_list
-            interest_values = {}
-            for elem in interests_list:
-                interest_value = getattr(temp, elem)
-                interest_values[elem] = interest_value
-
-            form_interests = InterestsSimpleForm(instance=interests[0])
-        else:
-            form_interests = InterestsSimpleForm()
 
     elif request.method == "POST":
         form = SearchFriendForm()
@@ -177,8 +162,21 @@ def profile(request, user_search):
             request.session["result"] = form.errors
         return HttpResponseRedirect(reverse('profile'))
 
+    interests = InterestsSimple.objects.filter(user=user_aux)
+
+    if interests:
+        temp = interests[0]
+        interests_list = temp.interests_list
+        interest_values = {}
+        for elem in interests_list:
+            interest_value = getattr(temp, elem)
+            interest_values[elem] = interest_value
+
+        form_interests = InterestsSimpleForm(instance=interests[0])
+    else:
+        form_interests = InterestsSimpleForm()
+
     user_boards = Board.objects.filter(author=user_aux)
-    user_sections = Section.objects.filter(author=user_aux)
     user_pins = Pin.objects.filter(author=user_aux)
     following = Friendship.objects.filter(
         creator=user_aux, accepted=True).count()
@@ -196,7 +194,6 @@ def profile(request, user_search):
         'authenticated': request.user.is_authenticated,
         'user': user_aux,
         'user_boards': user_boards,
-        'user_sections': user_sections,
         'user_pins': user_pins,
         'you': user_aux == request.user,
         'followers': followers,
@@ -309,32 +306,6 @@ def board(request, board_search=""):
 
     else:
         return HttpResponseRedirect(reverse("home_page"))
-
-
-@login_required
-def section(request):
-    if request.method == "POST":
-        form = SectionForm(request.POST)
-        if form.is_valid():
-            new_section = form.save(commit=False)
-            new_section.author = request.user
-            new_section.save()
-
-            return HttpResponseRedirect(reverse("home_page"))
-
-        else:
-            request.session["result"] = form.errors
-        return HttpResponseRedirect(reverse('home_page'))
-
-    else:
-        form = SectionForm()
-        context = {
-            'form': form,
-            'authenticated': request.user.is_authenticated,
-            'username': request.user.email
-        }
-
-    return render(request, 'Picturest/section.html', context)
 
 
 @login_required
