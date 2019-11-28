@@ -88,7 +88,7 @@ class PinForm(forms.ModelForm):
 class BoardForm(forms.ModelForm):
     class Meta:
         model = Board
-        fields = ["name"]
+        fields = ["name", "secret"]
 
 
 class SearchFriendForm(forms.ModelForm):
