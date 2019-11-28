@@ -58,36 +58,6 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            {% comment %}
-                            Aqui estaria lo de añadir botones para cada interes de dentro de la lista de intereses
-                            asi como esta la checkbox. No me acuerdo de como coger los elementos de dentro del form porque
-                            era de backend. Dejo el codigo de como tendrian que ser los botones y luego ya
-                            adaptas a los tags de los intereses.
-
-                            La gracia estaria en que el botón de guardar los cambios en el modal sea el que hace el summit
-                            pero como esta fuera del form no se bien bien como colocarlo. Si se pone dentro del form queda
-                            el boton de close fuera del footer del modal, asi que no se que hacer con el. Dejo un prototipo
-                            y mañana si eso se modifica.
-
-                            El prototipo se puede expandir de forma infinita puesto que el modal-body se supone que tiene
-                            la posibilidad de hacer scroll asi que no hay problema.
-
-                            Luego justo antes de lo de los boards y tal (los botones de abajo del select) pienso que seria
-                            util mostrar la lista de intereses para asi tenerlos a mano (asi pequeñita que no moleste mucho)
-
-                            Es muy importante el style que hay en los label estos porque no funciona en el fichero CSS que
-                            he hecho expresamente, asi que cada vez que se crea un nuevo interes en la lista ese style tiene
-                            que estar si o si para que se vea como tiene que ser.
-
-                            - Fran
-                            {% endcomment %}
-                            {% comment %} <div class="list-group">
-                            {% for interest in interests %}
-                            <input type="checkbox" name="CheckBoxInputName" value={{interest}} id={{interest}} />
-                            <label class="list-group-item" for={{ interest }} style=" margin-bottom: 0.25em;"> {{ interest }} </label>
-                            {% endfor %}
-                            </div> {% endcomment %}
-
                             <form method="POST">
                                 {% csrf_token %}
                                 {% comment %} {{ form_interests.as_p }} {% endcomment %}
