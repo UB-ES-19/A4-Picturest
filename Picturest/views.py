@@ -374,6 +374,12 @@ def search(request):
 
     return render(request, 'Picturest/search.html', context)
 
+def notifications(request):
+    context = {
+
+    }
+
+    return render(request, 'Picturest/notifications.html', context)
 
 def get_user_interests(user):
     interest_values = {}
