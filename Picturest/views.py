@@ -134,35 +134,28 @@ def profile(request, user_search):
         except PicturestUser.DoesNotExist:
             return HttpResponseRedirect(reverse("friend_not_found"))
 
-    if request.method == "GET" and not user_aux:
+    if not user_aux:
         user_aux = request.user
 
-    elif request.method == "POST":
-        form = SearchFriendForm()
-        if form.is_valid():
+    if request.method == "POST":
+        if user_search:
+            form = SearchFriendForm()
             freq = form.save(commit=False)
             freq.friend = user_aux
             freq.creator = request.user
             freq.save()
-            request.session["result"] = "OK"
-
-        interests = InterestsSimple.objects.filter(user=request.user)
-        if interests:
-            form_interests = InterestsSimpleForm(
-                request.POST or None, instance=interests[0])
-        else:
-            form_interests = InterestsSimpleForm(request.POST or None)
-
-        if form_interests.is_valid():
-            interests = form_interests.save(commit=False)
-            interests.user = request.user
-            interests.save()
-
-            return HttpResponseRedirect(reverse("profile"))
 
         else:
-            request.session["result"] = form.errors
-        return HttpResponseRedirect(reverse('profile'))
+            interests = InterestsSimple.objects.filter(user=request.user)
+            if interests:
+                form_interests = InterestsSimpleForm(request.POST or None, instance=interests[0])
+            else:
+                form_interests = InterestsSimpleForm(request.POST or None)
+
+            if form_interests.is_valid():
+                interests = form_interests.save(commit=False)
+                interests.user = request.user
+                interests.save()
 
     interests = InterestsSimple.objects.filter(user=user_aux)
 
@@ -180,10 +173,8 @@ def profile(request, user_search):
 
     user_boards = Board.objects.filter(author=user_aux)
     user_pins = Pin.objects.filter(author=user_aux)
-    following = Friendship.objects.filter(
-        creator=user_aux, accepted=True).count()
-    followers = Friendship.objects.filter(
-        friend=user_aux, accepted=True).count()
+    following = Friendship.objects.filter(creator=user_aux, accepted=True).count()
+    followers = Friendship.objects.filter(friend=user_aux, accepted=True).count()
 
     if user_aux != request.user:
         try:
