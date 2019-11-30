@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
@@ -71,16 +72,23 @@
                     <img src="../static/ImgStatic/PicChat.png" width="30" height="30" class="d-inline-block align-top" alt="Chat">
                 </a>
 
-                <a class="btn btn-outline-secondary" title="Notifications" href="{% url 'search_friends' %}">
-                    <img src="../static/ImgStatic/PicNotify.png" width="30" height="30" class="d-inline-block align-top" alt="Notifications">
-                </a>
+<!--                <a class="btn btn-outline-secondary" title="Notifications" href="{% url 'search_friends' %}">-->
+<!--                    <img src="../static/ImgStatic/PicNotify.png" width="30" height="30" class="d-inline-block align-top" alt="Notifications">-->
+<!--                </a>-->
 
                 <div class="btn-group" role="group">
-                  <button class="btn btn-outline-secondary dropdown-toggle" title="Options" width="56" height="44" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn btn-outline-secondary dropdown-toggle" title="Options" width="56" height="44" type="button" id="notisDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img src="../static/ImgStatic/PicNotify.png" width="30" height="30" class="d-inline-block align-top" alt="Notifications">
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" style="max-height:500px; width:250px; overflow-x: auto;" aria-labelledby="dropdownMenuButton" id="notis"></div>
+                </div>
+
+                <div class="btn-group" role="group">
+                  <button class="btn btn-outline-secondary dropdown-toggle" title="Options" width="56" height="44" type="button" id="logoutDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <img src="../static/ImgStatic/PicOptions.png" width="30" height="30" class="d-inline-block align-top" alt="Notifications">
                   </button>
-                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="{%url 'logout' %}">Log Out</a>
+                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownLogoutMenuButton">
+                      <a class="dropdown-item" href="{%url 'logout' %}">Log Out</a>
                   </div>
                 </div>
 
@@ -95,6 +103,14 @@
         {% endblock %}
 
     </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#notisDropdownMenuButton').on("click", function() {
+                $('#notis').load('{%url 'notifications' %}');
+            });
+        });
+    </script>
 
 </body>
 </html>
