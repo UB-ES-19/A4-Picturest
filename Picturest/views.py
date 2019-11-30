@@ -144,6 +144,13 @@ def profile(request, user_search):
             freq.save()
             request.session["result"] = "OK"
 
+        form_request = NotificationAcceptedForm()
+        freq_request = form_request.save(commit=False)
+        freq_request.user = user_aux
+        freq_request.type = "NewFollower"
+        freq_request.friendship = request.user
+        freq_request.save()
+
         interests = InterestsSimple.objects.filter(user=request.user)
         if interests:
             form_interests = InterestsSimpleForm(
@@ -326,8 +333,14 @@ def search_friends(request):
 
         elif "accept" in request.POST.keys():
             friend_id = request.POST["accept"]
-            Friendship.objects.filter(
-                id_friend=friend_id).update(accepted=True)
+            Friendship.objects.filter(id_friend=friend_id).update(accepted=True)
+
+            form_accept = NotificationAcceptedForm()
+            freq_accept = form_accept.save(commit=False)
+            freq_accept.user = Friendship.objects.get(id_friend=friend_id).creator
+            freq_accept.type = "FollowAccepted"
+            freq_accept.friendship = request.user
+            freq_accept.save()
 
         elif "refuse" in request.POST.keys():
             friend_id = request.POST["refuse"]
@@ -374,12 +387,16 @@ def search(request):
 
     return render(request, 'Picturest/search.html', context)
 
-def notifications(request):
-    context = {
 
+def notifications(request):
+    notis = Notification.objects.filter(user=request.user)
+
+    context = {
+        "notifications": notis
     }
 
     return render(request, 'Picturest/notifications.html', context)
+
 
 def get_user_interests(user):
     interest_values = {}
