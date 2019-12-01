@@ -81,6 +81,7 @@ class Board(models.Model):
     name = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
+    secret = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.board_id) + ": " + str(self.name) + " of " \
