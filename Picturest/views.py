@@ -1,4 +1,5 @@
 # Create your views here.
+import operator
 import random
 
 from django.contrib.auth import login, logout
@@ -76,6 +77,7 @@ def homepage(request):
             new_board = form_board.save(commit=False)
             new_board.author = request.user
             new_board.name = request.POST['board_name']
+            new_board.secret = 'secret' in request.POST
             new_board.save()
             form.errors.pop('board')
 
@@ -100,7 +102,7 @@ def homepage(request):
         user_interests = get_user_interests(request.user)
         interests_list = get_interests_list(user_interests)
         interests_list_hastag = add_hastag_to_interests(interests_list)
-        pins = get_pins_from_interests(interests_list_hastag)
+        pins = get_pins_from_interests(interests_list_hastag, request.user)
         boards_user = Board.objects.filter(author=request.user)
 
         context = {
@@ -247,7 +249,7 @@ def following(request):
         email_followers.append(friendship.friend)
 
     # pins = Pin.objects.filter(author__in=email_followers)
-    pins = sorted(Pin.objects.filter(author__in=email_followers),
+    pins = sorted(Pin.objects.filter(author__in=email_followers, board__secret=False),
                   key=lambda x: random.random())
 
     context = {
@@ -260,7 +262,7 @@ def following(request):
 
 
 @login_required
-def pin(request, pin_search, noti_id=""):
+def pin(request, pin_search="", noti_id=""):
     if noti_id:
         try:
             Notification.objects.filter(id=noti_id, user=request.user).update(seen=True)
@@ -268,11 +270,12 @@ def pin(request, pin_search, noti_id=""):
         except Notification.DoesNotExist:
             pass
 
-        return HttpResponseRedirect(reverse('pin', args=(pin_search,)))
-
     if pin_search:
         try:
             result = Pin.objects.get(pin_id=pin_search)
+            if result.author != request.user and result.board.secret:
+                return HttpResponseRedirect(reverse("home_page"))
+
             context = {
                 'pin': result
             }
@@ -287,7 +290,11 @@ def pin(request, pin_search, noti_id=""):
 
 @login_required
 def board(request, board_search=""):
-    result = Board.objects.get(board_id=board_search)
+    try:
+        result = Board.objects.get(board_id=board_search)
+        yours = result.author == request.user
+    except Board.DoesNotExist or Board.MultipleObjectsReturned:
+        return HttpResponseRedirect(reverse("friend_not_found"))
 
     if request.method == "POST":
         if "pin" in request.POST:
@@ -307,18 +314,15 @@ def board(request, board_search=""):
                 new_pin.board = result
                 new_pin.save()
 
-    if board_search:
-        try:
-            pins = Pin.objects.filter(board=result)
+    if board_search and (yours or not result.secret):
+        pins = Pin.objects.filter(board=result)
 
-            context = {
-                'board': result,
-                'pins': pins
-            }
-            return render(request, 'Picturest/board_view.html', context)
-
-        except Board.DoesNotExist or Board.MultipleObjectsReturned:
-            return HttpResponseRedirect(reverse("friend_not_found"))
+        context = {
+            'board': result,
+            'pins': pins,
+            'yours': yours
+        }
+        return render(request, 'Picturest/board_view.html', context)
 
     else:
         return HttpResponseRedirect(reverse("home_page"))
@@ -351,7 +355,8 @@ def search_friends(request, noti_id=""):
 
         elif "accept" in request.POST.keys():
             friend_id = request.POST["accept"]
-            Friendship.objects.filter(id_friend=friend_id).update(accepted=True)
+            Friendship.objects.filter(
+                id_friend=friend_id).update(accepted=True)
 
             form_accept = NotificationAcceptedForm()
             freq_accept = form_accept.save(commit=False)
@@ -392,15 +397,18 @@ def friend_not_found(request):
 def search(request):
     word = request.GET["word_search"]
     you = request.user.username
-    users_username = PicturestUser.objects.filter(username__contains=word).\
-        exclude(username=you)
-    pins = Pin.objects.filter(title__contains=word)
-    boards = Board.objects.filter(name__contains=word)
+    users = PicturestUser.objects.filter(username__contains=word).exclude(username=you)
+    pins = []
+    pins += Pin.objects.filter(title__contains=word, board__secret=False)
+    pins += Pin.objects.filter(author=request.user, board__secret=True)
+    boards = []
+    boards += Board.objects.filter(name__contains=word, secret=False)
+    boards += Board.objects.filter(author=request.user, secret=True)
 
     context = {
-        "users_username": users_username,
-        "pins": pins,
-        "boards": boards
+        "users_username": users,
+        "pins": sorted(pins, key=operator.attrgetter('pk')),
+        "boards": sorted(boards, key=operator.attrgetter('pk'))
     }
 
     return render(request, 'Picturest/search.html', context)
@@ -446,13 +454,13 @@ def add_hastag_to_interests(interests_list):
     return interests_hastag
 
 
-def get_pins_from_interests(interests_list):
+def get_pins_from_interests(interests_list, user):
     # This method will show one Pin as many times as different interests contains.
     # Bad implementation. Pins shouldn't be repeated, but for now it's OK
 
     pins = []
     for interest in interests_list:
-        pins += Pin.objects.filter(description__contains=interest)
+        pins += Pin.objects.filter(description__contains=interest, board__secret=False).exclude(author=user)
     pins = list(dict.fromkeys(pins))
 
     return pins
