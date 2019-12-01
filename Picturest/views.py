@@ -116,7 +116,16 @@ def homepage(request):
 
 
 @login_required
-def profile(request, user_search):
+def profile(request, user_search="", noti_id=""):
+    if noti_id:
+        try:
+            Notification.objects.filter(id=noti_id, user=request.user).update(seen=True)
+
+        except Notification.DoesNotExist:
+            pass
+
+        return HttpResponseRedirect(reverse('profile', args=(user_search,)))
+
     user_aux = ""
     dis = True
     interests_list = []
@@ -144,6 +153,13 @@ def profile(request, user_search):
             freq.friend = user_aux
             freq.creator = request.user
             freq.save()
+
+            form_request = NotificationAcceptedForm()
+            freq_request = form_request.save(commit=False)
+            freq_request.user = user_aux
+            freq_request.type = "NewFollower"
+            freq_request.friendship = request.user
+            freq_request.save()
 
         else:
             interests = InterestsSimple.objects.filter(user=request.user)
@@ -246,7 +262,14 @@ def following(request):
 
 
 @login_required
-def pin(request, pin_search=""):
+def pin(request, pin_search="", noti_id=""):
+    if noti_id:
+        try:
+            Notification.objects.filter(id=noti_id, user=request.user).update(seen=True)
+
+        except Notification.DoesNotExist:
+            pass
+
     if pin_search:
         try:
             result = Pin.objects.get(pin_id=pin_search)
@@ -306,7 +329,16 @@ def board(request, board_search=""):
 
 
 @login_required
-def search_friends(request):
+def search_friends(request, noti_id=""):
+    if noti_id:
+        try:
+            Notification.objects.filter(id=noti_id, user=request.user).delete()
+
+        except Notification.DoesNotExist:
+            pass
+
+        return HttpResponseRedirect(reverse('search_friends'))
+
     if request.method == "POST":
         if "friend" in request.POST.keys():
             friend_name = request.POST["friend"]
@@ -325,6 +357,13 @@ def search_friends(request):
             friend_id = request.POST["accept"]
             Friendship.objects.filter(
                 id_friend=friend_id).update(accepted=True)
+
+            form_accept = NotificationAcceptedForm()
+            freq_accept = form_accept.save(commit=False)
+            freq_accept.user = Friendship.objects.get(id_friend=friend_id).creator
+            freq_accept.type = "FollowAccepted"
+            freq_accept.friendship = request.user
+            freq_accept.save()
 
         elif "refuse" in request.POST.keys():
             friend_id = request.POST["refuse"]
@@ -373,6 +412,16 @@ def search(request):
     }
 
     return render(request, 'Picturest/search.html', context)
+
+
+def notifications(request):
+    notis = Notification.objects.filter(user=request.user).order_by('-date_insert')
+
+    context = {
+        "notifications": notis
+    }
+
+    return render(request, 'Picturest/notifications.html', context)
 
 
 def get_user_interests(user):

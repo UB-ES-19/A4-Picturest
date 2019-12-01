@@ -148,3 +148,23 @@ class InterestsSimple(models.Model):
 
     def __str__(self):
         return "Interests of " + str(self.user.username)
+
+
+class Notification(models.Model):
+    TYPES = (
+        ("new", "NewFollower"),
+        ("acc", "FollowAccepted"),
+        ("rep", "RePin")
+    )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE,
+                             related_name="user_notify")
+    type = models.TextField(choices=TYPES, max_length=3)
+    seen = models.BooleanField(default=False)
+    friendship = models.ForeignKey(User, on_delete=models.CASCADE, null=True,
+                                   related_name="friendship_user")
+    pin = models.ForeignKey(Pin, on_delete=models.CASCADE, null=True)
+    date_insert = models.DateTimeField(verbose_name='date inserted', auto_now_add=True)
+
+    def __str__(self):
+        return "Notification " + self.type + " of " + self.user.username
