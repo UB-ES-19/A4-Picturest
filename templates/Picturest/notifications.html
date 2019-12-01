@@ -86,17 +86,36 @@
 
 {% for noti in notifications %}
     {% if noti.type == "FollowAccepted" %}
-        <a class="dropdown-item follow-request-item" href="{% url 'profile' noti.friendship.username %}">
+        {% if noti.seen %}
+            <a class="dropdown-item" href="{% url 'profile' noti.friendship.username %}">
+        {% else %}
+            <a class="dropdown-item follow-request-item" href="{% url 'profile' noti.friendship.username %}">
+        {% endif %}
             <div style="margin-top: 10px; margin-left: -10px;">
                 <h1 class="username">Follow request accepted</h1>
-                <h1 class="name">{{ noti.friendship.username }}</h1>
+                <h1 class="name">From {{ noti.friendship.username }}</h1>
             </div>
         </a>
     {% elif noti.type == "NewFollower" %}
-        <a class="dropdown-item follow-request-item" href="{% url 'search_friends' %}">
+        {% if noti.seen %}
+            <a class="dropdown-item" href="{% url 'search_friends' %}">
+        {% else %}
+            <a class="dropdown-item follow-request-item" href="{% url 'search_friends' %}">
+        {% endif %}
             <div style="margin-top: 10px; margin-left: -10px;">
                 <h1 class="username">New follow request</h1>
-                <h1 class="name">{{ noti.friendship.username }}</h1>
+                <h1 class="name">From {{ noti.friendship.username }}</h1>
+            </div>
+        </a>
+    {% elif noti.type == "RePin" %}
+        {% if noti.seen %}
+            <a class="dropdown-item" href="{% url 'pin' noti.pin.pin_id %}">
+        {% else %}
+            <a class="dropdown-item follow-request-item" href="{% url 'pin' noti.pin.pin_id %}">
+        {% endif %}
+            <div style="margin-top: 10px; margin-left: -10px;">
+                <h1 class="username">RePin</h1>
+                <h1 class="name">Of {{ noti.pin.title }} from {{ noti.friendship.username }}</h1>
             </div>
         </a>
     {% endif %}

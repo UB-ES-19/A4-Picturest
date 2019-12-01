@@ -389,7 +389,7 @@ def search(request):
 
 
 def notifications(request):
-    notis = Notification.objects.filter(user=request.user)
+    notis = Notification.objects.filter(user=request.user).order_by('-date_insert')
 
     context = {
         "notifications": notis
