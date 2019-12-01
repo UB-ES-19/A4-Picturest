@@ -114,7 +114,16 @@ def homepage(request):
 
 
 @login_required
-def profile(request, user_search):
+def profile(request, user_search="", noti_id=""):
+    if noti_id:
+        try:
+            Notification.objects.filter(id=noti_id, user=request.user).update(seen=True)
+
+        except Notification.DoesNotExist:
+            pass
+
+        return HttpResponseRedirect(reverse('profile', args=(user_search,)))
+
     user_aux = ""
     dis = True
     interests_list = []
@@ -260,7 +269,16 @@ def following(request):
 
 
 @login_required
-def pin(request, pin_search=""):
+def pin(request, pin_search, noti_id=""):
+    if noti_id:
+        try:
+            Notification.objects.filter(id=noti_id, user=request.user).update(seen=True)
+
+        except Notification.DoesNotExist:
+            pass
+
+        return HttpResponseRedirect(reverse('pin', args=(pin_search,)))
+
     if pin_search:
         try:
             result = Pin.objects.get(pin_id=pin_search)
@@ -316,7 +334,16 @@ def board(request, board_search=""):
 
 
 @login_required
-def search_friends(request):
+def search_friends(request, noti_id=""):
+    if noti_id:
+        try:
+            Notification.objects.filter(id=noti_id, user=request.user).delete()
+
+        except Notification.DoesNotExist:
+            pass
+
+        return HttpResponseRedirect(reverse('search_friends'))
+
     if request.method == "POST":
         if "friend" in request.POST.keys():
             friend_name = request.POST["friend"]
