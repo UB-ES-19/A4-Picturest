@@ -26,7 +26,6 @@ Per acabar crear 2 Friendships per User
 
 Nota: degut a que l'autor dels Pins es escollit aleatoriament és possible que les teves 2 amistats no hagin creat cap Pin. Si aixo passa fes flush de la DB i torna a executar l'script
 
-
-
-
-
+<!-- Req:
+- docker
+- docker-compose -->
