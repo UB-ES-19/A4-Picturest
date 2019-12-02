@@ -59,5 +59,5 @@ DATABASES = {
 }
 ```
 
-Once this change is complete just execute the following command on the root of the project: `docker-compose up`. The DB and Pictures will be up after.
+Once this change is complete just execute the following command on the root of the project: `docker-compose up`. The DB and Picturest will be up after.
 
