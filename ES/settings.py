@@ -25,7 +25,7 @@ SECRET_KEY = 'yx-($3fcfnrjzsio^b!&3+ot94-saeslp^p80k=&32)n#4o!$%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [134.209.254.62]
+ALLOWED_HOSTS = ['134.209.254.62']
 
 
 # Application definition
