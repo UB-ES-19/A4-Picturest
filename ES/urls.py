@@ -37,6 +37,7 @@ urlpatterns = [
     url(r'^search_friends/$', views.search_friends, name='search_friends'),
     url(r'^friend_not_found/$', views.friend_not_found, name='friend_not_found'),
     url(r'^search/$', views.search, name='search'),
+    url(r'^interests/$', views.interests, name='interests'),
 ]
 
 

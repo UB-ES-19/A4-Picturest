@@ -444,3 +444,51 @@ def get_pins_from_interests(interests_list):
     pins = list(dict.fromkeys(pins))
 
     return pins
+
+
+def interests(request):
+    interests_list = []
+    interest_values = []
+
+    if request.method == "GET":
+        interests = InterestsSimple.objects.filter(user=request.user)
+
+        if interests:
+
+            temp = interests[0]
+            interests_list = temp.interests_list
+            interest_values = {}
+            for elem in interests_list:
+                interest_value = getattr(temp, elem)
+                interest_values[elem] = interest_value
+
+            form_interests = InterestsSimpleForm(instance=interests[0])
+        else:
+            form_interests = InterestsSimpleForm()
+
+    elif request.method == "POST":
+
+        interests = InterestsSimple.objects.filter(user=request.user)
+        if interests:
+            form_interests = InterestsSimpleForm(
+                request.POST or None, instance=interests[0])
+        else:
+            form_interests = InterestsSimpleForm(request.POST or None)
+
+        if form_interests.is_valid():
+            interests = form_interests.save(commit=False)
+            interests.user = request.user
+            interests.save()
+
+            return HttpResponseRedirect(reverse("profile"))
+
+        else:
+            request.session["result"] = form.errors
+        return HttpResponseRedirect(reverse('profile'))
+
+    context = {
+        'form_interests': form_interests,
+        'interests_list': interests_list,
+        'interest_values': interest_values
+    }
+    return render(request, 'registration/interests.html', context)
