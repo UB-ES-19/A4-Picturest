@@ -88,13 +88,7 @@ class PinForm(forms.ModelForm):
 class BoardForm(forms.ModelForm):
     class Meta:
         model = Board
-        fields = ["name"]
-
-
-class SectionForm(forms.ModelForm):
-    class Meta:
-        model = Section
-        fields = ["name", "board"]
+        fields = ["name", "secret"]
 
 
 class SearchFriendForm(forms.ModelForm):
@@ -118,3 +112,15 @@ class InterestsSimpleForm(forms.ModelForm):
     class Meta:
         model = InterestsSimple
         fields = ["cinema", "sports", "music"]
+
+
+class NotificationAcceptedForm(forms.ModelForm):
+    class Meta:
+        model = Notification
+        fields = ["user", "type", "friendship"]
+
+
+class NotificationRequestForm(forms.ModelForm):
+    class Meta:
+        model = Notification
+        fields = ["user", "type", "friendship"]
