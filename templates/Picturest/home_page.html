@@ -127,7 +127,7 @@
 
                 <div class="input-group" style="padding-top: 8px;">
                   <div class="input-group-prepend">
-                    <span class="input-group-text">Put a Title</span>
+                    <span class="input-group-text" style="color: white; background-color:  rgb(220,53,69);">Title</span>
                   </div>
                   {% comment %} <textarea class="form-control" aria-label="Title"></textarea> {% endcomment %}
                   <input type="title" name="title" class="form-control" data-required>
@@ -135,9 +135,8 @@
 
                 <div class="input-group" style="padding-top: 8px;">
                   <div class="input-group-prepend">
-                    <span class="input-group-text">Make a description</span>
+                    <span class="input-group-text" style="color: white; background-color:  rgb(220,53,69);">Description</span>
                   </div>
-                  {% comment %} <textarea class="form-control" aria-label="Description"></textarea> {% endcomment %}
                   <input type="description" name="description" class="form-control" data-required>
                 </div>
 
@@ -152,7 +151,7 @@
 
                 <div class="input-group" style="padding-top: 8px;">
                   <div class="input-group-prepend">
-                    <span class="input-group-text">Select a board</span>
+                    <span class="input-group-text" style="color: white; background-color:  rgb(220,53,69);">Select a board</span>
                   </div>
                   <select name="board" id="select_board" onchange="showDiv('hidden_newB', this)">
                     {% for board in boards_user %}
@@ -166,7 +165,7 @@
                     <hr>
                     <div  class="input-group" style="padding-top: 8px;">
                       <div class="input-group-prepend">
-                        <span class="input-group-text">New board name</span>
+                        <span class="input-group-text" style="color: white; background-color:  rgb(220,53,69);">New board name</span>
                       </div>
                       {% comment %} <textarea class="form-control" aria-label="New Board"></textarea> {% endcomment %}
                       <input type="board_name" name="board_name" class="form-control" data-required>
