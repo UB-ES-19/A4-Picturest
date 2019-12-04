@@ -25,7 +25,7 @@ SECRET_KEY = 'yx-($3fcfnrjzsio^b!&3+ot94-saeslp^p80k=&32)n#4o!$%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['134.209.254.62', '*']
 
 
 # Application definition
@@ -78,10 +78,9 @@ WSGI_APPLICATION = 'ES.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Picturest',
-        'USER': 'admin',
-        'PASSWORD': 'admin',
-        'HOST': 'localhost',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }
