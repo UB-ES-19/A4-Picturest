@@ -29,7 +29,7 @@ def login_view(request):
 
 
 def register_view(request):
-    next = request.GET.get('next')
+    # next = request.GET.get('next')
     form = UserRegisterForm(request.POST or None)
     if form.is_valid():
         user = form.save(commit=False)
@@ -49,9 +49,12 @@ def register_view(request):
         interests.user = request.user
         interests.save()
 
-        if next:
-            return redirect(next)
-        return redirect('/')
+        # if next:
+        #     # return HttpResponseRedirect(reverse("homepage"))
+        #     return redirect("interests")
+
+        return redirect("interests")
+        # return redirect('/')
 
     context = {
         'form': form
@@ -480,11 +483,14 @@ def interests(request):
             interests.user = request.user
             interests.save()
 
-            return HttpResponseRedirect(reverse("profile"))
+            return redirect("home_page")
+            # return HttpResponseRedirect(reverse("homepage"))
 
         else:
             request.session["result"] = form.errors
-        return HttpResponseRedirect(reverse('profile'))
+
+        return redirect("home_page")
+        # return HttpResponseRedirect(reverse('profile'))
 
     context = {
         'form_interests': form_interests,
