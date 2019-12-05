@@ -1,6 +1,5 @@
 # Create your views here.
 import operator
-import random
 
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
@@ -242,15 +241,21 @@ def edit_profile(request):
 @login_required
 def following(request):
     form = PinForm(instance=request.user)
-    email_followers = []
     friendships = Friendship.objects.filter(creator=request.user)
+    # email_followers = []
+    #
+    # for friendship in friendships:
+    #     email_followers.append(friendship.friend)
+    #
+    # pins = sorted(Pin.objects.filter(author__in=email_followers, board__secret=False),
+    #               key=lambda x: random.random())
 
+    pins = []
     for friendship in friendships:
-        email_followers.append(friendship.friend)
-
-    # pins = Pin.objects.filter(author__in=email_followers)
-    pins = sorted(Pin.objects.filter(author__in=email_followers, board__secret=False),
-                  key=lambda x: random.random())
+        pins += Pin.objects.filter(author=friendship.friend, board__secret=False)
+        for repin in RePin.objects.filter(board__secret=False, board__author=friendship.friend).exclude(pin__author=request.user):
+            if repin.pin not in pins:
+                pins.append(repin.pin)
 
     context = {
         'pins': pins,
@@ -270,22 +275,57 @@ def pin(request, pin_search="", noti_id=""):
         except Notification.DoesNotExist:
             pass
 
+        return HttpResponseRedirect(reverse('pin', args=(pin_search,)))
+
     if pin_search:
         try:
             result = Pin.objects.get(pin_id=pin_search)
             if result.author != request.user and result.board.secret:
                 return HttpResponseRedirect(reverse("home_page"))
 
-            context = {
-                'pin': result
-            }
-            return render(request, 'Picturest/picture_view.html', context)
-
         except Pin.DoesNotExist or Pin.MultipleObjectsReturned:
             return HttpResponseRedirect(reverse("friend_not_found"))
 
     else:
         return HttpResponseRedirect(reverse("home_page"))
+
+    if request.method == "POST":
+        new_board = None
+
+        form = RePinForm(request.POST)
+        if 'board' in form.errors:
+            form_board = BoardForm()
+            new_board = form_board.save(commit=False)
+            new_board.author = request.user
+            new_board.name = request.POST['board_name']
+            new_board.secret = 'secret' in request.POST
+            new_board.save()
+            form.errors.pop('board')
+
+        new_repin = form.save(commit=False)
+        new_repin.pin = result
+
+        if new_board:
+            new_repin.board = new_board
+
+        new_repin.save()
+
+        form_request = NotificationRePinForm()
+        freq_request = form_request.save(commit=False)
+        freq_request.user = result.author
+        freq_request.type = "RePin"
+        freq_request.pin = result
+        freq_request.friendship = request.user
+        freq_request.save()
+        return HttpResponseRedirect(reverse('pin', args=(pin_search,)))
+
+    boards = Board.objects.filter(author=request.user)
+
+    context = {
+        'pin': result,
+        'boards_user': boards
+    }
+    return render(request, 'Picturest/picture_view.html', context)
 
 
 @login_required
@@ -299,7 +339,13 @@ def board(request, board_search=""):
     if request.method == "POST":
         if "pin" in request.POST:
             pin_id = request.POST["pin"]
-            Pin.objects.get(pin_id=pin_id).delete()
+            del_pin = Pin.objects.get(pin_id=pin_id)
+
+            if del_pin.board == result:
+                del_pin.delete()
+
+            else:
+                RePin.objects.filter(pin=del_pin, board=result).delete()
 
         else:
             form = PinForm(request.POST, request.FILES)
@@ -315,7 +361,11 @@ def board(request, board_search=""):
                 new_pin.save()
 
     if board_search and (yours or not result.secret):
-        pins = Pin.objects.filter(board=result)
+        pins = list(Pin.objects.filter(board=result))
+        repins = list(RePin.objects.filter(board=result))
+
+        for repin in repins:
+            pins.append(repin.pin)
 
         context = {
             'board': result,

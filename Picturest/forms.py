@@ -124,3 +124,15 @@ class NotificationRequestForm(forms.ModelForm):
     class Meta:
         model = Notification
         fields = ["user", "type", "friendship"]
+
+
+class NotificationRePinForm(forms.ModelForm):
+    class Meta:
+        model = Notification
+        fields = ["user", "type", "friendship", "pin"]
+
+
+class RePinForm(forms.ModelForm):
+    class Meta:
+        model = RePin
+        fields = ["board"]
