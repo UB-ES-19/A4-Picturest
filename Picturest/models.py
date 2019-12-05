@@ -168,3 +168,12 @@ class Notification(models.Model):
 
     def __str__(self):
         return "Notification " + self.type + " of " + self.user.username
+
+
+class RePin(models.Model):
+    repin_id = models.AutoField(primary_key=True)
+    pin = models.ForeignKey(Pin, on_delete=models.CASCADE)
+    board = models.ForeignKey(Board, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "RePin " + str(self.repin_id) + ": " + str(self.pin.pin_id)
