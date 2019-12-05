@@ -81,18 +81,11 @@ class Board(models.Model):
     name = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
+    secret = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.board_id) + ": " + str(self.name) + " of " \
             + str(self.author.username)
-
-
-class Section(models.Model):
-    section_id = models.AutoField(primary_key=True)
-    name = models.TextField()
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    board = models.ForeignKey(Board, on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(auto_now_add=True)
 
 
 class Pin(models.Model):
@@ -102,21 +95,11 @@ class Pin(models.Model):
     title = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     board = models.ForeignKey(Board, on_delete=models.CASCADE)
-    #section = models.ForeignKey(Section, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return str(self.pin_id) + ": " + str(self.title) + " of " \
             + str(self.author.username)
-
-
-class Message(models.Model):
-    message_id = models.AutoField(primary_key=True)
-    author = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='message_author')
-    message = models.TextField()
-    receptor = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='message_receptor')
 
 
 class Friendship(models.Model):
@@ -167,3 +150,35 @@ class InterestsSimple(models.Model):
     photography = models.BooleanField(default=False)
 
     interests_list = INTERESTS
+
+    def __str__(self):
+        return "Interests of " + str(self.user.username)
+
+
+class Notification(models.Model):
+    TYPES = (
+        ("new", "NewFollower"),
+        ("acc", "FollowAccepted"),
+        ("rep", "RePin")
+    )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE,
+                             related_name="user_notify")
+    type = models.TextField(choices=TYPES, max_length=3)
+    seen = models.BooleanField(default=False)
+    friendship = models.ForeignKey(User, on_delete=models.CASCADE, null=True,
+                                   related_name="friendship_user")
+    pin = models.ForeignKey(Pin, on_delete=models.CASCADE, null=True)
+    date_insert = models.DateTimeField(verbose_name='date inserted', auto_now_add=True)
+
+    def __str__(self):
+        return "Notification " + self.type + " of " + self.user.username
+
+
+class RePin(models.Model):
+    repin_id = models.AutoField(primary_key=True)
+    pin = models.ForeignKey(Pin, on_delete=models.CASCADE)
+    board = models.ForeignKey(Board, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "RePin " + str(self.repin_id) + ": " + str(self.pin.pin_id)
