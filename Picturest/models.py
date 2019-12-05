@@ -84,7 +84,7 @@ class Board(models.Model):
 
     def __str__(self):
         return str(self.board_id) + ": " + str(self.name) + " of " \
-               + str(self.author.username)
+            + str(self.author.username)
 
 
 class Section(models.Model):
@@ -107,7 +107,7 @@ class Pin(models.Model):
 
     def __str__(self):
         return str(self.pin_id) + ": " + str(self.title) + " of " \
-               + str(self.author.username)
+            + str(self.author.username)
 
 
 class Message(models.Model):
@@ -153,12 +153,17 @@ class Interests(models.Model):
 
 class InterestsSimple(models.Model):
     INTERESTS = [
-        "cinema", "music", "sports"
+        "cinema", "music", "sports", "animals", "paint", "travel", "garden", "photography"
     ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     cinema = models.BooleanField(default=False)
     music = models.BooleanField(default=False)
     sports = models.BooleanField(default=False)
+    animals = models.BooleanField(default=False)
+    paint = models.BooleanField(default=False)
+    travel = models.BooleanField(default=False)
+    garden = models.BooleanField(default=False)
+    photography = models.BooleanField(default=False)
 
     interests_list = INTERESTS
