@@ -1,34 +1,90 @@
-@ -1,51 +1,33 @@
 {% extends 'Picturest/navbar_PicBase.html' %}
 {% block title %}Pin - {{ pin.title }}{% endblock %}
 {% block content %}
-<div class>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <div class="jumbotron">
-        <h3 align="center" class="display-4">{{ pin.title }}</h3>
+<div style="display: grid;  align-items: center;  justify-content: center;  height: 2em;margin-top: 1em;">
+    <div class="jumbotron" style="width: min-content; height: min-content; box-shadow:0 6px 10px 0 rgba(0, 0, 0, 0.4);">
+        <h3 align="center" >{{ pin.title }}</h3>
         <br>
         <div>
-            
             <div class="col-md-6 img">
-                <img class="rounded-circle z-depth-2" alt="100x100" src="{{ pin.author.photo.url }}" data-holder-rendered="true">
+                <img class="rounded-circle z-depth-2" alt="50x50" src="{{ pin.author.photo.url }}" data-holder-rendered="true">
+                <p>
+                    <h9>&nbsp;Author:&nbsp;&nbsp;</h9>
+
+                    <a href="{% url 'profile' pin.author.username %}">{{ pin.author.username }}</a><br>
+                    <h9>&nbsp;In the Board: &nbsp;</h9>
+
+                    <a href="{% url 'board' pin.board.board_id %}">{{ pin.board.name }}</a>
+                </p>
             </div>
-            <p>
-                &nbsp;&nbsp;&nbsp;
-                <a href="{% url 'profile' pin.author.username %}">{{ pin.author.username }}</a>
-                &nbsp; saved to &nbsp;
-                <a href="{% url 'board' pin.board.board_id %}">{{ pin.board.name }}</a>
-            </p>
-            <div class="col-md-6 img">
-                <img style="width:500px; height:500px;" src="{{ pin.post.url }}" data-holder-rendered="true">
+
+            <div class="col-sm-2 img">
+                <div style="align-items: center;">
+                    <img style="width:500px; height:500px;" src="{{ pin.post.url }}" data-holder-rendered="true" style="width: border-box;">
+                </div>
+
             </div>
-            <br>
-            <p>&nbsp;&nbsp;&nbsp;{{ pin.description }}</p>
+            <hr>
+            <h6> Description of the Pin:  </h6>
+            <p>&nbsp;{{ pin.description }}</p>
+
         </div>
+
+        <div>
+          <a class="btn btn-block btn-outline-danger" data-toggle="collapse" href="#collapseRepin" role="button" aria-expanded="false" aria-controls="collapseRepin">
+            Save it
+          </a>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="collapse" id="collapseRepin" style="margin-top: 1em;">
+                <div  class="card card-body">
+
+                    <script type="text/javascript">
+                        function showDiv(divId, element)
+                        {
+                            document.getElementById(divId).style.display = element.value == "new_board" ? 'block' : 'none';
+                        }
+                    </script>
+
+                    <div class="input-group" style="padding-top: 8px;">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Select a board</span>
+                      </div>
+                      <select name="board" id="select_board" onchange="showDiv('hidden_newB', this)">
+                        <option disabled selected>Select a board</option>
+                        {% for board in boards_user %}
+                            <option value="{{ board.board_id }}">{{ board.name }}</option>
+                        {% endfor %}
+                        <option value="new_board">New board</option>
+                      </select>
+                    </div>
+
+                    <div id="hidden_newB" style="display: none;">
+                        <hr>
+                        <div  class="input-group" style="padding-top: 8px;">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">New board name</span>
+                          </div>
+                          {% comment %} <textarea class="form-control" aria-label="New Board"></textarea> {% endcomment %}
+                          <input type="board_name" name="board_name" class="form-control" data-required>
+                        </div>
+
+                        <div class="custom-control custom-switch">
+                          <input type="checkbox" class="custom-control-input" name="secret" id="secret_B_switch">
+                          <label class="custom-control-label" for="secret_B_switch"> Wanna make this board a secret?? </label>
+                        </div>
+                        <hr>
+                    </div>
+                    <div style="margin-top: 1em;">
+                        <button id="submit_repin" class="btn btn-block btn-sm btn-danger" role="button" type="submit" >
+                            Done!
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 {% endblock %}
