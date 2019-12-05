@@ -59,5 +59,10 @@ DATABASES = {
 }
 ```
 
-Once this change is complete just execute the following command on the root of the project: `docker-compose up`. The DB and Picturest will be up after.
+Once this change is complete just execute the following command on the root of the project: `docker-compose up`. The DB and Picturest will be up after.  
+
+If you want to open up a terminal inside the docker container where Picturest is running just:  
+`docker ps`: this will show you at least 2 running containers, postgres and picturest. Copy the container ID of the picturest container.  
+`docker exec -it containerID bash`: where containerID is the previously copied container ID. Now you can run commands like `python manage.py migrate` or `ls`  
+
 
