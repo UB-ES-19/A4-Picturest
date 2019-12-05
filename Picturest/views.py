@@ -50,9 +50,12 @@ def register_view(request):
         interests.user = request.user
         interests.save()
 
-        if next:
-            return redirect(next)
-        return redirect('/')
+        # if next:
+        #     # return HttpResponseRedirect(reverse("homepage"))
+        #     return redirect("interests")
+
+        return redirect("interests")
+        # return redirect('/')
 
     context = {
         'form': form
@@ -118,7 +121,8 @@ def homepage(request):
 def profile(request, user_search="", noti_id=""):
     if noti_id:
         try:
-            Notification.objects.filter(id=noti_id, user=request.user).update(seen=True)
+            Notification.objects.filter(
+                id=noti_id, user=request.user).update(seen=True)
 
         except Notification.DoesNotExist:
             pass
@@ -163,7 +167,8 @@ def profile(request, user_search="", noti_id=""):
         else:
             interests = InterestsSimple.objects.filter(user=request.user)
             if interests:
-                form_interests = InterestsSimpleForm(request.POST or None, instance=interests[0])
+                form_interests = InterestsSimpleForm(
+                    request.POST or None, instance=interests[0])
             else:
                 form_interests = InterestsSimpleForm(request.POST or None)
 
@@ -188,8 +193,10 @@ def profile(request, user_search="", noti_id=""):
 
     user_boards = Board.objects.filter(author=user_aux)
     user_pins = Pin.objects.filter(author=user_aux)
-    following = Friendship.objects.filter(creator=user_aux, accepted=True).count()
-    followers = Friendship.objects.filter(friend=user_aux, accepted=True).count()
+    following = Friendship.objects.filter(
+        creator=user_aux, accepted=True).count()
+    followers = Friendship.objects.filter(
+        friend=user_aux, accepted=True).count()
 
     if user_aux != request.user:
         try:
@@ -252,7 +259,8 @@ def following(request):
 
     pins = []
     for friendship in friendships:
-        pins += Pin.objects.filter(author=friendship.friend, board__secret=False)
+        pins += Pin.objects.filter(author=friendship.friend,
+                                   board__secret=False)
         for repin in RePin.objects.filter(board__secret=False, board__author=friendship.friend).exclude(pin__author=request.user):
             if repin.pin not in pins:
                 pins.append(repin.pin)
@@ -270,7 +278,8 @@ def following(request):
 def pin(request, pin_search="", noti_id=""):
     if noti_id:
         try:
-            Notification.objects.filter(id=noti_id, user=request.user).update(seen=True)
+            Notification.objects.filter(
+                id=noti_id, user=request.user).update(seen=True)
 
         except Notification.DoesNotExist:
             pass
@@ -410,7 +419,8 @@ def search_friends(request, noti_id=""):
 
             form_accept = NotificationAcceptedForm()
             freq_accept = form_accept.save(commit=False)
-            freq_accept.user = Friendship.objects.get(id_friend=friend_id).creator
+            freq_accept.user = Friendship.objects.get(
+                id_friend=friend_id).creator
             freq_accept.type = "FollowAccepted"
             freq_accept.friendship = request.user
             freq_accept.save()
@@ -447,7 +457,8 @@ def friend_not_found(request):
 def search(request):
     word = request.GET["word_search"]
     you = request.user.username
-    users = PicturestUser.objects.filter(username__contains=word).exclude(username=you)
+    users = PicturestUser.objects.filter(
+        username__contains=word).exclude(username=you)
     pins = []
     pins += Pin.objects.filter(title__contains=word, board__secret=False)
     pins += Pin.objects.filter(author=request.user, board__secret=True)
@@ -465,7 +476,8 @@ def search(request):
 
 
 def notifications(request):
-    notis = Notification.objects.filter(user=request.user).order_by('-date_insert')
+    notis = Notification.objects.filter(
+        user=request.user).order_by('-date_insert')
 
     context = {
         "notifications": notis
@@ -510,7 +522,59 @@ def get_pins_from_interests(interests_list, user):
 
     pins = []
     for interest in interests_list:
-        pins += Pin.objects.filter(description__contains=interest, board__secret=False).exclude(author=user)
+        pins += Pin.objects.filter(description__contains=interest,
+                                   board__secret=False).exclude(author=user)
     pins = list(dict.fromkeys(pins))
 
     return pins
+
+
+def interests(request):
+    interests_list = []
+    interest_values = []
+
+    if request.method == "GET":
+        interests = InterestsSimple.objects.filter(user=request.user)
+
+        if interests:
+
+            temp = interests[0]
+            interests_list = temp.interests_list
+            interest_values = {}
+            for elem in interests_list:
+                interest_value = getattr(temp, elem)
+                interest_values[elem] = interest_value
+
+            form_interests = InterestsSimpleForm(instance=interests[0])
+        else:
+            form_interests = InterestsSimpleForm()
+
+    elif request.method == "POST":
+
+        interests = InterestsSimple.objects.filter(user=request.user)
+        if interests:
+            form_interests = InterestsSimpleForm(
+                request.POST or None, instance=interests[0])
+        else:
+            form_interests = InterestsSimpleForm(request.POST or None)
+
+        if form_interests.is_valid():
+            interests = form_interests.save(commit=False)
+            interests.user = request.user
+            interests.save()
+
+            return redirect("home_page")
+            # return HttpResponseRedirect(reverse("homepage"))
+
+        else:
+            request.session["result"] = form.errors
+
+        return redirect("home_page")
+        # return HttpResponseRedirect(reverse('profile'))
+
+    context = {
+        'form_interests': form_interests,
+        'interests_list': interests_list,
+        'interest_values': interest_values
+    }
+    return render(request, 'registration/interests.html', context)
