@@ -111,7 +111,8 @@ class InterestsForm(forms.ModelForm):
 class InterestsSimpleForm(forms.ModelForm):
     class Meta:
         model = InterestsSimple
-        fields = ["cinema", "sports", "music"]
+        fields = ["cinema", "music", "sports", "animals",
+                  "paint", "travel", "garden", "photography"]
 
 
 class NotificationAcceptedForm(forms.ModelForm):
