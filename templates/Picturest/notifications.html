@@ -1,0 +1,122 @@
+<head>
+    <style>
+        .follow-request-header{
+            color: black;
+            font-size: 20px;
+            background-color: #FFE4E4;
+        }
+        .follow-request-item{
+            border-top: 1px solid darkgray;
+            background-color: #FFE4E4;
+        }
+        .profile-image{
+            height: 40px;
+            width: 40px;
+            margin-right: 10px;
+            background-size: 100%;
+            float: left;
+        }
+        .username{
+            color: blue;
+            font-size: 17px;
+        }
+        .name{
+            color: darkgray;
+            font-size: 15px;
+        }
+
+        .repin-header{
+            color: black;
+            font-size: 20px;
+            border-top: 2px solid black;
+            background-color: #FFBFBF;
+        }
+        .repin-item{
+            border-top: 1px solid darkgray;
+            background-color: #FFBFBF
+        }
+        .pin{
+            color: blue; font-size: 17px;
+        }
+        .pin-image{
+            background-size: 100%;  height: 146px; width: 146px;
+        }
+    </style>
+</head>
+
+{% comment %}
+<!--FOLLOW REQUESTS-->
+<label class="dropdown-header follow-request-header">Follow Requests</label>
+<a class="dropdown-item follow-request-item" href="#">
+    <div style="margin-top: 10px; margin-left: -10px;">
+        <div class="profile-image" style="background-image: url('static/ImgStatic/Ejemplo3_MainPG.jpg');"></div>
+        <h1 class="username">Username</h1>
+        <h1 class="name">FirstName LastName</h1>
+    </div>
+</a>
+<a class="dropdown-item follow-request-item" href="#">
+    <div style="margin-top: 10px; margin-left: -10px;">
+        <div class="profile-image" style="background-image: url('static/ImgStatic/Ejemplo3_MainPG.jpg');"></div>
+        <h1 class="username">Username</h1>
+        <h1 class="name">FirstName LastName</h1>
+    </div>
+</a>
+<a class="dropdown-item follow-request-item" href="#">
+    <div style="margin-top: 10px; margin-left: -10px;">
+        <div class="profile-image" style="background-image: url('static/ImgStatic/Ejemplo3_MainPG.jpg');"></div>
+        <h1 class="username">Username</h1>
+        <h1 class="name">FirstName LastName</h1>
+    </div>
+</a>
+<!--REPINS-->
+<label class="dropdown-header repin-header">Repins</label>
+<a class="dropdown-item repin-item" href="#">
+    <h1 class="pin">Pin</h1>
+    <div class="pin-image" style="background-image: url('static/ImgStatic/Ejemplo1_MainPG.jpg');"></div>
+</a>
+<a class="dropdown-item repin-item" href="#">
+    <h1 class="pin">Pin</h1>
+    <div class="pin-image" style="background-image: url('static/ImgStatic/Ejemplo1_MainPG.jpg');"></div>
+</a>
+<a class="dropdown-item repin-item" href="#">
+    <h1 class="pin">Pin</h1>
+    <div class="pin-image" style="background-image: url('static/ImgStatic/Ejemplo1_MainPG.jpg');"></div>
+</a>
+{% endcomment %}
+
+{% for noti in notifications %}
+    {% if noti.type == "FollowAccepted" %}
+        {% if noti.seen %}
+            <a class="dropdown-item" href="{% url 'profile' noti.friendship.username noti.id %}">
+        {% else %}
+            <a class="dropdown-item follow-request-item" href="{% url 'profile' noti.friendship.username noti.id %}">
+        {% endif %}
+            <div style="margin-top: 10px; margin-left: -10px;">
+                <h1 class="username">Follow request accepted</h1>
+                <h1 class="name">From {{ noti.friendship.username }}</h1>
+            </div>
+        </a>
+    {% elif noti.type == "NewFollower" %}
+        {% if noti.seen %}
+            <a class="dropdown-item" href="{% url 'search_friends' noti.id %}">
+        {% else %}
+            <a class="dropdown-item follow-request-item" href="{% url 'search_friends' noti.id %}">
+        {% endif %}
+            <div style="margin-top: 10px; margin-left: -10px;">
+                <h1 class="username">New follow request</h1>
+                <h1 class="name">From {{ noti.friendship.username }}</h1>
+            </div>
+        </a>
+    {% elif noti.type == "RePin" %}
+        {% if noti.seen %}
+            <a class="dropdown-item" href="{% url 'pin' noti.pin.pin_id noti.id %}">
+        {% else %}
+            <a class="dropdown-item follow-request-item" href="{% url 'pin' noti.pin.pin_id noti.id %}">
+        {% endif %}
+            <div style="margin-top: 10px; margin-left: -10px;">
+                <h1 class="username">New RePin</h1>
+                <h1 class="name">Of {{ noti.pin.title }} from {{ noti.friendship.username }}</h1>
+            </div>
+        </a>
+    {% endif %}
+{% endfor %}

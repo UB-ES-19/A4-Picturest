@@ -26,7 +26,43 @@ Per acabar crear 2 Friendships per User
 
 Nota: degut a que l'autor dels Pins es escollit aleatoriament és possible que les teves 2 amistats no hagin creat cap Pin. Si aixo passa fes flush de la DB i torna a executar l'script
 
+<!-- Req:
+- docker
+- docker-compose -->
 
+## Docker 
+Before this, `docker` and `docker-compose` need to be installed in your computer.  
 
+Now that Picturest connects to docker some changes have been made to the DB config (settings.py). For a local instance of postgres we've used the following config:
+````
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'Picturest',
+        'USER': 'admin',
+        'PASSWORD': 'admin',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+````
+We'll use the next config when we want to connect to a dockerized postgres:
+```
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'HOST': 'db',
+        'PORT': '5432',
+    }
+}
+```
+
+Once this change is complete just execute the following command on the root of the project: `docker-compose up`. The DB and Picturest will be up after.  
+
+If you want to open up a terminal inside the docker container where Picturest is running just:  
+`docker ps`: this will show you at least 2 running containers, postgres and picturest. Copy the container ID of the picturest container.  
+`docker exec -it containerID bash`: where containerID is the previously copied container ID. Now you can run commands like `python manage.py migrate` or `ls`  
 
 
