@@ -85,6 +85,15 @@
                 </div>
             </div>
         </form>
+        <form method="POST">
+            {% csrf_token %}
+            <select name="friend" id="select_friend">
+                {% for friend in friends %}
+                    <option value="{{ friend.friend.id }}">{{ friend.friend.username }}</option>
+                {% endfor %}
+            </select>
+            <button id="submit_sendpin" type="submit">Send!</button>
+        </form>
     </div>
 </div>
 {% endblock %}
