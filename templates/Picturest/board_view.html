@@ -14,12 +14,14 @@
     {% for pin in pins %}
         <a class="pin_ref" href="{% url 'pin' pin.pin_id %}">
             <div class="card">
-                <p align="right">
-                    <form class="form-inline" method="POST">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-light" value="{{ pin.pin_id }}" name="pin">Delete</button>
-                    </form>
-                </p>
+                {% if yours %}
+                    <p align="right">
+                        <form class="form-inline" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-light" value="{{ pin.pin_id }}" name="pin">Delete</button>
+                        </form>
+                    </p>
+                {% endif %}
                 <img class="card-img-top" alt="100x100" src="{{ pin.post.url }}" data-holder-rendered="true">
                 <div class="card-body">
                     <h5 class="card-title">{{ pin.title }}</h5>

@@ -16,7 +16,7 @@ class UserAdmin(admin.ModelAdmin):
 
 admin.site.register(PicturestUser, UserAdmin)
 admin.site.register(Board)
-admin.site.register(Section)
 admin.site.register(Pin)
 admin.site.register(Friendship)
 admin.site.register(InterestsSimple)
+admin.site.register(Notification)

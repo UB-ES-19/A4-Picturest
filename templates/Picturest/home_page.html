@@ -127,7 +127,7 @@
 
                 <div class="input-group" style="padding-top: 8px;">
                   <div class="input-group-prepend">
-                    <span class="input-group-text">Put a Title</span>
+                    <span class="input-group-text" style="color: white; background-color:  rgb(220,53,69);">Title</span>
                   </div>
                   {% comment %} <textarea class="form-control" aria-label="Title"></textarea> {% endcomment %}
                   <input type="title" name="title" class="form-control" data-required>
@@ -135,17 +135,25 @@
 
                 <div class="input-group" style="padding-top: 8px;">
                   <div class="input-group-prepend">
-                    <span class="input-group-text">Make a description</span>
+                    <span class="input-group-text" style="color: white; background-color:  rgb(220,53,69);">Description</span>
                   </div>
-                  {% comment %} <textarea class="form-control" aria-label="Description"></textarea> {% endcomment %}
                   <input type="description" name="description" class="form-control" data-required>
                 </div>
 
+
+                <script type="text/javascript">
+                    function showDiv(divId, element)
+                    {
+                        document.getElementById(divId).style.display = element.value == "new_board" ? 'block' : 'none';
+                    }
+                </script>
+
+
                 <div class="input-group" style="padding-top: 8px;">
                   <div class="input-group-prepend">
-                    <span class="input-group-text">Select a board</span>
+                    <span class="input-group-text" style="color: white; background-color:  rgb(220,53,69);">Select a board</span>
                   </div>
-                  <select name="board">
+                  <select name="board" id="select_board" onchange="showDiv('hidden_newB', this)">
                     {% for board in boards_user %}
                         <option value="{{ board.board_id }}">{{ board.name }}</option>
                     {% endfor %}
@@ -153,12 +161,21 @@
                   </select>
                 </div>
 
-                <div class="input-group" style="padding-top: 8px;">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">New board name</span>
-                  </div>
-                  {% comment %} <textarea class="form-control" aria-label="New Board"></textarea> {% endcomment %}
-                  <input type="board_name" name="board_name" class="form-control" data-required>
+                <div id="hidden_newB" style="display: none;">
+                    <hr>
+                    <div  class="input-group" style="padding-top: 8px;">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" style="color: white; background-color:  rgb(220,53,69);">New board name</span>
+                      </div>
+                      {% comment %} <textarea class="form-control" aria-label="New Board"></textarea> {% endcomment %}
+                      <input type="board_name" name="board_name" class="form-control" data-required>
+                    </div>
+
+                    <div class="custom-control custom-switch">
+                      <input type="checkbox" class="custom-control-input" name="secret" id="secret_B_switch">
+                      <label class="custom-control-label" for="secret_B_switch"> Wanna make this board a secret?? </label>
+                    </div>
+
                 </div>
 
             </div>
@@ -167,8 +184,7 @@
 
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
-            {% comment %} <button type="button" class="btn btn-danger">UPLOAD</button> {% endcomment %}
-            <button id="submit" class="btn btn-danger" type="submit">Real upload</button>
+            <button id="submit" class="btn btn-danger" type="submit">Upload</button>
 
           </div>
 
