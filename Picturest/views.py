@@ -50,6 +50,11 @@ def register_view(request):
         interests.user = request.user
         interests.save()
 
+        form_interests_show = InterestsSimpleShowForm()
+        interests_show = form_interests_show.save(commit=False)
+        interests_show.user = request.user
+        interests_show.save()
+
         # if next:
         #     # return HttpResponseRedirect(reverse("homepage"))
         #     return redirect("interests")
@@ -70,7 +75,7 @@ def logout_view(request):
 
 @login_required
 def homepage(request):
-    if request.method == "POST":
+    if request.method == "POST" and "newPin" in request.POST:
         new_board = None
 
         form = PinForm(request.POST, request.FILES)
@@ -99,11 +104,46 @@ def homepage(request):
             request.session["result"] = form.errors
         return HttpResponseRedirect(reverse('home_page'))
 
+    elif request.method == "POST" and "interestsShow" in request.POST:
+        interests_show = InterestsSimpleShow.objects.filter(user=request.user)
+        if interests_show:
+            form_interests_show = InterestsSimpleForm(
+                request.POST or None, instance=interests_show[0])
+        else:
+            form_interests_show = InterestsSimpleForm(request.POST or None)
+
+        if form_interests_show.is_valid():
+            interests = form_interests_show.save(commit=False)
+            interests.user = request.user
+            interests.save()
+
+        return HttpResponseRedirect(reverse('home_page'))
+
     else:
         form = PinForm(instance=request.user)
+
+        # Data model InterestsSimpleShow
+        interests_show_user = get_user_interests_show(request.user)
+        # Data model InterestsSimple
         user_interests = get_user_interests(request.user)
+        # List of interests the user is not interested in
+        interests_dont_show = [
+            k for k, v in user_interests.items() if v == False]
+        # Delete from interests_show all the interests the user is not interested
+        for interest in interests_dont_show:
+            del interests_show_user[interest]
+
+        # Now we have to make a query looking for the interests that are True in the interests_show_user
+        # interests_list != interests_show_user
         interests_list = get_interests_list(user_interests)
-        interests_list_hastag = add_hastag_to_interests(interests_list)
+        print("interests show user: ", interests_show_user)
+        print("interests user: ", interests_list)
+
+        interests_show_list = [
+            k for k, v in interests_show_user.items() if v == True]
+        print("interests show user list of trues: ", interests_show_list)
+
+        interests_list_hastag = add_hastag_to_interests(interests_show_list)
         pins = get_pins_from_interests(interests_list_hastag, request.user)
         boards_user = Board.objects.filter(author=request.user)
 
@@ -112,7 +152,9 @@ def homepage(request):
             'authenticated': request.user.is_authenticated,
             'username': request.user.email,
             'form': form,
-            'boards_user': boards_user
+            'boards_user': boards_user,
+            'interests_list': interests_list,
+            'interests_show': interests_show_user
         }
         return render(request, 'Picturest/home_page.html', context)
 
@@ -205,6 +247,7 @@ def profile(request, user_search="", noti_id=""):
         except Friendship.DoesNotExist:
             dis = False
 
+    print(interest_values)
     context = {
         'authenticated': request.user.is_authenticated,
         'user': user_aux,
@@ -484,6 +527,20 @@ def notifications(request):
     }
 
     return render(request, 'Picturest/notifications.html', context)
+
+
+def get_user_interests_show(user):
+    interest_values = {}
+    interests = InterestsSimpleShow.objects.filter(user=user)
+
+    if interests:
+        temp = interests[0]
+        interests_list = temp.interests_list
+        for elem in interests_list:
+            interest_value = getattr(temp, elem)
+            interest_values[elem] = interest_value
+
+    return interest_values
 
 
 def get_user_interests(user):
