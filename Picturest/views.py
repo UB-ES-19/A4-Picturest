@@ -68,6 +68,9 @@ def logout_view(request):
     return redirect('/')
 
 
+def faq_view(request):
+    render(request, "registration/FAQ.html")
+
 @login_required
 def homepage(request):
     if request.method == "POST":
