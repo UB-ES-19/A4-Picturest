@@ -18,12 +18,13 @@
                     <a href="{% url 'board' pin.board.board_id %}">{{ pin.board.name }}</a>
                 </p>
             </div>
-            <div align="right">
-                <button id="report_pin" class="btn btn-block btn-sm btn-danger" role="button" type="submit">
+            <div class="dropdown" align="right">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Report Pin
                 </button>
+                
             </div>
-            
             <div class="col-sm-2 img">
                 <div style="align-items: center;">
                     <img style="width:500px; height:500px;" src="{{ pin.post.url }}" data-holder-rendered="true"
