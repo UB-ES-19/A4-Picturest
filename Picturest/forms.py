@@ -133,6 +133,12 @@ class NotificationRePinForm(forms.ModelForm):
         fields = ["user", "type", "friendship", "pin"]
 
 
+class NotificationSendPinForm(forms.ModelForm):
+    class Meta:
+        model = Notification
+        fields = ["user", "type", "friendship", "pin"]
+
+
 class RePinForm(forms.ModelForm):
     class Meta:
         model = RePin
