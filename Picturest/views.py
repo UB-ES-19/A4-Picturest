@@ -157,12 +157,7 @@ def profile(request, user_search="", noti_id=""):
             freq.creator = request.user
             freq.save()
 
-            form_request = NotificationAcceptedForm()
-            freq_request = form_request.save(commit=False)
-            freq_request.user = user_aux
-            freq_request.type = "NewFollower"
-            freq_request.friendship = request.user
-            freq_request.save()
+            Notification.objects.create(type="new", user=user_aux, friendship=request.user)
 
         else:
             interests = InterestsSimple.objects.filter(user=request.user)
@@ -301,7 +296,7 @@ def pin(request, pin_search="", noti_id=""):
     if request.method == "POST":
         if 'friend' in request.POST:
             other_user = PicturestUser.objects.get(id=request.POST['friend'])
-            noti_type = "SendPin"
+            noti_type = "spf"
 
         else:
             new_board = None
@@ -323,16 +318,10 @@ def pin(request, pin_search="", noti_id=""):
                 new_repin.board = new_board
 
             new_repin.save()
-            noti_type = "RePin"
+            noti_type = "rep"
             other_user = result.author
 
-        form_request = NotificationRePinForm()
-        freq_request = form_request.save(commit=False)
-        freq_request.user = other_user
-        freq_request.type = noti_type
-        freq_request.pin = result
-        freq_request.friendship = request.user
-        freq_request.save()
+        Notification.objects.create(user=other_user, type=noti_type, pin=result, friendship=request.user)
 
         return HttpResponseRedirect(reverse('pin', args=(pin_search,)))
 
@@ -427,13 +416,9 @@ def search_friends(request, noti_id=""):
             Friendship.objects.filter(
                 id_friend=friend_id).update(accepted=True)
 
-            form_accept = NotificationAcceptedForm()
-            freq_accept = form_accept.save(commit=False)
-            freq_accept.user = Friendship.objects.get(
+            user = Friendship.objects.get(
                 id_friend=friend_id).creator
-            freq_accept.type = "FollowAccepted"
-            freq_accept.friendship = request.user
-            freq_accept.save()
+            Notification.objects.create(user=user, type="acc", friendship=request.user)
 
         elif "refuse" in request.POST.keys():
             friend_id = request.POST["refuse"]
@@ -588,3 +573,16 @@ def interests(request):
         'interest_values': interest_values
     }
     return render(request, 'registration/interests.html', context)
+
+
+@login_required
+def report(request, pin, cause):
+    try:
+        obj_pin = Pin.objects.get(pin_id=pin)
+    except Pin.DoesNotExist or Pin.MultipleObjectsReturned:
+        return HttpResponseRedirect(reverse('home_page'))
+
+    Report.objects.create(cause=cause, pin=obj_pin, author=request.user)
+    Notification.objects.create(user=obj_pin.author, pin=obj_pin, type="rpt")
+
+    return HttpResponseRedirect(reverse('pin', args=(pin,)))
