@@ -159,7 +159,9 @@ class Notification(models.Model):
     TYPES = (
         ("new", "NewFollower"),
         ("acc", "FollowAccepted"),
-        ("rep", "RePin")
+        ("rep", "RePin"),
+        ("spf", "SendPin"),
+        ("rpt", "Report")
     )
 
     user = models.ForeignKey(User, on_delete=models.CASCADE,
@@ -183,3 +185,20 @@ class RePin(models.Model):
 
     def __str__(self):
         return "RePin " + str(self.repin_id) + ": " + str(self.pin.pin_id)
+
+
+class Report(models.Model):
+    CAUSES = (
+        ("sex", "Sexual Explict content"),
+        ("spam", "Spam"),
+        ("copy", "Copyright"),
+        ("hate", "Hate Speech or Symbol")
+    )
+
+    report_id = models.AutoField(primary_key=True)
+    cause = models.TextField(choices=CAUSES, max_length=4)
+    pin = models.ForeignKey(Pin, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "Report " + str(self.report_id) + ":"

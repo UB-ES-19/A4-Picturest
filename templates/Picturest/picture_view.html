@@ -24,10 +24,10 @@
                     Report Pin
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#">Sexual Explict content</a>
-                    <a class="dropdown-item" href="#">Spam</a>
-                    <a class="dropdown-item" href="#">Copyright</a>
-                    <a class="dropdown-item" href="#">Hate Speech or Symbol</a>
+                    <a class="dropdown-item" href="{% url 'report' pin.pin_id 'sex' %}">Sexual Explict content</a>
+                    <a class="dropdown-item" href="{% url 'report' pin.pin_id 'spam' %}">Spam</a>
+                    <a class="dropdown-item" href="{% url 'report' pin.pin_id 'copy' %}">Copyright</a>
+                    <a class="dropdown-item" href="{% url 'report' pin.pin_id 'hate' %}">Hate Speech or Symbol</a>
                 </div>
             </div>
             <div class="col-sm-2 img">
@@ -83,8 +83,6 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">New board name</span>
                             </div>
-                            {% comment %} <textarea class="form-control" aria-label="New Board"></textarea> {%
-                            endcomment %}
                             <input type="board_name" name="board_name" class="form-control" data-required>
                         </div>
 
@@ -102,6 +100,19 @@
                     </div>
 
                 </div>
+            </div>
+        </form>
+        <br>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="row justify-content-center">
+                    <select class="form-control col-3" style="color:red;" name="friend" id="select_friend">
+                        {% for friend in friends %}
+                            <option value="{{ friend.friend.id }}">{{ friend.friend.username }}</option>
+                        {% endfor %}
+                    </select>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button class="col-4 btn btn-outline-danger" id="submit_sendpin" type="submit">Send!</button>
             </div>
         </form>
     </div>

@@ -115,24 +115,6 @@ class InterestsSimpleForm(forms.ModelForm):
                   "paint", "travel", "garden", "photography"]
 
 
-class NotificationAcceptedForm(forms.ModelForm):
-    class Meta:
-        model = Notification
-        fields = ["user", "type", "friendship"]
-
-
-class NotificationRequestForm(forms.ModelForm):
-    class Meta:
-        model = Notification
-        fields = ["user", "type", "friendship"]
-
-
-class NotificationRePinForm(forms.ModelForm):
-    class Meta:
-        model = Notification
-        fields = ["user", "type", "friendship", "pin"]
-
-
 class RePinForm(forms.ModelForm):
     class Meta:
         model = RePin

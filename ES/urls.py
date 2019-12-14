@@ -36,13 +36,13 @@ urlpatterns = [
     url(r'^pin/(?P<pin_search>.*)/(?P<noti_id>.*)$', views.pin, name='pin'),
     url(r'^pin/(?P<pin_search>.*)$', views.pin, name='pin'),
     url(r'^following/$', views.following, name="following"),
-    url(r'^search_friends/(?P<noti_id>.*)$',
-        views.search_friends, name='search_friends'),
+    url(r'^search_friends/(?P<noti_id>.*)$', views.search_friends, name='search_friends'),
     url(r'^search_friends/$', views.search_friends, name='search_friends'),
     url(r'^friend_not_found/$', views.friend_not_found, name='friend_not_found'),
     url(r'^search/$', views.search, name='search'),
     url(r'^notifications/$', views.notifications, name='notifications'),
     url(r'^interests/$', views.interests, name='interests'),
+    url(r'^report/(?P<pin>.*)/(?P<cause>.*)$', views.report, name='report'),
 ]
 
 
