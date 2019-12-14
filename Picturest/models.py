@@ -159,7 +159,8 @@ class Notification(models.Model):
     TYPES = (
         ("new", "NewFollower"),
         ("acc", "FollowAccepted"),
-        ("rep", "RePin")
+        ("rep", "RePin"),
+        ("spf", "SendPin")
     )
 
     user = models.ForeignKey(User, on_delete=models.CASCADE,

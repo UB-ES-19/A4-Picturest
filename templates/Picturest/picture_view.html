@@ -104,6 +104,19 @@
                 </div>
             </div>
         </form>
+        <br>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="row justify-content-center">
+                    <select class="form-control col-3" style="color:red;" name="friend" id="select_friend">
+                        {% for friend in friends %}
+                            <option value="{{ friend.friend.id }}">{{ friend.friend.username }}</option>
+                        {% endfor %}
+                    </select>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button class="col-4 btn btn-outline-danger" id="submit_sendpin" type="submit">Send!</button>
+            </div>
+        </form>
     </div>
 </div>
 {% endblock %}

@@ -299,40 +299,50 @@ def pin(request, pin_search="", noti_id=""):
         return HttpResponseRedirect(reverse("home_page"))
 
     if request.method == "POST":
-        new_board = None
+        if 'friend' in request.POST:
+            other_user = PicturestUser.objects.get(id=request.POST['friend'])
+            noti_type = "SendPin"
 
-        form = RePinForm(request.POST)
-        if 'board' in form.errors:
-            form_board = BoardForm()
-            new_board = form_board.save(commit=False)
-            new_board.author = request.user
-            new_board.name = request.POST['board_name']
-            new_board.secret = 'secret' in request.POST
-            new_board.save()
-            form.errors.pop('board')
+        else:
+            new_board = None
 
-        new_repin = form.save(commit=False)
-        new_repin.pin = result
+            form = RePinForm(request.POST)
+            if 'board' in form.errors:
+                form_board = BoardForm()
+                new_board = form_board.save(commit=False)
+                new_board.author = request.user
+                new_board.name = request.POST['board_name']
+                new_board.secret = 'secret' in request.POST
+                new_board.save()
+                form.errors.pop('board')
 
-        if new_board:
-            new_repin.board = new_board
+            new_repin = form.save(commit=False)
+            new_repin.pin = result
 
-        new_repin.save()
+            if new_board:
+                new_repin.board = new_board
+
+            new_repin.save()
+            noti_type = "RePin"
+            other_user = result.author
 
         form_request = NotificationRePinForm()
         freq_request = form_request.save(commit=False)
-        freq_request.user = result.author
-        freq_request.type = "RePin"
+        freq_request.user = other_user
+        freq_request.type = noti_type
         freq_request.pin = result
         freq_request.friendship = request.user
         freq_request.save()
+
         return HttpResponseRedirect(reverse('pin', args=(pin_search,)))
 
     boards = Board.objects.filter(author=request.user)
+    friends = Friendship.objects.filter(creator=request.user, accepted=True)
 
     context = {
         'pin': result,
-        'boards_user': boards
+        'boards_user': boards,
+        'friends': friends
     }
     return render(request, 'Picturest/picture_view.html', context)
 
@@ -567,7 +577,7 @@ def interests(request):
             # return HttpResponseRedirect(reverse("homepage"))
 
         else:
-            request.session["result"] = form.errors
+            request.session["result"] = form_interests.errors
 
         return redirect("home_page")
         # return HttpResponseRedirect(reverse('profile'))
