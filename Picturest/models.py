@@ -155,6 +155,27 @@ class InterestsSimple(models.Model):
         return "Interests of " + str(self.user.username)
 
 
+class InterestsSimpleShow(models.Model):
+    INTERESTS = [
+        "cinema", "music", "sports", "animals", "paint", "travel", "garden", "photography"
+    ]
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    cinema = models.BooleanField(default=False)
+    music = models.BooleanField(default=False)
+    sports = models.BooleanField(default=False)
+    animals = models.BooleanField(default=False)
+    paint = models.BooleanField(default=False)
+    travel = models.BooleanField(default=False)
+    garden = models.BooleanField(default=False)
+    photography = models.BooleanField(default=False)
+
+    interests_list = INTERESTS
+
+    def __str__(self):
+        return "Interests to show of " + str(self.user.username)
+
+
 class Notification(models.Model):
     TYPES = (
         ("new", "NewFollower"),
