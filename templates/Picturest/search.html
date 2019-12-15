@@ -8,6 +8,37 @@
         <a class="nav-item nav-link" id="nav-boards-tab" data-toggle="tab" href="#boards" role="tab" aria-controls="nav-boards" aria-selected="false">Boards</a>
       </div>
     </nav>
+
+    <script>
+            fetch('https://api.datamuse.com/words?ml={{ search_word }}')
+                .then(response => {
+                    return response.json()
+                })
+                .then(data => {
+                    var top10 = data.sort(function(a, b) { return a.Variable1 < b.Variable1 ? 1 : -1; }).slice(0, 10);
+                    console.log(top10)
+                    for (word in top10){
+                        console.log(top10[word].word)
+                        var a = document.createElement('BUTTON');
+                        var linkText = document.createTextNode(top10[word].word);
+                        a.appendChild(linkText);
+                        a.title = top10[word].word;
+                        a.href = "/search/?word_search="+top10[word].word;
+                        document.getElementById("similar_search").appendChild(a);
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+
+    </script>
+
+
+    <div id="similar_search">
+
+    </div>
+    
+    
     <div class="tab-content" id="nav-tabContent">
         <div class="tab-pane fade show active" id="users" role="tabpanel" aria-labelledby="nav-users-tab">
             <ul class="list-group col-3">
