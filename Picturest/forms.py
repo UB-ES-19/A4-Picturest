@@ -115,6 +115,22 @@ class InterestsSimpleForm(forms.ModelForm):
                   "paint", "travel", "garden", "photography"]
 
 
+class InterestsSimpleShowForm(forms.ModelForm):
+    cinema = forms.BooleanField(initial=True)
+    music = forms.BooleanField(initial=True)
+    sports = forms.BooleanField(initial=True)
+    animals = forms.BooleanField(initial=True)
+    paint = forms.BooleanField(initial=True)
+    travel = forms.BooleanField(initial=True)
+    garden = forms.BooleanField(initial=True)
+    photography = forms.BooleanField(initial=True)
+
+    class Meta:
+        model = InterestsSimpleShow
+        fields = ["cinema", "music", "sports", "animals",
+                  "paint", "travel", "garden", "photography"]
+
+
 class RePinForm(forms.ModelForm):
     class Meta:
         model = RePin

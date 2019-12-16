@@ -10,10 +10,10 @@
 
     <!-- From here we should modify some parts and look out everything -->
     <div class="card-columns">
-    
+
       {% for pin in pins %}
 
-        <a class="pin_ref" href="{% url 'pin' pin.pin_id %}"> 
+        <a class="pin_ref" href="{% url 'pin' pin.pin_id %}">
           <div class="card" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
             <img class="card-img-top" alt="100x100" src="{{ pin.post.url }}" data-holder-rendered="true">
             <div class="card-body">
@@ -23,13 +23,71 @@
           </div>
         </a>
 
-        
+
       {% endfor %}
 
     </div>
 
+    <!-- OPTIMIZE YOUR FEED -->
 
-    <button class="btn btn-outline-danger btn-lg rounded-circle" data-toggle="modal" data-target="#exampleModalCenter" style="font-weight: bold;  position: fixed; bottom: 20px; right: 20px;"> + </button>
+    <script>
+        // Initialize tooltip component
+        $(function () {
+            $('[rel="tooltip"]').tooltip()
+        })
+
+        // Initialize popover component
+        $(function () {
+            $('[rel="popover"]').popover()
+        })
+    </script>
+
+
+    <button class="btn btn-outline-success btn-lg" data-toggle="modal" data-target="#modalShowInterests" rel="tooltip" data-placement="left" title="Tune your feed"  style="font-weight: bold;  position: fixed; bottom: 120px; right: 20px;">
+        <img src="../static/ImgStatic/PicTuneFeed.png" width="30" height="30" class="d-inline-block align-top" alt="tune">
+    </button>
+
+    <div class="modal fade" id="modalShowInterests" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Choose what interests to see</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+            <div class="modal-body">
+                <form method="POST">
+
+                    {% csrf_token %}
+                    {% comment %} {{ form_interests.as_p }} {% endcomment %}
+
+                    <div class="list-group">
+                        {% for key, value in interests_show.items %}
+                            {% if value %}
+                                <input type="checkbox" name={{ key }} value={{ key }} id={{key }} checked>
+                            {% else %}
+                                <input type="checkbox" name={{ key }} value={{ key }} id={{key }}>
+                            {% endif %}
+                            <label class="list-group-item" name={{ key }} for={{ key }} style=" margin-bottom: 0.25em;"> {{ key }}</label>
+                        {% endfor %}
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                        <button type="summit" name="interestsShow" value="save" class="btn btn-success">Tune up</button>
+                    </div>
+                </form>
+            </div>
+
+         </div>
+      </div>
+    </div>
+
+
+    <!-- CREATE A NEW PIN -->
+
+    <button class="btn btn-outline-danger btn-lg rounded-circle" data-toggle="modal" data-target="#exampleModalCenter"  rel="tooltip" data-placement="left" title="Upload a Pin" style="font-weight: bold;  position: fixed; bottom: 20px; right: 20px;"> + </button>
 
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
@@ -184,7 +242,7 @@
 
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
-            <button id="submit" class="btn btn-danger" type="submit">Upload</button>
+            <button id="submit" name="newPin" class="btn btn-danger" type="submit">Upload</button>
 
           </div>
 
