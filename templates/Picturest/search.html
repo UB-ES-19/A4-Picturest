@@ -19,12 +19,17 @@
                     console.log(top10)
                     for (word in top10){
                         console.log(top10[word].word)
-                        var a = document.createElement('BUTTON');
+                        var a = document.createElement('a');
                         var linkText = document.createTextNode(top10[word].word);
                         a.appendChild(linkText);
+                        a.id = "test"
                         a.title = top10[word].word;
                         a.href = "/search/?word_search="+top10[word].word;
+                        a.className = "btn btn-outline-secondary"
+                        a.style = "border-radius: 16px; margin-left: 3px; text-align: center; font-weight: bold;"
+
                         document.getElementById("similar_search").appendChild(a);
+
                     }
                 })
                 .catch(err => {
@@ -33,9 +38,19 @@
 
     </script>
 
+    <style>
+        #test {
+            border-radius: 16px;
+            margin-left: 3px; 
+            margin-top: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
 
-    <div id="similar_search">
 
+    <div id="similar_search" class = "btn-group">
+        
     </div>
     
     
