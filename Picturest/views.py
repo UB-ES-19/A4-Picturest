@@ -479,7 +479,8 @@ def search(request):
     context = {
         "users_username": users,
         "pins": sorted(pins, key=operator.attrgetter('pk')),
-        "boards": sorted(boards, key=operator.attrgetter('pk'))
+        "boards": sorted(boards, key=operator.attrgetter('pk')),
+        "search_word": word
     }
 
     return render(request, 'Picturest/search.html', context)
