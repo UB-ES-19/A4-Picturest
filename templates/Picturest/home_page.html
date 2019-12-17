@@ -62,14 +62,14 @@
                     {% csrf_token %}
                     {% comment %} {{ form_interests.as_p }} {% endcomment %}
 
-                    <div class="list-group">
+                    <div class="list-group green input">
                         {% for key, value in interests_show.items %}
                             {% if value %}
                                 <input type="checkbox" name={{ key }} value={{ key }} id={{key }} checked>
                             {% else %}
                                 <input type="checkbox" name={{ key }} value={{ key }} id={{key }}>
                             {% endif %}
-                            <label class="list-group-item" name={{ key }} for={{ key }} style=" margin-bottom: 0.25em;"> {{ key }}</label>
+                            <label class="list-group-item" name={{ key }} for={{ key }}> {{ key }}</label>
                         {% endfor %}
                     </div>
 
