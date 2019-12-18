@@ -68,9 +68,6 @@ def logout_view(request):
     return redirect('/')
 
 
-def faq_view(request):
-    render(request, "registration/FAQ.html")
-
 @login_required
 def homepage(request):
     if request.method == "POST":
@@ -476,6 +473,10 @@ def search(request):
     }
 
     return render(request, 'Picturest/search.html', context)
+
+
+def faq_view(request):
+    return render(request, "Picturest/FAQ.html", {})
 
 
 def notifications(request):
