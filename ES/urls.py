@@ -28,8 +28,7 @@ urlpatterns = [
     url(r'^accounts/logout/$', views.logout_view, name='logout'),
     url(r'^accounts/register/$', views.register_view, name='register'),
     url(r'^profile/edit/$', views.edit_profile, name='edit_profile'),
-    url(r'^profile/(?P<user_search>.*)/(?P<noti_id>.*)$',
-        views.profile, name='profile'),
+    url(r'^profile/(?P<user_search>.*)/(?P<noti_id>.*)$', views.profile, name='profile'),
     url(r'^profile/(?P<user_search>.*)$', views.profile, name='profile'),
     url(r'^profile/$', views.profile, name='profile'),
     url(r'^board/(?P<board_search>.*)$', views.board, name='board'),
@@ -43,6 +42,7 @@ urlpatterns = [
     url(r'^notifications/$', views.notifications, name='notifications'),
     url(r'^interests/$', views.interests, name='interests'),
     url(r'^report/(?P<pin>.*)/(?P<cause>.*)$', views.report, name='report'),
+    url(r'^FAQs/$', views.faq_view, name='FAQs'),
 ]
 
 
