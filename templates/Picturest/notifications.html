@@ -85,7 +85,7 @@
 {% endcomment %}
 
 {% for noti in notifications %}
-    {% if noti.type == "FollowAccepted" %}
+    {% if noti.type == "acc" %}
         {% if noti.seen %}
             <a class="dropdown-item" href="{% url 'profile' noti.friendship.username noti.id %}">
         {% else %}
@@ -96,7 +96,7 @@
                 <h1 class="name">From {{ noti.friendship.username }}</h1>
             </div>
         </a>
-    {% elif noti.type == "NewFollower" %}
+    {% elif noti.type == "new" %}
         {% if noti.seen %}
             <a class="dropdown-item" href="{% url 'search_friends' noti.id %}">
         {% else %}
@@ -107,7 +107,7 @@
                 <h1 class="name">From {{ noti.friendship.username }}</h1>
             </div>
         </a>
-    {% elif noti.type == "RePin" %}
+    {% elif noti.type == "rep" %}
         {% if noti.seen %}
             <a class="dropdown-item" href="{% url 'pin' noti.pin.pin_id noti.id %}">
         {% else %}
@@ -116,6 +116,28 @@
             <div style="margin-top: 10px; margin-left: -10px;">
                 <h1 class="username">New RePin</h1>
                 <h1 class="name">Of {{ noti.pin.title }} from {{ noti.friendship.username }}</h1>
+            </div>
+        </a>
+    {% elif noti.type == "spf" %}
+        {% if noti.seen %}
+            <a class="dropdown-item" href="{% url 'pin' noti.pin.pin_id noti.id %}">
+        {% else %}
+            <a class="dropdown-item follow-request-item" href="{% url 'pin' noti.pin.pin_id noti.id %}">
+        {% endif %}
+            <div style="margin-top: 10px; margin-left: -10px;">
+                <h1 class="username">Pin received</h1>
+                <h1 class="name">From {{ noti.friendship.username }}</h1>
+            </div>
+        </a>
+    {% elif noti.type == "rpt" %}
+        {% if noti.seen %}
+            <a class="dropdown-item" href="{% url 'pin' noti.pin.pin_id noti.id %}">
+        {% else %}
+            <a class="dropdown-item follow-request-item" href="{% url 'pin' noti.pin.pin_id noti.id %}">
+        {% endif %}
+            <div style="margin-top: 10px; margin-left: -10px;">
+                <h1 class="username">Some report your pin</h1>
+                <h1 class="name">Pin: {{ noti.pin.title }}</h1>
             </div>
         </a>
     {% endif %}

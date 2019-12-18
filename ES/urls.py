@@ -41,6 +41,7 @@ urlpatterns = [
     url(r'^search/$', views.search, name='search'),
     url(r'^notifications/$', views.notifications, name='notifications'),
     url(r'^interests/$', views.interests, name='interests'),
+    url(r'^report/(?P<pin>.*)/(?P<cause>.*)$', views.report, name='report'),
     url(r'^FAQs/$', views.faq_view, name='FAQs'),
 ]
 

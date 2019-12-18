@@ -155,11 +155,34 @@ class InterestsSimple(models.Model):
         return "Interests of " + str(self.user.username)
 
 
+class InterestsSimpleShow(models.Model):
+    INTERESTS = [
+        "cinema", "music", "sports", "animals", "paint", "travel", "garden", "photography"
+    ]
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    cinema = models.BooleanField(default=False)
+    music = models.BooleanField(default=False)
+    sports = models.BooleanField(default=False)
+    animals = models.BooleanField(default=False)
+    paint = models.BooleanField(default=False)
+    travel = models.BooleanField(default=False)
+    garden = models.BooleanField(default=False)
+    photography = models.BooleanField(default=False)
+
+    interests_list = INTERESTS
+
+    def __str__(self):
+        return "Interests to show of " + str(self.user.username)
+
+
 class Notification(models.Model):
     TYPES = (
         ("new", "NewFollower"),
         ("acc", "FollowAccepted"),
-        ("rep", "RePin")
+        ("rep", "RePin"),
+        ("spf", "SendPin"),
+        ("rpt", "Report")
     )
 
     user = models.ForeignKey(User, on_delete=models.CASCADE,
@@ -183,3 +206,20 @@ class RePin(models.Model):
 
     def __str__(self):
         return "RePin " + str(self.repin_id) + ": " + str(self.pin.pin_id)
+
+
+class Report(models.Model):
+    CAUSES = (
+        ("sex", "Sexual Explict content"),
+        ("spam", "Spam"),
+        ("copy", "Copyright"),
+        ("hate", "Hate Speech or Symbol")
+    )
+
+    report_id = models.AutoField(primary_key=True)
+    cause = models.TextField(choices=CAUSES, max_length=4)
+    pin = models.ForeignKey(Pin, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "Report " + str(self.report_id) + ":"
