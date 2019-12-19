@@ -75,7 +75,7 @@ def logout_view(request):
 
 @login_required
 def homepage(request):
-    if request.method == "POST":
+    if request.method == "POST" and "newPin" in request.POST:
         new_board = None
 
         if 'SelectMultiple' in request.POST:
@@ -150,6 +150,21 @@ def homepage(request):
                 interests.save()
 
             return HttpResponseRedirect(reverse('home_page'))
+
+    elif request.method == "POST" and "interestsShow" in request.POST:
+        interests_show = InterestsSimpleShow.objects.filter(user=request.user)
+        if interests_show:
+            form_interests_show = InterestsSimpleForm(
+                request.POST or None, instance=interests_show[0])
+        else:
+            form_interests_show = InterestsSimpleForm(request.POST or None)
+
+        if form_interests_show.is_valid():
+            interests = form_interests_show.save(commit=False)
+            interests.user = request.user
+            interests.save()
+
+        return HttpResponseRedirect(reverse('home_page'))
 
     else:
         form = PinForm(instance=request.user)
@@ -383,6 +398,7 @@ def following(request):
     friendships = Friendship.objects.filter(creator=request.user)
     boards_user = Board.objects.filter(author=request.user)
     pins = []
+    repins = []
     for friendship in friendships:
         pins += Pin.objects.filter(author=friendship.friend,
                                    board__secret=False)
