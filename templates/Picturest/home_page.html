@@ -8,70 +8,71 @@
   <a href="pin" class="button">Create Pin</a> {% endcomment %}
 
     <!-- From here we should modify some parts and look out everything -->
+    {% if pins %}
+        <a class="btn btn-outline-danger" href="#" id="btnSelectPinsId">Select pins</a>
 
-    <a class="btn btn-outline-danger" href="#" id="btnSelectPinsId">Select pins</a>
-
-    <form method="POST">
-        {% csrf_token %}
-        <div class="input-group" id="selectPinsId" style="padding-top: 8px; display: none;">
-            <hr>
-            <div class="input-group-prepend">
-                <span class="input-group-text" style="color: white; background-color:  rgb(220,53,69);">Select a board</span>
-                <select class="form-control col-3" name="board" id="select_board" onchange="showDiv('hidden_selectB', this)">
-                {% for board in boards_user %}
-                    <option value="{{ board.board_id }}">{{ board.name }}</option>
-                {% endfor %}
-                <option value="new_board">New board</option>
-            </select>
-            </div>
-            <div id="hidden_selectB" style="display: none;">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="input-group" id="selectPinsId" style="padding-top: 8px; display: none;">
                 <hr>
-                <div  class="input-group" style="padding-top: 8px;">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" style="color: white; background-color:  rgb(220,53,69);">New board name</span>
-                  </div>
-                  {% comment %} <textarea class="form-control" aria-label="New Board"></textarea> {% endcomment %}
-                  <input type="board_name" name="board_name" class="form-control" data-required>
+                <div class="input-group-prepend">
+                    <span class="input-group-text" style="color: white; background-color:  rgb(220,53,69);">Select a board</span>
+                    <select class="form-control col-3" name="board" id="select_board" onchange="showDiv('hidden_selectB', this)">
+                    {% for board in boards_user %}
+                        <option value="{{ board.board_id }}">{{ board.name }}</option>
+                    {% endfor %}
+                    <option value="new_board">New board</option>
+                </select>
                 </div>
+                <div id="hidden_selectB" style="display: none;">
+                    <hr>
+                    <div  class="input-group" style="padding-top: 8px;">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" style="color: white; background-color:  rgb(220,53,69);">New board name</span>
+                      </div>
+                      {% comment %} <textarea class="form-control" aria-label="New Board"></textarea> {% endcomment %}
+                      <input type="board_name" name="board_name" class="form-control" data-required>
+                    </div>
 
-                <div class="custom-control custom-switch">
-                  <input type="checkbox" class="custom-control-input" name="secret" id="secret_B_switch">
-                  <label class="custom-control-label" for="secret_B_switch"> Wanna make this board a secret?? </label>
+                    <div class="custom-control custom-switch">
+                      <input type="checkbox" class="custom-control-input" name="secret" id="secret_B_switch">
+                      <label class="custom-control-label" for="secret_B_switch"> Wanna make this board a secret?? </label>
+                    </div>
                 </div>
+                <br>
+                <button class="btn btn-outline-danger" type="submit" name="SelectMultiple">Add</button>
             </div>
             <br>
-            <button class="btn btn-outline-danger" type="submit" name="SelectMultiple">Add</button>
-        </div>
-        <br>
-        <hr>
-        <div class="card-columns">
-            {% for pin in pins %}
-                <div class="card" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
-                    <input class="pin-checkbox" type="checkbox" style="display: none; color: red;" name="check_{{ pin.pin_id }}">
-                    <a class="pin_ref" href="{% url 'pin' pin.pin_id %}">
-                        <img class="card-img-top" alt="100x100" src="{{ pin.post.url }}" data-holder-rendered="true">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ pin.title }}</h5>
-                            <p class="card-text">{{ pin.description }}</p>
-                        </div>
-                    </a>
-                </div>
-            {% endfor %}
-        </div>
-    </form>
-    <!-- OPTIMIZE YOUR FEED -->
+            <hr>
+            <div class="card-columns">
+                {% for pin in pins %}
+                    <div class="card" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+                        <input class="pin-checkbox" type="checkbox" style="display: none; color: red;" name="check_{{ pin.pin_id }}">
+                        <a class="pin_ref" href="{% url 'pin' pin.pin_id %}">
+                            <img class="card-img-top" alt="100x100" src="{{ pin.post.url }}" data-holder-rendered="true">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ pin.title }}</h5>
+                                <p class="card-text">{{ pin.description }}</p>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </form>
+        <!-- OPTIMIZE YOUR FEED -->
 
-    <script>
-        // Initialize tooltip component
-        $(function () {
-            $('[rel="tooltip"]').tooltip()
-        })
+        <script>
+            // Initialize tooltip component
+            $(function () {
+                $('[rel="tooltip"]').tooltip()
+            })
 
-        // Initialize popover component
-        $(function () {
-            $('[rel="popover"]').popover()
-        })
-    </script>
+            // Initialize popover component
+            $(function () {
+                $('[rel="popover"]').popover()
+            })
+        </script>
+    {% endif %}
 
 
     {% if interests_show %}

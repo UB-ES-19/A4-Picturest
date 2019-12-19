@@ -108,6 +108,9 @@ def homepage(request):
             if board:
                 return HttpResponseRedirect(reverse('board', args=(board.board_id,)))
 
+            else:
+                return HttpResponseRedirect(reverse('home_page'))
+
         elif "newPin" in request.POST:
             form = PinForm(request.POST, request.FILES)
             if 'board' in form.errors:
@@ -402,10 +405,12 @@ def following(request):
     for friendship in friendships:
         pins += Pin.objects.filter(author=friendship.friend,
                                    board__secret=False)
-        for repin in RePin.objects.filter(board__secret=False, board__author=friendship.friend).\
-                exclude(pin__author=request.user):
-            if repin.pin not in pins:
-                pins.append(repin.pin)
+        repins += RePin.objects.filter(board__secret=False, board__author=friendship.friend).\
+            exclude(pin__author=request.user)
+
+    for repin in repins:
+        if repin.pin not in pins:
+            pins.append(repin.pin)
 
     context = {
         'pins': pins,
