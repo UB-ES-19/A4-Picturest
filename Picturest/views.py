@@ -225,7 +225,7 @@ def profile(request, user_search="", noti_id=""):
     dis = True
     interests_list = []
     interest_values = []
-
+    user_boards = []
     if 'user_search' in request.GET:
         user_search = request.GET["user_search"]
 
@@ -235,11 +235,14 @@ def profile(request, user_search="", noti_id=""):
                 user_aux = PicturestUser.objects.get(email=user_search)
             else:
                 user_aux = PicturestUser.objects.get(username=user_search)
+
+            user_boards = Board.objects.filter(author=user_aux, secret=False)
         except PicturestUser.DoesNotExist:
             return HttpResponseRedirect(reverse("friend_not_found"))
 
     if not user_aux:
         user_aux = request.user
+        user_boards = Board.objects.filter(author=user_aux)
 
     if request.method == "POST":
         if user_search:
@@ -279,7 +282,7 @@ def profile(request, user_search="", noti_id=""):
     else:
         form_interests = InterestsSimpleForm()
 
-    user_boards = Board.objects.filter(author=user_aux)
+    # user_boards = Board.objects.filter(author=user_aux, secret=False)
     user_pins = Pin.objects.filter(author=user_aux)
     following = Friendship.objects.filter(
         creator=user_aux, accepted=True).count()
