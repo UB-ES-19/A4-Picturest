@@ -97,22 +97,11 @@ class SearchFriendForm(forms.ModelForm):
         fields = ["friend", "creator"]
 
 
-class InterestsForm(forms.ModelForm):
-    # interest = forms.MultipleChoiceField(choices=Interests.CATEGORIES)
-    interest = forms.MultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple,
-        choices=Interests.CATEGORIES)
-
-    class Meta:
-        model = Interests
-        fields = ["interest"]
-
-
 class InterestsSimpleForm(forms.ModelForm):
     class Meta:
         model = InterestsSimple
         fields = ["cinema", "music", "sports", "animals",
-                  "paint", "travel", "garden", "photography"]
+                  "paint", "travel", "garden", "photography", "tecnology", "food"]
 
 
 class InterestsSimpleShowForm(forms.ModelForm):
@@ -124,11 +113,13 @@ class InterestsSimpleShowForm(forms.ModelForm):
     travel = forms.BooleanField(initial=True)
     garden = forms.BooleanField(initial=True)
     photography = forms.BooleanField(initial=True)
+    tecnology = forms.BooleanField(initial=True)
+    food = forms.BooleanField(initial=True)
 
     class Meta:
         model = InterestsSimpleShow
         fields = ["cinema", "music", "sports", "animals",
-                  "paint", "travel", "garden", "photography"]
+                  "paint", "travel", "garden", "photography", "tecnology", "food"]
 
 
 class RePinForm(forms.ModelForm):
