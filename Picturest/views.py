@@ -75,34 +75,81 @@ def logout_view(request):
 
 @login_required
 def homepage(request):
-    if request.method == "POST" and "newPin" in request.POST:
+    if request.method == "POST":
         new_board = None
 
-        form = PinForm(request.POST, request.FILES)
-        if 'board' in form.errors:
-            form_board = BoardForm()
-            new_board = form_board.save(commit=False)
-            new_board.author = request.user
-            new_board.name = request.POST['board_name']
-            new_board.secret = 'secret' in request.POST
-            new_board.save()
-            form.errors.pop('board')
+        if 'SelectMultiple' in request.POST:
+            board = None
 
-        if form.is_valid():
-            new_pin = form.save(commit=False)
-            new_pin.author = request.user
-            new_pin.post = form.cleaned_data['post']
+            if request.POST['board'] == 'new_board':
+                form_board = BoardForm()
+                new_board = form_board.save(commit=False)
+                new_board.author = request.user
+                new_board.name = request.POST['board_name']
+                new_board.secret = 'secret' in request.POST
+                new_board.save()
 
-            if new_board:
-                new_pin.board = new_board
+            for var in request.POST:
+                if 'check_' in var:
+                    form = RePinForm(request.POST)
+                    if 'board' in form.errors:
+                        form.errors.pop('board')
+                    repin = form.save(commit=False)
+                    repin.author = request.user
 
-            new_pin.save()
-            return HttpResponseRedirect(reverse('pin', args=(new_pin.pin_id,)))
+                    if new_board:
+                        repin.board = new_board
 
-        else:
-            print(form.errors)
-            request.session["result"] = form.errors
-        return HttpResponseRedirect(reverse('home_page'))
+                    var = var.split("_")[1]
+                    repin.pin = Pin.objects.get(pin_id=var)
+                    repin.save()
+                    board = repin.board
+
+            if board:
+                return HttpResponseRedirect(reverse('board', args=(board.board_id,)))
+
+        elif "newPin" in request.POST:
+            form = PinForm(request.POST, request.FILES)
+            if 'board' in form.errors:
+                form_board = BoardForm()
+                new_board = form_board.save(commit=False)
+                new_board.author = request.user
+                new_board.name = request.POST['board_name']
+                new_board.secret = 'secret' in request.POST
+                new_board.save()
+                form.errors.pop('board')
+
+            if form.is_valid():
+                new_pin = form.save(commit=False)
+                new_pin.author = request.user
+                new_pin.post = form.cleaned_data['post']
+
+                if new_board:
+                    new_pin.board = new_board
+
+                new_pin.save()
+                return HttpResponseRedirect(reverse('pin', args=(new_pin.pin_id,)))
+
+            else:
+                print(form.errors)
+                request.session["result"] = form.errors
+            return HttpResponseRedirect(reverse('home_page'))
+
+        elif "interestsShow" in request.POST:
+            interests_show = InterestsSimpleShow.objects.filter(
+                user=request.user)
+            if interests_show:
+                form_interests_show = InterestsSimpleForm(
+                    request.POST or None, instance=interests_show[0])
+            else:
+                form_interests_show = InterestsSimpleForm(request.POST or None)
+
+            if form_interests_show.is_valid():
+                interests = form_interests_show.save(commit=False)
+                interests.user = request.user
+                interests.save()
+
+            return HttpResponseRedirect(reverse('home_page'))
 
     elif request.method == "POST" and "interestsShow" in request.POST:
         interests_show = InterestsSimpleShow.objects.filter(user=request.user)
@@ -286,33 +333,86 @@ def edit_profile(request):
 
 @login_required
 def following(request):
+    if request.method == "POST":
+        new_board = None
+
+        if 'SelectMultiple' in request.POST:
+            board = None
+
+            if request.POST['board'] == 'new_board':
+                form_board = BoardForm()
+                new_board = form_board.save(commit=False)
+                new_board.author = request.user
+                new_board.name = request.POST['board_name']
+                new_board.secret = 'secret' in request.POST
+                new_board.save()
+
+            for var in request.POST:
+                if 'check_' in var:
+                    form = RePinForm(request.POST)
+                    if 'board' in form.errors:
+                        form.errors.pop('board')
+                    repin = form.save(commit=False)
+                    repin.author = request.user
+
+                    if new_board:
+                        repin.board = new_board
+
+                    var = var.split("_")[1]
+                    repin.pin = Pin.objects.get(pin_id=var)
+                    repin.save()
+                    board = repin.board
+
+            if board:
+                return HttpResponseRedirect(reverse('board', args=(board.board_id,)))
+
+        else:
+            form = PinForm(request.POST, request.FILES)
+            if 'board' in form.errors:
+                form_board = BoardForm()
+                new_board = form_board.save(commit=False)
+                new_board.author = request.user
+                new_board.name = request.POST['board_name']
+                new_board.secret = 'secret' in request.POST
+                new_board.save()
+                form.errors.pop('board')
+
+            if form.is_valid():
+                repin = form.save(commit=False)
+                repin.author = request.user
+                repin.post = form.cleaned_data['post']
+
+                if new_board:
+                    repin.board = new_board
+
+                repin.save()
+                return HttpResponseRedirect(reverse('pin', args=(repin.pin_id,)))
+
+            else:
+                print(form.errors)
+                request.session["result"] = form.errors
+
+        return HttpResponseRedirect(reverse('following'))
+
     form = PinForm(instance=request.user)
     friendships = Friendship.objects.filter(creator=request.user)
-    # email_followers = []
-    #
-    # for friendship in friendships:
-    #     email_followers.append(friendship.friend)
-    #
-    # pins = sorted(Pin.objects.filter(author__in=email_followers, board__secret=False),
-    #               key=lambda x: random.random())
-
+    boards_user = Board.objects.filter(author=request.user)
     pins = []
     repins = []
     for friendship in friendships:
         pins += Pin.objects.filter(author=friendship.friend,
                                    board__secret=False)
-        repins += RePin.objects.filter(board__secret=False,
-                                       board__author=friendship.friend).exclude(pin__author=request.user)
-
-    for repin in repins:
-        if repin.pin not in pins:
-            pins.append(repin.pin)
+        for repin in RePin.objects.filter(board__secret=False, board__author=friendship.friend).\
+                exclude(pin__author=request.user):
+            if repin.pin not in pins:
+                pins.append(repin.pin)
 
     context = {
         'pins': pins,
         'authenticated': request.user.is_authenticated,
         'username': request.user.username,
-        'form': form
+        'form': form,
+        'boards_user': boards_user
     }
     return render(request, 'Picturest/home_page.html', context)
 
