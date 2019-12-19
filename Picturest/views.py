@@ -199,7 +199,8 @@ def profile(request, user_search="", noti_id=""):
             freq.creator = request.user
             freq.save()
 
-            Notification.objects.create(type="new", user=user_aux, friendship=request.user)
+            Notification.objects.create(
+                type="new", user=user_aux, friendship=request.user)
 
         else:
             interests = InterestsSimple.objects.filter(user=request.user)
@@ -364,7 +365,8 @@ def pin(request, pin_search="", noti_id=""):
             noti_type = "rep"
             other_user = result.author
 
-        Notification.objects.create(user=other_user, type=noti_type, pin=result, friendship=request.user)
+        Notification.objects.create(
+            user=other_user, type=noti_type, pin=result, friendship=request.user)
 
         return HttpResponseRedirect(reverse('pin', args=(pin_search,)))
 
@@ -461,7 +463,8 @@ def search_friends(request, noti_id=""):
 
             user = Friendship.objects.get(
                 id_friend=friend_id).creator
-            Notification.objects.create(user=user, type="acc", friendship=request.user)
+            Notification.objects.create(
+                user=user, type="acc", friendship=request.user)
 
         elif "refuse" in request.POST.keys():
             friend_id = request.POST["refuse"]
@@ -492,6 +495,7 @@ def friend_not_found(request):
     return render(request, 'Picturest/user_not_found.html', {})
 
 
+@login_required
 def search(request):
     word = request.GET["word_search"]
     you = request.user.username
@@ -514,6 +518,7 @@ def search(request):
     return render(request, 'Picturest/search.html', context)
 
 
+@login_required
 def notifications(request):
     notis = Notification.objects.filter(
         user=request.user).order_by('-date_insert')
