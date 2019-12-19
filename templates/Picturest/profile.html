@@ -82,7 +82,13 @@
             </div>
         {% endif %}
         <br>
-        
+
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link" id="nav-boards-tab" data-toggle="tab" href="#boards" role="tab" aria-controls="nav-boards" aria-selected="false">Boards</a>
+                <a class="nav-item nav-link" id="nav-pins-tab" data-toggle="tab" href="#pins" role="tab" aria-controls="nav-pins" aria-selected="false">Pins</a>
+            </div>
+        </nav>
 
         <div class="collapse" id="collapseBoards">
             <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
@@ -108,5 +114,40 @@
             </div>
 
         </div>
+
     </div>
+    
+    <div class="tab-content" id="nav-tabContent">
+
+        <div class="tab-pane fade" id="pins" role="tabpanel" aria-labelledby="nav-pins-tab">
+            <ul class="list-group col-3">
+                <br>
+                {% for pin in user_pins %}
+                    <a class="btn btn-outline-primary list-group-item list-group-item-action" role="button" aria-disabled="true" href="{% url 'pin' pin.pin_id %}">
+                        <img style="width:150px; height:150px;" src="{{ pin.post.url }}" data-holder-rendered="true">
+                        <br><br>
+                        {{ pin.title }} ({{ pin.author.username }})
+                    </a>
+                {% endfor %}
+            </ul>
+        </div>
+            
+
+        <div class="tab-pane fade" id="boards" role="tabpanel" aria-labelledby="nav-boards-tab">
+            <ul class="list-group col-3">
+                <br>
+                {% for board in user_boards %}
+                    <a class="btn btn-outline-primary list-group-item list-group-item-action" role="button" aria-disabled="true" href="{% url 'board' board.board_id %}">
+<!--                        {% for pin in board.pins %}-->
+<!--                            <img style="width:50px; height:50px;" src="{{ pin.post.url }}" data-holder-rendered="true">-->
+<!--                        {% endfor %}-->
+<!--                        <br>-->
+                        {{ board.name}} ({{ board.author.username }})
+                    </a>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+
 {% endblock %}
