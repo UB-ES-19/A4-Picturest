@@ -97,40 +97,29 @@ class SearchFriendForm(forms.ModelForm):
         fields = ["friend", "creator"]
 
 
-class InterestsForm(forms.ModelForm):
-    # interest = forms.MultipleChoiceField(choices=Interests.CATEGORIES)
-    interest = forms.MultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple,
-        choices=Interests.CATEGORIES)
-
-    class Meta:
-        model = Interests
-        fields = ["interest"]
-
-
 class InterestsSimpleForm(forms.ModelForm):
     class Meta:
         model = InterestsSimple
         fields = ["cinema", "music", "sports", "animals",
-                  "paint", "travel", "garden", "photography"]
+                  "paint", "travel", "garden", "photography", "tecnology", "food"]
 
 
-class NotificationAcceptedForm(forms.ModelForm):
+class InterestsSimpleShowForm(forms.ModelForm):
+    cinema = forms.BooleanField(initial=True)
+    music = forms.BooleanField(initial=True)
+    sports = forms.BooleanField(initial=True)
+    animals = forms.BooleanField(initial=True)
+    paint = forms.BooleanField(initial=True)
+    travel = forms.BooleanField(initial=True)
+    garden = forms.BooleanField(initial=True)
+    photography = forms.BooleanField(initial=True)
+    tecnology = forms.BooleanField(initial=True)
+    food = forms.BooleanField(initial=True)
+
     class Meta:
-        model = Notification
-        fields = ["user", "type", "friendship"]
-
-
-class NotificationRequestForm(forms.ModelForm):
-    class Meta:
-        model = Notification
-        fields = ["user", "type", "friendship"]
-
-
-class NotificationRePinForm(forms.ModelForm):
-    class Meta:
-        model = Notification
-        fields = ["user", "type", "friendship", "pin"]
+        model = InterestsSimpleShow
+        fields = ["cinema", "music", "sports", "animals",
+                  "paint", "travel", "garden", "photography", "tecnology", "food"]
 
 
 class RePinForm(forms.ModelForm):

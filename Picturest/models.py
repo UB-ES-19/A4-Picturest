@@ -116,27 +116,9 @@ class Friendship(models.Model):
             " (" + self.friend.email + "): " + str(self.accepted)
 
 
-class Interests(models.Model):
-    INTERESTS = [
-        "Cinema", "Music", "Sports"
-    ]
-
-    CATEGORIES = (
-        ("cin", "Cinema"),
-        ("mus", "Music"),
-        ("spo", "Sports")
-    )
-    interest = models.TextField(max_length=5, choices=CATEGORIES)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-    # interest_id = models.AutoField(primary_key=True)
-    # category = models.CharField(max_length=5, choices=CATEGORIES)
-    # is_interested = models.BooleanField(default=False)
-
-
 class InterestsSimple(models.Model):
     INTERESTS = [
-        "cinema", "music", "sports", "animals", "paint", "travel", "garden", "photography"
+        "cinema", "music", "sports", "animals", "paint", "travel", "garden", "photography", "tecnology", "food"
     ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -148,6 +130,8 @@ class InterestsSimple(models.Model):
     travel = models.BooleanField(default=False)
     garden = models.BooleanField(default=False)
     photography = models.BooleanField(default=False)
+    tecnology = models.BooleanField(default=False)
+    food = models.BooleanField(default=False)
 
     interests_list = INTERESTS
 
@@ -155,11 +139,36 @@ class InterestsSimple(models.Model):
         return "Interests of " + str(self.user.username)
 
 
+class InterestsSimpleShow(models.Model):
+    INTERESTS = [
+        "cinema", "music", "sports", "animals", "paint", "travel", "garden", "photography", "tecnology", "food"
+    ]
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    cinema = models.BooleanField(default=True)
+    music = models.BooleanField(default=True)
+    sports = models.BooleanField(default=True)
+    animals = models.BooleanField(default=True)
+    paint = models.BooleanField(default=True)
+    travel = models.BooleanField(default=True)
+    garden = models.BooleanField(default=True)
+    photography = models.BooleanField(default=True)
+    tecnology = models.BooleanField(default=True)
+    food = models.BooleanField(default=True)
+
+    interests_list = INTERESTS
+
+    def __str__(self):
+        return "Interests to show of " + str(self.user.username)
+
+
 class Notification(models.Model):
     TYPES = (
         ("new", "NewFollower"),
         ("acc", "FollowAccepted"),
-        ("rep", "RePin")
+        ("rep", "RePin"),
+        ("spf", "SendPin"),
+        ("rpt", "Report")
     )
 
     user = models.ForeignKey(User, on_delete=models.CASCADE,
@@ -183,3 +192,20 @@ class RePin(models.Model):
 
     def __str__(self):
         return "RePin " + str(self.repin_id) + ": " + str(self.pin.pin_id)
+
+
+class Report(models.Model):
+    CAUSES = (
+        ("sex", "Sexual Explict content"),
+        ("spam", "Spam"),
+        ("copy", "Copyright"),
+        ("hate", "Hate Speech or Symbol")
+    )
+
+    report_id = models.AutoField(primary_key=True)
+    cause = models.TextField(choices=CAUSES, max_length=4)
+    pin = models.ForeignKey(Pin, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "Report " + str(self.report_id) + ":"
