@@ -75,7 +75,7 @@ def logout_view(request):
 
 @login_required
 def homepage(request):
-    if request.method == "POST" and "newPin" in request.POST:
+    if request.method == "POST":
         new_board = None
 
         if 'SelectMultiple' in request.POST:
